@@ -1514,8 +1514,10 @@ export default function App() {
   useEffect(() => {
     if (!isOpened) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
 
     const handleWheel = (e: WheelEvent) => {
@@ -1628,14 +1630,14 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen overflow-x-visible" style={{ fontFamily: "'Poppins', sans-serif", background: "#FAF7F2" }}>
+    <div className="min-h-screen overflow-x-hidden" style={{ fontFamily: "'Poppins', sans-serif", background: "#FAF7F2", minHeight: "100svh" }}>
 
       <FallingPetals />
 
       {/* ── HERO & OPENING SECTION ─────────────────────────── */}
       <div
         className="relative w-full flex flex-col items-center justify-center overflow-visible"
-        style={{ height: "100vh", background: "#FAF7F2" }}
+        style={{ minHeight: "100svh", height: "100svh", background: "#FAF7F2" }}
       >
         {/* Left Flower Frame */}
         <div
@@ -1820,8 +1822,8 @@ export default function App() {
       {isOpened && (
         <button
           onClick={() => setIsMuted(prev => !prev)}
-          className="fixed left-4 bottom-28 z-50 flex items-center gap-2 rounded-full bg-white/85 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#2C2416] shadow-lg shadow-black/10 backdrop-blur-xl transition hover:scale-105"
-          style={{ border: "1px solid rgba(44, 36, 22, 0.12)" }}
+          className="fixed left-4 z-50 flex items-center gap-2 rounded-full bg-white/85 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#2C2416] shadow-lg shadow-black/10 backdrop-blur-xl transition hover:scale-105"
+          style={{ border: "1px solid rgba(44, 36, 22, 0.12)", bottom: "calc(env(safe-area-inset-bottom, 1rem) + 1.5rem)" }}
         >
           <Music size={16} />
           <span>{isMuted ? "Muted" : "Sound"}</span>
@@ -2269,7 +2271,9 @@ export default function App() {
       </footer>
 
       {isOpened && (
-        <nav className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 w-[min(94vw,680px)] rounded-full border border-white/25 bg-white/70 px-2 py-2 shadow-2xl shadow-black/10 backdrop-blur-2xl">
+        <nav className="fixed left-1/2 z-50 -translate-x-1/2 w-[min(94vw,680px)] rounded-full border border-white/25 bg-white/70 px-2 py-2 shadow-2xl shadow-black/10 backdrop-blur-2xl"
+          style={{ bottom: "calc(env(safe-area-inset-bottom, 1rem) + 0.75rem)" }}
+        >
           <div className="flex items-center justify-between gap-1">
             {[
               { href: "#welcome", label: "Home", Icon: Home },
