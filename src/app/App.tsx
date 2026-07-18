@@ -355,7 +355,7 @@ function useInView(threshold = 0.1) {
 function useFadeIn(threshold = 0.1) { return useInView(threshold); }
 
 /* ─── FadeSection — entrance animation wrapper ───────────── */
-type AnimVariant = "up" | "left" | "right" | "zoom" | "popIn" | "fade";
+type AnimVariant = "up" | "left" | "right" | "zoom" | "popIn" | "center" | "fade";
 
 function FadeSection({
   children, className = "", variant = "up", delay = 0,
@@ -368,24 +368,46 @@ function FadeSection({
     if (variant === "popIn") {
       return {
         opacity: visible ? 1 : 0,
-        transform: visible ? "none" : "scale(0.7) translateY(30px)",
+        transform: visible ? "none" : "scale(0.75) translateY(20px)",
         transition: `opacity 0.6s cubic-bezier(0.34,1.56,0.64,1) ${delay}ms,
                      transform 0.6s cubic-bezier(0.34,1.56,0.64,1) ${delay}ms`,
       };
     }
     const init: Record<string, string> = {
-      up: "translateY(60px)", left: "translateX(-70px)",
-      right: "translateX(70px)", zoom: "scale(0.88)", fade: "none",
+      up: "translateY(34px)", left: "translateX(-45px)",
+      right: "translateX(45px)", zoom: "scale(0.92)", center: "translateY(28px) scale(0.98)", fade: "none",
     };
     return {
       opacity: visible ? 1 : 0,
-      transform: visible ? "none" : init[variant] ?? "translateY(60px)",
-      transition: `opacity 0.9s cubic-bezier(0.22,1,0.36,1) ${delay}ms,
-                   transform 0.9s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+      transform: visible ? "none" : init[variant] ?? "translateY(34px)",
+      transition: `opacity 0.8s cubic-bezier(0.22,1,0.36,1) ${delay}ms,
+                   transform 0.8s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
     };
   })();
 
   return <div ref={ref} className={className} style={style}>{children}</div>;
+}
+
+function SectionReveal({
+  children, className = "", delay = 0,
+}: {
+  children: React.ReactNode; className?: string; delay?: number;
+}) {
+  const { ref, visible } = useInView(0.15);
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "none" : "translateY(24px) scale(0.985)",
+        transition: `opacity 0.85s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.85s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+        willChange: "opacity, transform",
+      }}
+    >
+      {children}
+    </div>
+  );
 }
 
 /* ─── StaggerChildren ────────────────────────────────────── */
@@ -595,6 +617,9 @@ function LoveStorySection({ timeline }: { timeline: StoryItem[] }) {
   const [prevActive, setPrevActive] = useState<number | null>(null);
   const [dir, setDir] = useState<1 | -1>(1);
   const trackRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const touchX = useRef(0);
+  const touchY = useRef(0);
 
   const go = (idx: number) => {
     if (idx === active) return;
@@ -608,19 +633,70 @@ function LoveStorySection({ timeline }: { timeline: StoryItem[] }) {
     }, 50);
   };
 
-  // touch swipe
-  const touchX = useRef(0);
-  const onTouchStart = (e: React.TouchEvent) => { touchX.current = e.touches[0].clientX; };
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchX.current = e.touches[0].clientX;
+      touchY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const dx = Math.abs(e.touches[0].clientX - touchX.current);
+      const dy = Math.abs(e.touches[0].clientY - touchY.current);
+      if (dx > 10 && dx > dy) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const dx = touchX.current - e.changedTouches[0].clientX;
+      if (Math.abs(dx) > 40) {
+        go(Math.max(0, Math.min(timeline.length - 1, active + (dx > 0 ? 1 : -1))));
+      }
+    };
+
+    section.addEventListener("touchstart", handleTouchStart, { passive: false });
+    section.addEventListener("touchmove", handleTouchMove, { passive: false });
+    section.addEventListener("touchend", handleTouchEnd, { passive: false });
+
+    return () => {
+      section.removeEventListener("touchstart", handleTouchStart);
+      section.removeEventListener("touchmove", handleTouchMove);
+      section.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [active, go, timeline.length]);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchX.current = e.touches[0].clientX;
+    touchY.current = e.touches[0].clientY;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    const dx = Math.abs(e.touches[0].clientX - touchX.current);
+    const dy = Math.abs(e.touches[0].clientY - touchY.current);
+    if (dx > 10 && dx > dy) {
+      e.preventDefault();
+    }
+  };
+
   const onTouchEnd = (e: React.TouchEvent) => {
     const dx = touchX.current - e.changedTouches[0].clientX;
-    if (Math.abs(dx) > 40) go(Math.max(0, Math.min(timeline.length - 1, active + (dx > 0 ? 1 : -1))));
+    if (Math.abs(dx) > 40) {
+      go(Math.max(0, Math.min(timeline.length - 1, active + (dx > 0 ? 1 : -1))));
+    }
   };
 
   const iconMap = ["🌸", "🕯️", "💑", "💍"];
   const colorMap = ["#E8D09A", "#D4B87A", "#A8B8A5", "#C8A96A"];
 
   return (
-    <section className="py-24 relative overflow-hidden" style={{ background: "#FAF7F2" }}>
+    <section
+      ref={sectionRef}
+      className="py-24 relative overflow-hidden"
+      style={{ background: "#FAF7F2", touchAction: "pan-y", overscrollBehaviorX: "contain" }}
+    >
       <BackgroundOrnament position="top-left" opacity={0.08} />
       <BackgroundOrnament position="bottom-right" opacity={0.08} />
       <div className="relative z-10">
@@ -628,7 +704,7 @@ function LoveStorySection({ timeline }: { timeline: StoryItem[] }) {
           <SectionHeader label="Our Journey Together" title="Our Love Story" />
 
           {/* ── Step tabs ──────────────────────────────────────── */}
-          <div ref={trackRef} className="flex justify-center gap-3 mb-10 px-6 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+          <div ref={trackRef} className="flex justify-center gap-3 mb-10 px-6 overflow-x-auto" style={{ scrollbarWidth: "none", touchAction: "pan-y", overscrollBehaviorX: "contain" }}>
             {timeline.map((item, i) => (
               <button
                 key={i}
@@ -678,7 +754,9 @@ function LoveStorySection({ timeline }: { timeline: StoryItem[] }) {
           {/* ── Story card ─────────────────────────────────────── */}
           <div
             className="max-w-xl mx-auto px-2"
+            style={{ touchAction: "pan-y" }}
             onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
             {timeline.map((item, i) => (
@@ -836,6 +914,7 @@ function GallerySection({ photos }: { photos: string[] }) {
   const [lightbox, setLightbox] = useState(false);
   const [prevActive, setPrevActive] = useState<number | null>(null);
   const [direction, setDirection] = useState<"left" | "right">("right");
+  const sectionRef = useRef<HTMLElement | null>(null);
   const touchStartX = useRef<number>(0);
   const touchStartY = useRef<number>(0);
   const thumbsRef = useRef<HTMLDivElement>(null);
@@ -850,13 +929,55 @@ function GallerySection({ photos }: { photos: string[] }) {
     el?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
   };
 
-  const prev = () => go((active - 1 + photos.length) % photos.length, "left");
-  const next = () => go((active + 1) % photos.length, "right");
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+      if (dx > 10 && dx > dy) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const dx = e.changedTouches[0].clientX - touchStartX.current;
+      const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
+      if (Math.abs(dx) > 40 && Math.abs(dx) > dy) {
+        dx < 0 ? next() : prev();
+      }
+    };
+
+    section.addEventListener("touchstart", handleTouchStart, { passive: false });
+    section.addEventListener("touchmove", handleTouchMove, { passive: false });
+    section.addEventListener("touchend", handleTouchEnd, { passive: false });
+
+    return () => {
+      section.removeEventListener("touchstart", handleTouchStart);
+      section.removeEventListener("touchmove", handleTouchMove);
+      section.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [active]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
   };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+    if (dx > 10 && dx > dy) {
+      e.preventDefault();
+    }
+  };
+
   const onTouchEnd = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
@@ -864,6 +985,9 @@ function GallerySection({ photos }: { photos: string[] }) {
       dx < 0 ? next() : prev();
     }
   };
+
+  const prev = () => go((active - 1 + photos.length) % photos.length, "left");
+  const next = () => go((active + 1) % photos.length, "right");
 
   // layout: photos in a 3-col mosaic (featured large + 2 small + 2 small)
   const featured = photos[active];
@@ -873,7 +997,11 @@ function GallerySection({ photos }: { photos: string[] }) {
   const sideBot2 = photos[(active + 4) % photos.length];
 
   return (
-    <section className="py-24 overflow-hidden relative" style={{ background: "#FAF7F2" }}>
+    <section
+      ref={sectionRef}
+      className="py-24 overflow-hidden relative"
+      style={{ background: "#FAF7F2", touchAction: "pan-y", overscrollBehaviorX: "contain" }}
+    >
       <BackgroundOrnament position="top-right" opacity={0.07} />
       <BackgroundOrnament position="bottom-left" opacity={0.07} />
       <FadeSection>
@@ -933,7 +1061,7 @@ function GallerySection({ photos }: { photos: string[] }) {
               <button onClick={prev} className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all hover:scale-110" style={{ background: "rgba(200,169,106,0.12)", border: "1px solid rgba(200,169,106,0.3)", color: "#C8A96A" }}>
                 <ChevronDown size={16} style={{ transform: "rotate(90deg)" }}/>
               </button>
-              <div ref={thumbsRef} className="flex gap-2 overflow-x-auto flex-1" style={{ scrollbarWidth: "none" }}>
+              <div ref={thumbsRef} className="flex gap-2 overflow-x-auto flex-1" style={{ scrollbarWidth: "none", touchAction: "pan-y", overscrollBehaviorX: "contain", scrollSnapType: "x mandatory" }}>
                 {photos.map((src, i) => (
                   <button
                     key={i}
@@ -962,8 +1090,9 @@ function GallerySection({ photos }: { photos: string[] }) {
             {/* Main photo */}
             <div
               className="relative overflow-hidden rounded-3xl"
-              style={{ height: "65vw", maxHeight: 380 }}
+              style={{ height: "65vw", maxHeight: 380, touchAction: "pan-y" }}
               onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
               onClick={() => setLightbox(true)}
             >
@@ -1040,7 +1169,8 @@ function GallerySection({ photos }: { photos: string[] }) {
             <div
               ref={thumbsRef}
               className="flex gap-2 overflow-x-auto mt-5 pb-1"
-              style={{ scrollbarWidth: "none", scrollSnapType: "x mandatory" }}
+              style={{ scrollbarWidth: "none", scrollSnapType: "x mandatory", touchAction: "pan-y" }}
+              onTouchMove={onTouchMove}
             >
               {photos.map((src, i) => (
                 <button
@@ -1695,11 +1825,12 @@ export default function App() {
         <BackgroundOrnament position="top-right" opacity={0.08} />
         <BackgroundOrnament position="bottom-left" opacity={0.08} />
         <div className="relative z-10">
-          <PremiumFrame>
-            <SectionHeader label="With Joy We Announce" title="Welcome, Dear Guests" />
-            <div className="max-w-xl mx-auto">
-              <p style={{
-                fontFamily: "'Cormorant Garamond', serif",
+          <SectionReveal className="relative z-10">
+            <PremiumFrame>
+              <SectionHeader label="With Joy We Announce" title="Welcome, Dear Guests" />
+              <div className="max-w-xl mx-auto">
+                  <p style={{
+                    fontFamily: "'Cormorant Garamond', serif",
                 fontSize: "clamp(1.1rem, 3vw, 1.4rem)",
                 color: "#8A7560",
                 fontStyle: "italic",
@@ -1714,6 +1845,7 @@ export default function App() {
               </p>
             </div>
           </PremiumFrame>
+          </SectionReveal>
         </div>
       </section>
 
@@ -1735,7 +1867,7 @@ export default function App() {
 
         <BackgroundOrnament position="top-left" opacity={0.07} />
         <BackgroundOrnament position="bottom-right" opacity={0.07} />
-        <div className="relative z-10">
+        <SectionReveal className="relative z-10">
           <PremiumFrame>
             <SectionHeader label="The Happy Couple" title="Bride & Groom" />
             <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
@@ -1744,7 +1876,7 @@ export default function App() {
                 <div className="relative mb-8 group cursor-pointer">
                   {/* Floral Background Spray */}
                   <div className="absolute inset-0 -m-8 pointer-events-none select-none z-0 opacity-75 scale-115 group-hover:scale-120 group-hover:rotate-6 transition-all duration-700 ease-out">
-                    <img src={bunga1Svg} className="w-full h-full object-contain" alt="" />
+                    <img src={bunga1Svg} className="w-full h-full object-contain" alt="" style={{ animation: "floralFloat 12s ease-in-out infinite alternate" }} />
                   </div>
 
                   {/* Arched Portrait Frame */}
@@ -1774,7 +1906,7 @@ export default function App() {
                 <div className="relative mb-8 group cursor-pointer">
                   {/* Floral Background Spray */}
                   <div className="absolute inset-0 -m-8 pointer-events-none select-none z-0 opacity-75 scale-115 group-hover:scale-120 group-hover:-rotate-6 transition-all duration-700 ease-out">
-                    <img src={bunga2Svg} className="w-full h-full object-contain" alt="" />
+                    <img src={bunga2Svg} className="w-full h-full object-contain" alt="" style={{ animation: "floralFloat 12s ease-in-out infinite alternate" }} />
                   </div>
 
                   {/* Arched Portrait Frame */}
@@ -1809,7 +1941,7 @@ export default function App() {
               </div>
             </div>
           </PremiumFrame>
-        </div>
+        </SectionReveal>
       </section>
 
       {/* ── LOVE STORY ──────────────────────────────────────── */}
@@ -1822,7 +1954,7 @@ export default function App() {
         <BackgroundOrnament position="top-right" opacity={0.25} />
         <BackgroundOrnament position="bottom-left" opacity={0.25} />
         <FloralScatter tint="#C8A96A" opacity={0.06}/>
-        <div className="relative z-10">
+        <SectionReveal className="relative z-10">
           <SectionHeader label="The Big Day" title="Counting Down With Joy" light={false} />
             <StaggerChildren className="flex flex-wrap justify-center gap-5 mt-10" variant="zoom" staggerMs={120} baseDelay={100}>
               {[
@@ -1846,14 +1978,14 @@ export default function App() {
                 </div>
               ))}
             </StaggerChildren>
-        </div>
+        </SectionReveal>
       </section>
 
       {/* ── EVENTS ──────────────────────────────────────────── */}
       <section id="events" className="py-24 px-6 relative overflow-hidden" style={{ background: "#FAF7F2" }}>
         <FloralLineart tint="#A8B8A5" opacity={0.09}/>
         <FloralScatter tint="#C8A96A" opacity={0.055}/>
-        <div className="relative z-10">
+        <SectionReveal className="relative z-10">
           <SectionHeader label="Save The Date" title="Wedding Events" />
           <StaggerChildren className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8" variant="up" staggerMs={150} baseDelay={80}>
             {[
@@ -1911,14 +2043,14 @@ export default function App() {
               </div>
             ))}
           </StaggerChildren>
-        </div>
+        </SectionReveal>
       </section>
 
       {/* ── LOCATION ────────────────────────────────────────── */}
       <section id="location" className="py-24 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
         <FloralScatter tint="#C8A96A" opacity={0.07}/>
         <FloralWatercolor opacity={0.05}/>
-        <div className="relative z-10">
+        <SectionReveal className="relative z-10">
           <SectionHeader label="How to Find Us" title="Location" />
           <div className="max-w-3xl mx-auto">
             <div className="rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(200,169,106,0.25)", boxShadow: "0 8px 40px rgba(200,169,106,0.1)" }}>
@@ -1954,7 +2086,7 @@ export default function App() {
               </div>
             </div>
           </div>
-        </div>
+        </SectionReveal>
       </section>
 
       {/* ── GALLERY ─────────────────────────────────────────── */}
@@ -1967,7 +2099,7 @@ export default function App() {
       <section id="rsvp" className="py-24 px-6 relative overflow-hidden" style={{ background: "#FAF7F2" }}>
         <FloralLineart tint="#C8A96A" opacity={0.07}/>
         <FloralScatter tint="#A8B8A5" opacity={0.065}/>
-        <div className="relative z-10">
+        <SectionReveal className="relative z-10">
           <SectionHeader label="Will You Join Us?" title="RSVP" />
           <div className="max-w-lg mx-auto">
             {rsvpSent ? (
@@ -2043,14 +2175,14 @@ export default function App() {
               </form>
             )}
           </div>
-        </div>
+        </SectionReveal>
       </section>
 
       {/* ── WISHES ──────────────────────────────────────────── */}
       <section id="wishes" className="py-24 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
         <FloralLineart tint="#A8B8A5" opacity={0.09}/>
         <FloralWatercolor opacity={0.055}/>
-        <div className="relative z-10">
+        <SectionReveal className="relative z-10">
           <SectionHeader label="Kind Words" title="Guest Wishes" />
           <StaggerChildren className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" variant="zoom" staggerMs={100}>
             {wishes.map((w, i) => (
@@ -2073,14 +2205,14 @@ export default function App() {
               </div>
             ))}
           </StaggerChildren>
-        </div>
+        </SectionReveal>
       </section>
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
       <footer className="relative py-20 px-6 text-center overflow-hidden" style={{ background: "#2C2416" }}>
         <BackgroundOrnament position="top-left" opacity={0.2} />
         <BackgroundOrnament position="top-right" opacity={0.2} />
-        <div className="relative z-10">
+        <SectionReveal className="relative z-10">
           <p className="text-xs tracking-[0.4em] uppercase mb-4" style={{ color: "rgba(200,169,106,0.6)", fontWeight: 300 }}>
             With All Our Love
           </p>
@@ -2110,7 +2242,7 @@ export default function App() {
           <p className="mt-10 text-xs" style={{ color: "rgba(255,255,255,0.2)", letterSpacing: "0.15em" }}>
             Dibuat dengan cinta · #AisyahRizky2026
           </p>
-        </div>
+        </SectionReveal>
       </footer>
 
       {isOpened && (
@@ -2182,6 +2314,11 @@ export default function App() {
         @keyframes fadeImg {
           from { opacity: 0; transform: scale(1.03); }
           to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes floralFloat {
+          0% { transform: translate(0px, 0px) rotate(0deg) scale(1.13); }
+          50% { transform: translate(6px, -10px) rotate(1deg) scale(1.13); }
+          100% { transform: translate(0px, 0px) rotate(0deg) scale(1.13); }
         }
         @keyframes slideInRight {
           from { transform: translateX(6%); opacity: 0; }
