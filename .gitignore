@@ -6,7 +6,6 @@ dist/
 build/
 
 # Package manager files
-package-lock.json
 pnpm-lock.yaml
 
 # Local editor settings
