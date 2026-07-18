@@ -11,6 +11,7 @@ import kananAtasSvg from "./components/gambar/kananatas.svg";
 import kiriBawahSvg from "./components/gambar/kiribawah.svg";
 import kananBawahSvg from "./components/gambar/kananbawah.svg";
 import bunga2Svg from "./components/gambar/2.svg";
+import rumahSvg from "./components/gambar/rumah.svg";
 
 
 
@@ -337,17 +338,21 @@ function useCountdown(targetMs: number) {
 }
 
 /* ─── Intersection Observer Hook ────────────────────────── */
-function useInView(threshold = 0.1) {
+function useInView(options: number | { threshold?: number; rootMargin?: string } = { threshold: 0.1, rootMargin: "0px 0px -33% 0px" }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const { threshold, rootMargin } = typeof options === "number"
+    ? { threshold: options, rootMargin: "0px 0px -33% 0px" }
+    : { threshold: options.threshold ?? 0.1, rootMargin: options.rootMargin ?? "0px 0px -33% 0px" };
+
   useEffect(() => {
     const obs = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) setVisible(true); },
-      { threshold }
+      { threshold, rootMargin }
     );
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
-  }, [threshold]);
+  }, [threshold, rootMargin]);
   return { ref, visible };
 }
 
@@ -1623,18 +1628,18 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden" style={{ fontFamily: "'Poppins', sans-serif", background: "#FAF7F2" }}>
+    <div className="min-h-screen overflow-x-visible" style={{ fontFamily: "'Poppins', sans-serif", background: "#FAF7F2" }}>
 
       <FallingPetals />
 
       {/* ── HERO & OPENING SECTION ─────────────────────────── */}
       <div
-        className="relative w-full flex flex-col items-center justify-center overflow-hidden"
+        className="relative w-full flex flex-col items-center justify-center overflow-visible"
         style={{ height: "100vh", background: "#FAF7F2" }}
       >
         {/* Left Flower Frame */}
         <div
-          className="absolute inset-y-0 left-0 w-full h-full pointer-events-none select-none"
+          className="absolute inset-y-0 left-0 w-full h-full pointer-events-none select-none overflow-visible"
           style={{
             zIndex: 10,
             transform: `translateX(${isOpened ? "-45vw" : "0vw"})`,
@@ -1645,20 +1650,21 @@ export default function App() {
           <div
             className="w-full h-full"
             style={{
-              animation: "windSwayLeft 7s ease-in-out infinite alternate",
+              animation: "windSwayLeft 10s ease-in-out infinite alternate",
             }}
           >
             <img
               src={bungaOpeningKiriSvg}
               className="w-full h-full object-cover"
               alt="Left Flower"
+              style={{ transform: "scale(1.03)", objectFit: "cover" }}
             />
           </div>
         </div>
 
         {/* Right Flower Frame */}
         <div
-          className="absolute inset-y-0 right-0 w-full h-full pointer-events-none select-none"
+          className="absolute inset-y-0 right-0 w-full h-full pointer-events-none select-none overflow-visible"
           style={{
             zIndex: 10,
             transform: `translateX(${isOpened ? "45vw" : "0vw"})`,
@@ -1669,20 +1675,21 @@ export default function App() {
           <div
             className="w-full h-full"
             style={{
-              animation: "windSwayRight 7s ease-in-out infinite alternate",
+              animation: "windSwayRight 10s ease-in-out infinite alternate",
             }}
           >
             <img
               src={bungaOpeningKananSvg}
               className="w-full h-full object-cover"
               alt="Right Flower"
+              style={{ transform: "scale(1.03)", objectFit: "cover" }}
             />
           </div>
         </div>
 
         {/* Closed Cover Overlay */}
         <div
-          className="absolute inset-0 w-full h-full overflow-hidden"
+          className="absolute inset-0 w-full h-full overflow-visible"
           style={{
             zIndex: 15,
             background: "#FAF7F2",
@@ -1702,6 +1709,7 @@ export default function App() {
               src={openinggSvg}
               className="w-full h-full object-cover"
               alt="Closed Cover"
+              style={{ transform: "scale(1.03)", objectFit: "cover" }}
             />
           </div>
         </div>
@@ -1956,28 +1964,28 @@ export default function App() {
         <FloralScatter tint="#C8A96A" opacity={0.06}/>
         <SectionReveal className="relative z-10">
           <SectionHeader label="The Big Day" title="Counting Down With Joy" light={false} />
-            <StaggerChildren className="flex flex-wrap justify-center gap-5 mt-10" variant="zoom" staggerMs={120} baseDelay={100}>
-              {[
-                { label: "Hari", value: countdown.days },
-                { label: "Jam", value: countdown.hours },
-                { label: "Menit", value: countdown.minutes },
-                { label: "Detik", value: countdown.seconds },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex flex-col items-center justify-center w-28 h-28 rounded-2xl" style={{
-                  background: "rgba(255,255,255,0.85)",
-                  backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(200,169,106,0.3)",
-                  boxShadow: "0 8px 32px rgba(44,36,22,0.08)",
-                }}>
-                  <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.8rem", color: "#C8A96A", lineHeight: 1, fontWeight: 300 }}>
-                    {String(value).padStart(2, "0")}
-                  </span>
-                  <span className="text-xs tracking-[0.25em] uppercase mt-1" style={{ color: "#8A7560", fontWeight: 400 }}>
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </StaggerChildren>
+          <StaggerChildren className="flex flex-wrap justify-center gap-5 mt-10" variant="zoom" staggerMs={120} baseDelay={100}>
+            {[
+              { label: "Hari", value: countdown.days },
+              { label: "Jam", value: countdown.hours },
+              { label: "Menit", value: countdown.minutes },
+              { label: "Detik", value: countdown.seconds },
+            ].map(({ label, value }) => (
+              <div key={label} className="flex flex-col items-center justify-center w-28 h-28 rounded-2xl" style={{
+                background: "rgba(255,255,255,0.85)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(200,169,106,0.3)",
+                boxShadow: "0 8px 32px rgba(44,36,22,0.08)",
+              }}>
+                <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.8rem", color: "#C8A96A", lineHeight: 1, fontWeight: 300 }}>
+                  {String(value).padStart(2, "0")}
+                </span>
+                <span className="text-xs tracking-[0.25em] uppercase mt-1" style={{ color: "#8A7560", fontWeight: 400 }}>
+                  {label}
+                </span>
+              </div>
+            ))}
+          </StaggerChildren>
         </SectionReveal>
       </section>
 
@@ -2054,19 +2062,34 @@ export default function App() {
           <SectionHeader label="How to Find Us" title="Location" />
           <div className="max-w-3xl mx-auto">
             <div className="rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(200,169,106,0.25)", boxShadow: "0 8px 40px rgba(200,169,106,0.1)" }}>
-              <div className="w-full h-80 bg-[#D4C8B8] relative flex items-center justify-center" style={{
-                background: "linear-gradient(135deg, #D4C8B8, #C8B8A0)",
-              }}>
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1944491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sJl.%20Sudirman%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, filter: "sepia(20%) saturate(0.8)" }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Wedding Location"
-                />
+              <div className="relative w-full max-w-5xl mx-auto p-2 md:p-6" style={{ background: "linear-gradient(180deg, #F6EEE4 0%, #E9DDD1 100%)" }}>
+                <div className="relative mx-auto w-full" style={{ maxWidth: "980px", aspectRatio: "1 / 1.02" }}>
+                  <div
+                    className="absolute left-1/2 top-[16%] w-[100%] h-[84%] -translate-x-1/2 overflow-hidden shadow-[0_28px_70px_rgba(0,0,0,0.16)]"
+                    style={{
+                      background: "#E7D7C8",
+                      clipPath: "polygon(10% 24%, 22% 14%, 36% 10%, 64% 10%, 78% 14%, 90% 24%, 90% 84%, 10% 84%)",
+                      border: "1px solid rgba(255,255,255,0.75)",
+                    }}
+                  >
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1944491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sJl.%20Sudirman%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0, filter: "sepia(20%) saturate(0.8)" }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Wedding Location"
+                    />
+                  </div>
+                  <img
+                    src={rumahSvg}
+                    alt="House location frame"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ zIndex: 2, pointerEvents: "none" }}
+                  />
+                </div>
               </div>
               <div className="p-6 flex flex-col md:flex-row items-center justify-between gap-4" style={{ background: "#FAF7F2" }}>
                 <div>
@@ -2289,6 +2312,10 @@ export default function App() {
             transform: rotate(-0.8deg) scale(1.07) translate(-6px, -3px);
           }
         }
+        @keyframes backgroundSway {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-8px) rotate(0.3deg); }
+        }
         @keyframes petalFall {
           0%   { transform: translateY(-30px) translateX(0px) rotate(0deg) scale(1);     opacity: 0; }
           6%   { opacity: var(--petal-opacity, 0.5); }
@@ -2306,6 +2333,14 @@ export default function App() {
         @keyframes float {
           0% { transform: translateY(0px) rotate(0deg); }
           100% { transform: translateY(-20px) rotate(15deg); }
+        }
+        @keyframes windSwayLeft {
+          0%, 100% { transform: rotate(0deg) translateX(0px); }
+          50% { transform: rotate(0.9deg) translateX(3px); }
+        }
+        @keyframes windSwayRight {
+          0%, 100% { transform: rotate(0deg) translateX(0px); }
+          50% { transform: rotate(-0.9deg) translateX(-3px); }
         }
         @keyframes bounce {
           0%, 100% { transform: translateY(0); }
