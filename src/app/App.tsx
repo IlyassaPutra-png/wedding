@@ -13,6 +13,7 @@ import kananBawahSvg from "./components/gambar/kananbawah.svg";
 import bunga2Svg from "./components/gambar/2.svg";
 import rumahSvg from "./components/gambar/rumah.svg";
 import bg80Svg from "./components/gambar/80.svg";
+import bg85Svg from "./components/gambar/85.svg";
 
 
 
@@ -275,7 +276,7 @@ function BackgroundOrnament({
   };
 
   const getPositionStyles = (): React.CSSProperties => {
-    const offset = "-15px";
+    const offset = "0px";
     switch (position) {
       case "top-left":
         return { top: offset, left: offset };
@@ -393,7 +394,7 @@ function useInView(options: number | { threshold?: number; rootMargin?: string }
 
   useEffect(() => {
     const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setVisible(true); },
+      ([e]) => { setVisible(e.isIntersecting); },
       { threshold, rootMargin }
     );
     if (ref.current) obs.observe(ref.current);
@@ -1921,6 +1922,8 @@ export default function App() {
 
       {/* ── BRIDE & GROOM ───────────────────────────────────── */}
       <section className="py-32 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
+        {/* Background wind sway */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 animate-bg-wind" style={{ background: `url(${bg85Svg}) no-repeat center/cover` }} />
         {/* Curved Section Divider (Lengkungan) at the top */}
         <div className="absolute top-0 inset-x-0 h-16 w-full overflow-hidden pointer-events-none z-10" style={{ transform: "translateY(-1px)" }}>
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full" style={{ fill: "#FAF7F2" }}>
@@ -2050,7 +2053,9 @@ export default function App() {
       </section>
 
       {/* ── EVENTS ──────────────────────────────────────────── */}
-      <section id="events" className="py-24 px-6 relative overflow-hidden" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }}>
+      <section id="events" className="py-24 px-6 relative overflow-hidden">
+        {/* Background wind sway */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 animate-bg-wind" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }} />
         <BackgroundOrnament position="top-right" opacity={0.95} />
         <BackgroundOrnament position="bottom-left" opacity={0.95} />
         <FloralLineart tint="#A8B8A5" opacity={0.09}/>
@@ -2117,7 +2122,9 @@ export default function App() {
       </section>
 
       {/* ── LOCATION ────────────────────────────────────────── */}
-      <section id="location" className="py-24 px-6 relative overflow-hidden" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }}>
+      <section id="location" className="py-24 px-6 relative overflow-hidden">
+        {/* Background wind sway */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 animate-bg-wind" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }} />
         <BackgroundOrnament position="top-left" opacity={0.95} />
         <BackgroundOrnament position="bottom-right" opacity={0.95} />
         <FloralScatter tint="#C8A96A" opacity={0.07}/>
@@ -2183,7 +2190,9 @@ export default function App() {
       <GiftSection copied={copied} handleCopy={handleCopy} />
 
       {/* ── RSVP ────────────────────────────────────────────── */}
-      <section id="rsvp" className="py-24 px-6 relative overflow-hidden" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }}>
+      <section id="rsvp" className="py-24 px-6 relative overflow-hidden">
+        {/* Background wind sway */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 animate-bg-wind" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }} />
         <BackgroundOrnament position="top-left" opacity={0.95} />
         <BackgroundOrnament position="bottom-right" opacity={0.95} />
         <FloralLineart tint="#C8A96A" opacity={0.07}/>
@@ -2364,8 +2373,21 @@ export default function App() {
         </nav>
       )}
 
-      {/* ── GLOBAL STYLES ───────────────────────────────────── */}
       <style>{`
+        /* Background Wind Sway */
+        @keyframes bgWindSway {
+          0%, 100% {
+            transform: scale(1.02) translate(0px, 0px) rotate(0deg);
+          }
+          50% {
+            transform: scale(1.06) translate(6px, -4px) rotate(0.3deg);
+          }
+        }
+        .animate-bg-wind {
+          transform-origin: center;
+          animation: bgWindSway 25s ease-in-out infinite alternate;
+        }
+
         /* Flower Corner Animations */
         @keyframes flowerEnterTL {
           0% {
