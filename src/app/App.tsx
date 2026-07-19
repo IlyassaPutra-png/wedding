@@ -12,6 +12,7 @@ import kiriBawahSvg from "./components/gambar/kiribawah.svg";
 import kananBawahSvg from "./components/gambar/kananbawah.svg";
 import bunga2Svg from "./components/gambar/2.svg";
 import rumahSvg from "./components/gambar/rumah.svg";
+import bg80Svg from "./components/gambar/80.svg";
 
 
 
@@ -2049,7 +2050,7 @@ export default function App() {
       </section>
 
       {/* ── EVENTS ──────────────────────────────────────────── */}
-      <section id="events" className="py-24 px-6 relative overflow-hidden" style={{ background: "#FAF7F2" }}>
+      <section id="events" className="py-24 px-6 relative overflow-hidden" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }}>
         <BackgroundOrnament position="top-right" opacity={0.95} />
         <BackgroundOrnament position="bottom-left" opacity={0.95} />
         <FloralLineart tint="#A8B8A5" opacity={0.09}/>
@@ -2116,7 +2117,7 @@ export default function App() {
       </section>
 
       {/* ── LOCATION ────────────────────────────────────────── */}
-      <section id="location" className="py-24 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
+      <section id="location" className="py-24 px-6 relative overflow-hidden" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }}>
         <BackgroundOrnament position="top-left" opacity={0.95} />
         <BackgroundOrnament position="bottom-right" opacity={0.95} />
         <FloralScatter tint="#C8A96A" opacity={0.07}/>
@@ -2182,7 +2183,7 @@ export default function App() {
       <GiftSection copied={copied} handleCopy={handleCopy} />
 
       {/* ── RSVP ────────────────────────────────────────────── */}
-      <section id="rsvp" className="py-24 px-6 relative overflow-hidden" style={{ background: "#FAF7F2" }}>
+      <section id="rsvp" className="py-24 px-6 relative overflow-hidden" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }}>
         <BackgroundOrnament position="top-left" opacity={0.95} />
         <BackgroundOrnament position="bottom-right" opacity={0.95} />
         <FloralLineart tint="#C8A96A" opacity={0.07}/>
