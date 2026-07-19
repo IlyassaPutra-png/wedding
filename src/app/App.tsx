@@ -247,7 +247,7 @@ function PremiumFrame({
 /* ─── Background Ornament (1.svg) ────────────────────────── */
 function BackgroundOrnament({
   position = "top-right",
-  opacity = 0.08,
+  opacity = 0.95,
   scale = 1,
   style = {},
 }: {
@@ -256,6 +256,8 @@ function BackgroundOrnament({
   scale?: number;
   style?: React.CSSProperties;
 }) {
+  const { ref, visible } = useInView({ threshold: 0.01, rootMargin: "0px" });
+
   const getSrc = () => {
     switch (position) {
       case "top-left":
@@ -272,35 +274,78 @@ function BackgroundOrnament({
   };
 
   const getPositionStyles = (): React.CSSProperties => {
+    const offset = "-15px";
     switch (position) {
       case "top-left":
-        return { top: "-10%", left: "-10%", transform: `scale(${scale})` };
+        return { top: offset, left: offset };
       case "top-right":
-        return { top: "-10%", right: "-10%", transform: `scale(${scale})` };
+        return { top: offset, right: offset };
       case "bottom-left":
-        return { bottom: "-10%", left: "-10%", transform: `scale(${scale})` };
+        return { bottom: offset, left: offset };
       case "bottom-right":
-        return { bottom: "-10%", right: "-10%", transform: `scale(${scale})` };
+        return { bottom: offset, right: offset };
       case "center":
-        return { top: "50%", left: "50%", transform: `translate(-50%, -50%) scale(${scale})` };
+        return { top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
       default:
         return {};
     }
   };
 
+  const getEntranceClass = () => {
+    if (!visible) return "opacity-0 scale-75";
+    switch (position) {
+      case "top-left":
+        return "animate-flower-enter-tl";
+      case "top-right":
+        return "animate-flower-enter-tr";
+      case "bottom-left":
+        return "animate-flower-enter-bl";
+      case "bottom-right":
+        return "animate-flower-enter-br";
+      default:
+        return "animate-flower-enter-center";
+    }
+  };
+
+  const getSwayClass = () => {
+    switch (position) {
+      case "top-left":
+        return "animate-flower-sway-tl";
+      case "top-right":
+        return "animate-flower-sway-tr";
+      case "bottom-left":
+        return "animate-flower-sway-bl";
+      case "bottom-right":
+        return "animate-flower-sway-br";
+      default:
+        return "animate-flower-sway-center";
+    }
+  };
+
   return (
     <div
-      className="absolute pointer-events-none select-none overflow-hidden"
+      ref={ref}
+      className={`absolute pointer-events-none select-none overflow-visible transition-all duration-1000 ${getEntranceClass()}`}
       style={{
-        width: "350px",
-        height: "350px",
-        zIndex: 0,
-        opacity,
+        width: position === "center" ? "200px" : "clamp(120px, 30vw, 260px)",
+        height: position === "center" ? "200px" : "clamp(120px, 30vw, 260px)",
+        zIndex: 25,
+        opacity: visible ? opacity : 0,
+        transformOrigin: position === "top-left" ? "top left" :
+                         position === "top-right" ? "top right" :
+                         position === "bottom-left" ? "bottom left" :
+                         position === "bottom-right" ? "bottom right" : "center",
         ...getPositionStyles(),
         ...style,
       }}
     >
-      <img src={getSrc()} className="w-full h-full object-contain" alt="" />
+      <div className={visible ? getSwayClass() : ""} style={{ width: "100%", height: "100%", transform: `scale(${scale})` }}>
+        <img
+          src={getSrc()}
+          className="w-full h-full object-contain filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.14)]"
+          alt=""
+        />
+      </div>
     </div>
   );
 }
@@ -614,6 +659,19 @@ function FallingPetals() {
   );
 }
 
+/* Helper to scroll a container to center a specific child element without scrolling the page/parents */
+function scrollContainerToChild(container: HTMLElement | null, child: HTMLElement | null | undefined) {
+  if (!container || !child) return;
+  const containerRect = container.getBoundingClientRect();
+  const childRect = child.getBoundingClientRect();
+  const relativeLeft = childRect.left - containerRect.left + container.scrollLeft;
+  const targetScrollLeft = relativeLeft - (containerRect.width / 2) + (childRect.width / 2);
+  container.scrollTo({
+    left: targetScrollLeft,
+    behavior: "smooth",
+  });
+}
+
 /* ─── Love Story Section ────────────────────────────────── */
 type StoryItem = { year: string; title: string; desc: string; icon: string };
 
@@ -634,7 +692,8 @@ function LoveStorySection({ timeline }: { timeline: StoryItem[] }) {
     // scroll step indicator into view on mobile
     setTimeout(() => {
       const dots = trackRef.current?.querySelectorAll<HTMLElement>("[data-dot]");
-      dots?.[idx]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      const dot = dots?.[idx];
+      scrollContainerToChild(trackRef.current, dot);
     }, 50);
   };
 
@@ -702,8 +761,8 @@ function LoveStorySection({ timeline }: { timeline: StoryItem[] }) {
       className="py-24 relative overflow-hidden"
       style={{ background: "#FAF7F2", touchAction: "pan-y", overscrollBehaviorX: "contain" }}
     >
-      <BackgroundOrnament position="top-left" opacity={0.08} />
-      <BackgroundOrnament position="bottom-right" opacity={0.08} />
+      <BackgroundOrnament position="top-left" opacity={0.95} />
+      <BackgroundOrnament position="bottom-right" opacity={0.95} />
       <div className="relative z-10">
         <PremiumFrame>
           <SectionHeader label="Our Journey Together" title="Our Love Story" />
@@ -931,7 +990,7 @@ function GallerySection({ photos }: { photos: string[] }) {
     setTimeout(() => setPrevActive(null), 400);
     // scroll thumbnail into view
     const el = thumbsRef.current?.children[idx] as HTMLElement;
-    el?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    scrollContainerToChild(thumbsRef.current, el);
   };
 
   useEffect(() => {
@@ -1007,8 +1066,8 @@ function GallerySection({ photos }: { photos: string[] }) {
       className="py-24 overflow-hidden relative"
       style={{ background: "#FAF7F2", touchAction: "pan-y", overscrollBehaviorX: "contain" }}
     >
-      <BackgroundOrnament position="top-right" opacity={0.07} />
-      <BackgroundOrnament position="bottom-left" opacity={0.07} />
+      <BackgroundOrnament position="top-right" opacity={0.95} />
+      <BackgroundOrnament position="bottom-left" opacity={0.95} />
       <FadeSection>
         <PremiumFrame>
           <SectionHeader label="Our Memories" title="Photo Gallery" />
@@ -1332,8 +1391,8 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
 
   return (
     <section className="py-24 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
-      <BackgroundOrnament position="top-left" opacity={0.08} />
-      <BackgroundOrnament position="bottom-right" opacity={0.08} />
+      <BackgroundOrnament position="top-left" opacity={0.95} />
+      <BackgroundOrnament position="bottom-right" opacity={0.95} />
       <div className="relative z-10">
         <PremiumFrame>
           <SectionHeader
@@ -1832,8 +1891,8 @@ export default function App() {
 
       {/* ── WELCOME ─────────────────────────────────────────── */}
       <section id="welcome" className="py-24 px-6 text-center relative overflow-hidden" style={{ background: "#FAF7F2" }}>
-        <BackgroundOrnament position="top-right" opacity={0.08} />
-        <BackgroundOrnament position="bottom-left" opacity={0.08} />
+        <BackgroundOrnament position="top-right" opacity={0.95} />
+        <BackgroundOrnament position="bottom-left" opacity={0.95} />
         <div className="relative z-10">
           <SectionReveal className="relative z-10">
             <PremiumFrame>
@@ -1875,8 +1934,8 @@ export default function App() {
           </svg>
         </div>
 
-        <BackgroundOrnament position="top-left" opacity={0.07} />
-        <BackgroundOrnament position="bottom-right" opacity={0.07} />
+        <BackgroundOrnament position="top-left" opacity={0.95} />
+        <BackgroundOrnament position="bottom-right" opacity={0.95} />
         <SectionReveal className="relative z-10">
           <PremiumFrame>
             <SectionHeader label="The Happy Couple" title="Bride & Groom" />
@@ -1959,10 +2018,8 @@ export default function App() {
 
       {/* ── COUNTDOWN ───────────────────────────────────────── */}
       <section className="py-24 px-6 relative overflow-hidden" style={{ background: `#FAF7F2 url(${hitungMundurSvg}) no-repeat center/cover` }}>
-        <BackgroundOrnament position="top-left" opacity={0.35} />
-        <BackgroundOrnament position="bottom-right" opacity={0.35} />
-        <BackgroundOrnament position="top-right" opacity={0.25} />
-        <BackgroundOrnament position="bottom-left" opacity={0.25} />
+        <BackgroundOrnament position="top-left" opacity={0.95} />
+        <BackgroundOrnament position="bottom-right" opacity={0.95} />
         <FloralScatter tint="#C8A96A" opacity={0.06}/>
         <SectionReveal className="relative z-10">
           <SectionHeader label="The Big Day" title="Counting Down With Joy" light={false} />
@@ -1993,6 +2050,8 @@ export default function App() {
 
       {/* ── EVENTS ──────────────────────────────────────────── */}
       <section id="events" className="py-24 px-6 relative overflow-hidden" style={{ background: "#FAF7F2" }}>
+        <BackgroundOrnament position="top-right" opacity={0.95} />
+        <BackgroundOrnament position="bottom-left" opacity={0.95} />
         <FloralLineart tint="#A8B8A5" opacity={0.09}/>
         <FloralScatter tint="#C8A96A" opacity={0.055}/>
         <SectionReveal className="relative z-10">
@@ -2058,6 +2117,8 @@ export default function App() {
 
       {/* ── LOCATION ────────────────────────────────────────── */}
       <section id="location" className="py-24 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
+        <BackgroundOrnament position="top-left" opacity={0.95} />
+        <BackgroundOrnament position="bottom-right" opacity={0.95} />
         <FloralScatter tint="#C8A96A" opacity={0.07}/>
         <FloralWatercolor opacity={0.05}/>
         <SectionReveal className="relative z-10">
@@ -2122,6 +2183,8 @@ export default function App() {
 
       {/* ── RSVP ────────────────────────────────────────────── */}
       <section id="rsvp" className="py-24 px-6 relative overflow-hidden" style={{ background: "#FAF7F2" }}>
+        <BackgroundOrnament position="top-left" opacity={0.95} />
+        <BackgroundOrnament position="bottom-right" opacity={0.95} />
         <FloralLineart tint="#C8A96A" opacity={0.07}/>
         <FloralScatter tint="#A8B8A5" opacity={0.065}/>
         <SectionReveal className="relative z-10">
@@ -2205,6 +2268,8 @@ export default function App() {
 
       {/* ── WISHES ──────────────────────────────────────────── */}
       <section id="wishes" className="py-24 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
+        <BackgroundOrnament position="top-right" opacity={0.95} />
+        <BackgroundOrnament position="bottom-left" opacity={0.95} />
         <FloralLineart tint="#A8B8A5" opacity={0.09}/>
         <FloralWatercolor opacity={0.055}/>
         <SectionReveal className="relative z-10">
@@ -2235,8 +2300,8 @@ export default function App() {
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
       <footer className="relative py-20 px-6 text-center overflow-hidden" style={{ background: "#2C2416" }}>
-        <BackgroundOrnament position="top-left" opacity={0.2} />
-        <BackgroundOrnament position="top-right" opacity={0.2} />
+        <BackgroundOrnament position="top-left" opacity={0.85} />
+        <BackgroundOrnament position="top-right" opacity={0.85} />
         <SectionReveal className="relative z-10">
           <p className="text-xs tracking-[0.4em] uppercase mb-4" style={{ color: "rgba(200,169,106,0.6)", fontWeight: 300 }}>
             With All Our Love
@@ -2300,6 +2365,111 @@ export default function App() {
 
       {/* ── GLOBAL STYLES ───────────────────────────────────── */}
       <style>{`
+        /* Flower Corner Animations */
+        @keyframes flowerEnterTL {
+          0% {
+            transform: translate(-30px, -30px) rotate(-35deg) scale(0.65);
+            opacity: 0;
+          }
+          100% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+            opacity: 1;
+          }
+        }
+        @keyframes flowerEnterTR {
+          0% {
+            transform: translate(30px, -30px) rotate(35deg) scale(0.65);
+            opacity: 0;
+          }
+          100% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+            opacity: 1;
+          }
+        }
+        @keyframes flowerEnterBL {
+          0% {
+            transform: translate(-30px, 30px) rotate(-35deg) scale(0.65);
+            opacity: 0;
+          }
+          100% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+            opacity: 1;
+          }
+        }
+        @keyframes flowerEnterBR {
+          0% {
+            transform: translate(30px, 30px) rotate(35deg) scale(0.65);
+            opacity: 0;
+          }
+          100% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+            opacity: 1;
+          }
+        }
+        @keyframes flowerEnterCenter {
+          0% {
+            transform: scale(0.5) rotate(-15deg);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+          }
+        }
+
+        @keyframes flowerSwayTL {
+          0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+          50% { transform: translate(2px, 3px) rotate(2deg); }
+        }
+        @keyframes flowerSwayTR {
+          0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+          50% { transform: translate(-2px, 3px) rotate(-2deg); }
+        }
+        @keyframes flowerSwayBL {
+          0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+          50% { transform: translate(2px, -3px) rotate(-2deg); }
+        }
+        @keyframes flowerSwayBR {
+          0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+          50% { transform: translate(-2px, -3px) rotate(2deg); }
+        }
+        @keyframes flowerSwayCenter {
+          0%, 100% { transform: translate(0px, 0px) scale(1); }
+          50% { transform: translate(0px, -4px) scale(1.02); }
+        }
+
+        .animate-flower-enter-tl {
+          animation: flowerEnterTL 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        .animate-flower-enter-tr {
+          animation: flowerEnterTR 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        .animate-flower-enter-bl {
+          animation: flowerEnterBL 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        .animate-flower-enter-br {
+          animation: flowerEnterBR 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        .animate-flower-enter-center {
+          animation: flowerEnterCenter 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .animate-flower-sway-tl {
+          animation: flowerSwayTL 8s ease-in-out infinite alternate;
+        }
+        .animate-flower-sway-tr {
+          animation: flowerSwayTR 8s ease-in-out infinite alternate;
+        }
+        .animate-flower-sway-bl {
+          animation: flowerSwayBL 8s ease-in-out infinite alternate;
+        }
+        .animate-flower-sway-br {
+          animation: flowerSwayBR 8s ease-in-out infinite alternate;
+        }
+        .animate-flower-sway-center {
+          animation: flowerSwayCenter 7s ease-in-out infinite alternate;
+        }
+
         @keyframes windSwayLeft {
           0%, 100% {
             transform: rotate(0deg) scale(1.05) translate(0px, 0px);
