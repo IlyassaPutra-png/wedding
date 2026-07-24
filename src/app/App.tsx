@@ -4,6 +4,14 @@ import openinggSvg from "./components/gambar/openingg.svg";
 import musicTrack from "./components/Musik/nadin.mp3";
 import bungaOpeningKananSvg from "./components/gambar/bunga_opening_kanan.svg";
 import bungaOpeningKiriSvg from "./components/gambar/bungan_opening_kiri.svg";
+import gerbangTertutupPng from "./components/gambar/gerbang/gerbang_tertutup.png";
+import gerbangTerbukaPng from "./components/gambar/gerbang/gerbsng_terbuka.png";
+import burung01Png from "./components/gambar/burung/burung01.png";
+import burung02Png from "./components/gambar/burung/burung02.png";
+import burungBaru1Png from "./components/gambar/burung/burungbaru1.png";
+import burungBaru2Png from "./components/gambar/burung/burungbaru2.png";
+import burungBaru3Png from "./components/gambar/burung/burungbaru3.png";
+import burungBaru4Png from "./components/gambar/burung/burungbaru4.png";
 import hitungMundurSvg from "./components/gambar/hitungmundur.svg";
 import bunga1Svg from "./components/gambar/1.svg";
 import kiriAtasSvg from "./components/gambar/kiriatas.svg";
@@ -14,8 +22,114 @@ import bunga2Svg from "./components/gambar/2.svg";
 import rumahSvg from "./components/gambar/rumah.svg";
 import bg80Svg from "./components/gambar/80.svg";
 import bg85Svg from "./components/gambar/85.svg";
+import bunga2Png from "./components/gambar/bunga/bunga2.png";
+import bunga8Png from "./components/gambar/bunga/bunga8.png";
+import bunga9Png from "./components/gambar/bunga/bunga9.png";
+import bunga10Png from "./components/gambar/bunga/bunga10.png";
+import bunga11Png from "./components/gambar/bunga/bunga11.png";
+import bunga3Png from "./components/gambar/bunga/bunga3.png";
+import bunga5Png from "./components/gambar/bunga/bunga5.png";
+import pohon1Png from "./components/gambar/pohon/pohon1.png";
+import pohon2Png from "./components/gambar/pohon/pohon2.png";
 
 
+
+/* ─── Animated Flying Birds Component ─────────────────── */
+function FlappingBird({
+  frameA,
+  frameB,
+  size = 36,
+  flapSpeed = 250,
+  flipX = false,
+  style = {},
+  className = "",
+}: {
+  frameA: string;
+  frameB: string;
+  size?: number;
+  flapSpeed?: number;
+  flipX?: boolean;
+  style?: React.CSSProperties;
+  className?: string;
+}) {
+  const [frame, setFrame] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setFrame((prev) => (prev === 0 ? 1 : 0));
+    }, flapSpeed);
+    return () => clearInterval(timer);
+  }, [flapSpeed]);
+
+  const transformStyle = flipX ? "scaleX(-1)" : "none";
+
+  return (
+    <div className={`relative pointer-events-none select-none ${className}`} style={{ width: size, height: size, transform: transformStyle, ...style }}>
+      <img
+        src={frameA}
+        alt="Bird frame A"
+        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
+        style={{ opacity: frame === 0 ? 1 : 0 }}
+      />
+      <img
+        src={frameB}
+        alt="Bird frame B"
+        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
+        style={{ opacity: frame === 1 ? 1 : 0 }}
+      />
+    </div>
+  );
+}
+
+function FlyingBirdsFlock() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-25">
+      {/* Flock 1: Flying Left to Right across upper gate */}
+      <div
+        className="absolute top-[18vh] left-0"
+        style={{ animation: "flyAcrossLTR 13s linear infinite 0.5s" }}
+      >
+        <FlappingBird frameA={burung01Png} frameB={burung02Png} size={44} flapSpeed={230} flipX={false} />
+      </div>
+
+      <div
+        className="absolute top-[15vh] left-0"
+        style={{ animation: "flyAcrossLTR 13s linear infinite 1.2s" }}
+      >
+        <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={34} flapSpeed={270} flipX={true} />
+      </div>
+
+      <div
+        className="absolute top-[22vh] left-0"
+        style={{ animation: "flyAcrossLTR 13s linear infinite 1.9s" }}
+      >
+        <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={28} flapSpeed={210} flipX={true} />
+      </div>
+
+      {/* Flock 2: Flying Right to Left across lower/mid gate */}
+      <div
+        className="absolute top-[28vh] right-0"
+        style={{ animation: "flyAcrossRTL 16s linear infinite 5.5s" }}
+      >
+        <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={48} flapSpeed={220} flipX={false} />
+      </div>
+
+      <div
+        className="absolute top-[24vh] right-0"
+        style={{ animation: "flyAcrossRTL 16s linear infinite 6.3s" }}
+      >
+        <FlappingBird frameA={burung01Png} frameB={burung02Png} size={38} flapSpeed={260} flipX={true} />
+      </div>
+
+      <div
+        className="absolute top-[32vh] right-0"
+        style={{ animation: "flyAcrossRTL 16s linear infinite 7.1s" }}
+      >
+        <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={30} flapSpeed={200} flipX={false} />
+      </div>
+    </div>
+  );
+}
 
 /* ─── Floral Background Decorations ─────────────────────── */
 
@@ -263,15 +377,25 @@ function BackgroundOrnament({
   const getSrc = () => {
     switch (position) {
       case "top-left":
-        return kiriAtasSvg;
       case "top-right":
-        return kananAtasSvg;
       case "bottom-left":
-        return kiriBawahSvg;
       case "bottom-right":
-        return kananBawahSvg;
+        return kananAtasSvg;
       default:
         return bunga1Svg;
+    }
+  };
+
+  const getTransform = () => {
+    switch (position) {
+      case "top-left":
+        return "scaleX(-1)";
+      case "bottom-left":
+        return "scale(-1, -1)";
+      case "bottom-right":
+        return "scaleY(-1)";
+      default:
+        return "none";
     }
   };
 
@@ -329,8 +453,8 @@ function BackgroundOrnament({
       ref={ref}
       className={`absolute pointer-events-none select-none overflow-visible transition-all duration-1000 ${getEntranceClass()}`}
       style={{
-        width: position === "center" ? "200px" : "clamp(120px, 30vw, 260px)",
-        height: position === "center" ? "200px" : "clamp(120px, 30vw, 260px)",
+        width: position === "center" ? "200px" : "clamp(160px, 35vw, 340px)",
+        height: position === "center" ? "200px" : "clamp(160px, 35vw, 340px)",
         zIndex: 25,
         opacity: visible ? opacity : 0,
         transformOrigin: position === "top-left" ? "top left" :
@@ -345,6 +469,7 @@ function BackgroundOrnament({
         <img
           src={getSrc()}
           className="w-full h-full object-contain filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.14)]"
+          style={{ transform: getTransform() }}
           alt=""
         />
       </div>
@@ -1558,6 +1683,7 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
 /* ─── Main App ───────────────────────────────────────────── */
 export default function App() {
   const [isOpened, setIsOpened] = useState(false);
+  const [openingStage, setOpeningStage] = useState<'closed' | 'opening_gate' | 'gate_opened' | 'zooming_in' | 'white_screen' | 'revealing' | 'opened'>('closed');
   const [copied, setCopied] = useState<string | null>(null);
   const [wishes, setWishes] = useState([
     { name: "Sarah & James", message: "Semoga kalian berdua dikaruniai seumur hidup yang penuh cinta, tawa, dan kebahagiaan yang tak berujung!", date: "2 hari lalu" },
@@ -1568,22 +1694,59 @@ export default function App() {
   const [rsvpSent, setRsvpSent] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const weddingDateMs = useMemo(() => new Date("2026-09-20T10:00:00").getTime(), []);
+  const weddingDateMs = useMemo(() => new Date("2026-06-20T10:00:00").getTime(), []);
   const countdown = useCountdown(weddingDateMs);
+
+  const handleStartOpening = () => {
+    if (openingStage !== 'closed') return;
+
+    if (audioRef.current && !isMuted) {
+      void audioRef.current.play().catch(() => {});
+    }
+
+    // Step 1: Open gate (gerbang_tertutup -> gerbsng_terbuka) with decorations remaining intact
+    setOpeningStage('opening_gate');
+
+    // Step 2: Open gate is displayed at scale(1) with decorations for user to admire for a few seconds
+    setTimeout(() => {
+      setOpeningStage('gate_opened');
+    }, 800);
+
+    // Step 3: Now zoom in camera deep into open gate archway after ~1.3s in gate_opened state
+    setTimeout(() => {
+      setOpeningStage('zooming_in');
+    }, 2100);
+
+    // Step 4: Flash pure white blank screen
+    setTimeout(() => {
+      setOpeningStage('white_screen');
+      setIsOpened(true);
+    }, 3400);
+
+    // Step 5: White screen fades while camera zooms out main page back to normal scale
+    setTimeout(() => {
+      setOpeningStage('revealing');
+    }, 4500);
+
+    // Step 6: Complete transition
+    setTimeout(() => {
+      setOpeningStage('opened');
+    }, 5900);
+  };
 
   // Scroll locking & touch/wheel opening detection
   useEffect(() => {
-    if (!isOpened) {
+    if (openingStage === 'closed') {
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
-    } else {
+    } else if (openingStage === 'opened') {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     }
 
     const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 0) {
-        setIsOpened(true);
+      if (e.deltaY > 0 && openingStage === 'closed') {
+        handleStartOpening();
       }
     };
 
@@ -1593,12 +1756,12 @@ export default function App() {
     };
     const handleTouchMove = (e: TouchEvent) => {
       const touchEnd = e.touches[0].clientY;
-      if (touchStart - touchEnd > 40) {
-        setIsOpened(true);
+      if (touchStart - touchEnd > 30 && openingStage === 'closed') {
+        handleStartOpening();
       }
     };
 
-    if (!isOpened) {
+    if (openingStage === 'closed') {
       window.addEventListener("wheel", handleWheel, { passive: true });
       window.addEventListener("touchstart", handleTouchStart, { passive: true });
       window.addEventListener("touchmove", handleTouchMove, { passive: true });
@@ -1610,7 +1773,7 @@ export default function App() {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [isOpened]);
+  }, [openingStage]);
 
   // Load background music once and keep it ready
   useEffect(() => {
@@ -1630,33 +1793,11 @@ export default function App() {
     if (!audioRef.current) return;
     audioRef.current.muted = isMuted;
     if (isOpened) {
-      void audioRef.current.play().catch(() => {
-        // Autoplay may be blocked until first user gesture in some browsers.
-      });
+      void audioRef.current.play().catch(() => {});
     } else {
       audioRef.current.pause();
     }
   }, [isOpened, isMuted]);
-
-  // Listen for scroll back to top to close the flowers
-  useEffect(() => {
-    if (!isOpened) return;
-
-    let hasScrolledDown = false;
-
-    const handleScroll = () => {
-      const y = window.scrollY;
-      if (y > 20) {
-        hasScrolledDown = true;
-      }
-      if (hasScrolledDown && y <= 5) {
-        setIsOpened(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isOpened]);
 
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
@@ -1695,190 +1836,233 @@ export default function App() {
 
       <FallingPetals />
 
-      {/* ── HERO & OPENING SECTION ─────────────────────────── */}
-      <div
-        className="relative w-full flex flex-col items-center justify-center overflow-visible"
-        style={{ minHeight: "100svh", height: "100svh", background: "#FAF7F2" }}
-      >
-        {/* Left Flower Frame */}
+      {/* ── LUXURY OPENING COVER & GATE ANIMATION OVERLAY ──── */}
+      {openingStage !== 'opened' && (
         <div
-          className="absolute inset-y-0 left-0 w-full h-full pointer-events-none select-none overflow-visible"
+          className="fixed inset-0 z-[60] flex flex-col items-center justify-between overflow-hidden select-none pointer-events-auto"
           style={{
-            zIndex: 10,
-            transform: `translateX(${isOpened ? "-45vw" : "0vw"})`,
-            transition: "transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)",
-            willChange: "transform",
+            background: "linear-gradient(180deg, #FDFBF7 0%, #F7F2E9 50%, #FDFBF7 100%)",
+            opacity: openingStage === 'revealing' ? 0 : 1,
+            transition: openingStage === 'revealing' ? "opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1)" : "none",
+            pointerEvents: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? "auto" : "none",
           }}
         >
+          {/* Animated Flying Flock of Birds across Gate */}
+          {(openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') && (
+            <FlyingBirdsFlock />
+          )}
+
+          {/* Top-Left Corner Ornament (kananAtasSvg flipped horizontally) */}
           <div
-            className="w-full h-full"
+            className="absolute top-0 left-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
+            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+          >
+            <img src={kananAtasSvg} alt="Flowers Left Top Corner" className="w-full h-auto object-contain scale-x-[-1] filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.12)]" />
+          </div>
+
+          {/* Top-Right Corner Ornament (kananAtasSvg) */}
+          <div
+            className="absolute top-0 right-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
+            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+          >
+            <img src={kananAtasSvg} alt="Flowers Right Top Corner" className="w-full h-auto object-contain filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.12)]" />
+          </div>
+
+          {/* Bottom-Left Corner Ornament (kananAtasSvg flipped horizontally & vertically) */}
+          <div
+            className="absolute bottom-0 left-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
+            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+          >
+            <img src={kananAtasSvg} alt="Flowers Left Bottom Corner" className="w-full h-auto object-contain scale-x-[-1] scale-y-[-1] filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.12)]" />
+          </div>
+
+          {/* Bottom-Right Corner Ornament (kananAtasSvg flipped vertically) */}
+          <div
+            className="absolute bottom-0 right-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
+            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+          >
+            <img src={kananAtasSvg} alt="Flowers Right Bottom Corner" className="w-full h-auto object-contain scale-y-[-1] filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.12)]" />
+          </div>
+
+          {/* Left Side Continuous Floral Frame (bungan_opening_kiri.svg - Top & Bottom) */}
+          <div
+            className="absolute top-0 left-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
+            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+          >
+            <img src={bungaOpeningKiriSvg} alt="Flowers Left Top" className="w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(44,36,22,0.1)]" />
+          </div>
+          <div
+            className="absolute bottom-0 left-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
+            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+          >
+            <img src={bungaOpeningKiriSvg} alt="Flowers Left Bottom" className="w-full h-auto object-contain scale-y-[-1] filter drop-shadow-[0_4px_12px_rgba(44,36,22,0.1)]" />
+          </div>
+
+          {/* Right Side Continuous Floral Frame (bunga_opening_kanan.svg - Top & Bottom) */}
+          <div
+            className="absolute top-0 right-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
+            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+          >
+            <img src={bungaOpeningKananSvg} alt="Flowers Right Top" className="w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(44,36,22,0.1)]" />
+          </div>
+          <div
+            className="absolute bottom-0 right-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
+            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+          >
+            <img src={bungaOpeningKananSvg} alt="Flowers Right Bottom" className="w-full h-auto object-contain scale-y-[-1] filter drop-shadow-[0_4px_12px_rgba(44,36,22,0.1)]" />
+          </div>
+
+          {/* Center Gate Container */}
+          <div className="relative z-10 flex-1 flex items-center justify-center w-full my-auto py-2">
+            <div
+              className="relative w-[360px] xs:w-[440px] sm:w-[560px] md:w-[680px] lg:w-[760px] aspect-[711/837] max-h-[64vh] sm:max-h-[72vh] lg:max-h-[76vh] flex items-center justify-center transition-all duration-[1500ms]"
+              style={{
+                transformOrigin: "50% 50%",
+                transform: (openingStage === 'zooming_in' || openingStage === 'white_screen')
+                  ? "scale(20) translateY(-2%)"
+                  : "scale(1) translateY(0)",
+                transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            >
+              {/* Layer 1: Open Gate (gerbsng_terbuka.png) */}
+              <img
+                src={gerbangTerbukaPng}
+                alt="Gerbang Terbuka"
+                className="absolute inset-0 w-full h-full object-contain pointer-events-none transition-opacity duration-1000 ease-in-out"
+                style={{
+                  opacity: openingStage === 'closed' ? 0 : 1,
+                }}
+              />
+
+              {/* Layer 2: Closed Gate (gerbang_tertutup.png) */}
+              <img
+                src={gerbangTertutupPng}
+                alt="Gerbang Tertutup"
+                className="absolute inset-0 w-full h-full object-contain pointer-events-none transition-opacity duration-1000 ease-in-out"
+                style={{
+                  opacity: openingStage === 'closed' ? 1 : 0,
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Bottom Controls: Subtitle, Button, Click Pointer */}
+          <div
+            className="relative z-20 flex flex-col items-center text-center pb-8 sm:pb-12 px-4 transition-all duration-500"
             style={{
-              animation: "windSwayLeft 10s ease-in-out infinite alternate",
+              opacity: openingStage === 'closed' ? 1 : 0,
+              transform: openingStage === 'closed' ? "translateY(0)" : "translateY(25px)",
+              pointerEvents: openingStage === 'closed' ? "auto" : "none",
             }}
           >
-            <img
-              src={bungaOpeningKiriSvg}
-              className="w-full h-full object-cover"
-              alt="Left Flower"
-              style={{ transform: "scale(1.03)", objectFit: "cover" }}
-            />
+            <p className="text-xs sm:text-sm tracking-[0.2em] text-[#6E5B48] font-light mb-3">
+              ✦ Buka pintu awal kisah kami ✦
+            </p>
+
+            <button
+              onClick={handleStartOpening}
+              className="group relative px-8 py-3.5 rounded-full text-xs sm:text-sm font-light tracking-[0.25em] uppercase transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer shadow-lg"
+              style={{
+                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 240, 228, 0.92))",
+                backdropFilter: "blur(10px)",
+                border: "1.5px solid #C8A96A",
+                color: "#4A3E31",
+                boxShadow: "0 10px 30px rgba(200, 169, 106, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.9)",
+                fontFamily: "'Poppins', sans-serif",
+              }}
+            >
+              <span>BUKA UNDANGAN</span>
+              <span className="text-[#C8A96A] text-sm font-bold transition-transform duration-300 group-hover:translate-x-1">›</span>
+            </button>
+
+            <div className="mt-3 animate-bounce flex flex-col items-center opacity-75">
+              <svg className="w-5 h-5 text-[#C8A96A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V6m-6 6H2.25m19.5 0H18" />
+              </svg>
+            </div>
+          </div>
+
+
+
+          {/* Bottom Overlapping Flower PNG Garden Cluster (bunga8, bunga9, bunga10, bunga11, bunga2) */}
+          <div
+            className="absolute bottom-0 inset-x-0 pointer-events-none z-15 overflow-hidden flex items-end justify-between transition-opacity duration-700 px-0"
+            style={{
+              opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 1 : 0,
+            }}
+          >
+            {/* Left Overlapping Flowers Cluster */}
+            <div className="relative flex items-end -ml-4 sm:-ml-8 -mb-2 sm:-mb-5">
+              {/* Bunga 8 - Base Layer Left */}
+              <img
+                src={bunga8Png}
+                alt="Flower 8"
+                className="w-24 sm:w-36 md:w-44 h-auto object-contain transform -rotate-12 translate-y-2 filter drop-shadow(0 6px 12px rgba(61,46,30,0.15)) animate-flower-sway-bl"
+              />
+              {/* Bunga 9 - Overlapping Layer Left */}
+              <img
+                src={bunga9Png}
+                alt="Flower 9"
+                className="w-28 sm:w-40 md:w-48 h-auto object-contain -ml-10 sm:-ml-16 transform rotate-6 -translate-y-2 filter drop-shadow(0 8px 16px rgba(61,46,30,0.18))"
+              />
+              {/* Bunga 2 - Front Accent Left */}
+              <img
+                src={bunga2Png}
+                alt="Flower 2"
+                className="w-18 sm:w-28 md:w-34 h-auto object-contain -ml-8 sm:-ml-12 transform -rotate-6 translate-y-1 opacity-95"
+              />
+            </div>
+
+            {/* Center Bottom Floral Hedge Accent (Between Left & Right) */}
+            <div className="relative flex items-end justify-center -mb-3 opacity-90 hidden xs:flex">
+              <img
+                src={bunga10Png}
+                alt="Flower 10 Center"
+                className="w-32 sm:w-44 md:w-52 h-auto object-contain transform scale-95 -translate-y-1 filter drop-shadow(0 6px 14px rgba(61,46,30,0.14))"
+              />
+            </div>
+
+            {/* Right Overlapping Flowers Cluster */}
+            <div className="relative flex items-end -mr-4 sm:-mr-8 -mb-2 sm:-mb-5">
+              {/* Bunga 2 - Front Accent Right */}
+              <img
+                src={bunga2Png}
+                alt="Flower 2 Right"
+                className="w-18 sm:w-28 md:w-34 h-auto object-contain -mr-8 sm:-mr-12 transform rotate-12 scale-x-[-1] translate-y-1 opacity-95"
+              />
+              {/* Bunga 10 - Overlapping Layer Right */}
+              <img
+                src={bunga10Png}
+                alt="Flower 10"
+                className="w-28 sm:w-40 md:w-48 h-auto object-contain -mr-10 sm:-mr-16 transform -rotate-6 filter drop-shadow(0 8px 16px rgba(61,46,30,0.18))"
+              />
+              {/* Bunga 11 - Base Layer Right */}
+              <img
+                src={bunga11Png}
+                alt="Flower 11"
+                className="w-26 sm:w-38 md:w-46 h-auto object-contain transform rotate-12 translate-y-2 filter drop-shadow(0 6px 12px rgba(61,46,30,0.15)) animate-flower-sway-br"
+              />
+            </div>
           </div>
         </div>
+      )}
 
-        {/* Right Flower Frame */}
+      {/* White Screen Transition Flash Overlay */}
+      {(openingStage === 'zooming_in' || openingStage === 'white_screen' || openingStage === 'revealing') && (
         <div
-          className="absolute inset-y-0 right-0 w-full h-full pointer-events-none select-none overflow-visible"
+          className="fixed inset-0 bg-white pointer-events-none z-[100]"
           style={{
-            zIndex: 10,
-            transform: `translateX(${isOpened ? "45vw" : "0vw"})`,
-            transition: "transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)",
-            willChange: "transform",
+            opacity: (openingStage === 'white_screen')
+              ? 1
+              : (openingStage === 'zooming_in')
+              ? 1
+              : 0,
+            transition: (openingStage === 'zooming_in')
+              ? "opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1)"
+              : "opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
-        >
-          <div
-            className="w-full h-full"
-            style={{
-              animation: "windSwayRight 10s ease-in-out infinite alternate",
-            }}
-          >
-            <img
-              src={bungaOpeningKananSvg}
-              className="w-full h-full object-cover"
-              alt="Right Flower"
-              style={{ transform: "scale(1.03)", objectFit: "cover" }}
-            />
-          </div>
-        </div>
-
-        {/* Closed Cover Overlay */}
-        <div
-          className="absolute inset-0 w-full h-full overflow-visible"
-          style={{
-            zIndex: 15,
-            background: "#FAF7F2",
-            opacity: isOpened ? 0 : 1,
-            pointerEvents: isOpened ? "none" : "auto",
-            transition: "opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1)",
-            willChange: "opacity",
-          }}
-        >
-          <div
-            className="w-full h-full"
-            style={{
-              animation: "windSwayLeft 8s ease-in-out infinite alternate",
-            }}
-          >
-            <img
-              src={openinggSvg}
-              className="w-full h-full object-cover"
-              alt="Closed Cover"
-              style={{ transform: "scale(1.03)", objectFit: "cover" }}
-            />
-          </div>
-        </div>
-
-        {/* Hero Content (revealed when opened) */}
-        <div
-          className="relative z-20 flex flex-col items-center text-center px-6"
-          style={{
-            opacity: isOpened ? 1 : 0,
-            transform: `translateY(${isOpened ? "0px" : "30px"})`,
-            transition: "opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s",
-            pointerEvents: isOpened ? "auto" : "none",
-            willChange: "opacity, transform",
-          }}
-        >
-          <p
-            className="text-xs tracking-[0.45em] uppercase mb-4"
-            style={{ color: "#8A7560", fontWeight: 400 }}
-          >
-            THE WEDDING OF
-          </p>
-          <h1
-            style={{
-              fontFamily: "'Great Vibes', cursive",
-              fontSize: "clamp(3.5rem, 12vw, 6.5rem)",
-              color: "#C8A96A",
-              lineHeight: 1,
-              textShadow: "0 2px 10px rgba(200,169,106,0.1)",
-            }}
-          >
-            Aisyah
-          </h1>
-          <span
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontStyle: "italic",
-              fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
-              color: "#8A7560",
-              margin: "0.25rem 0",
-            }}
-          >
-            &
-          </span>
-          <h1
-            style={{
-              fontFamily: "'Great Vibes', cursive",
-              fontSize: "clamp(3.5rem, 12vw, 6.5rem)",
-              color: "#C8A96A",
-              lineHeight: 1,
-              textShadow: "0 2px 10px rgba(200,169,106,0.1)",
-              marginBottom: "1rem",
-            }}
-          >
-            Rizky
-          </h1>
-          <p
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: "clamp(1.1rem, 3vw, 1.5rem)",
-              color: "#8A7560",
-              letterSpacing: "0.15em",
-              fontWeight: 500,
-            }}
-          >
-            20.09.2026
-          </p>
-          <p className="mt-2 text-xs tracking-[0.35em] uppercase" style={{ color: "#8A7560", fontWeight: 300 }}>
-            Grand Ballroom · The Ivory Palace · Jakarta
-          </p>
-          <a
-            href="#welcome"
-            className="mt-10 flex flex-col items-center gap-2"
-            style={{ color: "rgba(200,169,106,0.8)", textDecoration: "none" }}
-          >
-            <span className="text-xs tracking-[0.3em] uppercase" style={{ fontSize: "0.65rem" }}>Scroll to Explore</span>
-            <ChevronDown size={18} style={{ animation: "bounce 1.5s ease-in-out infinite" }}/>
-          </a>
-        </div>
-
-        {/* Buka Undangan Button Overlay */}
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center z-30 pointer-events-none"
-          style={{
-            opacity: isOpened ? 0 : 1,
-            transition: "opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
-            willChange: "opacity",
-          }}
-        >
-          <button
-            onClick={() => setIsOpened(true)}
-            className="px-8 py-4 rounded-full text-sm font-light tracking-[0.2em] uppercase transition-all duration-500 hover:scale-105 active:scale-95 flex items-center gap-3 cursor-pointer pointer-events-auto"
-            style={{
-              background: "rgba(255, 255, 255, 0.9)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(200, 169, 106, 0.5)",
-              color: "#2C2416",
-              boxShadow: "0 10px 40px rgba(200, 169, 106, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "0.75rem",
-            }}
-          >
-            <Heart size={14} fill="#C8A96A" className="text-[#C8A96A]" />
-            Buka Undangan
-          </button>
-        </div>
-      </div>
+        />
+      )}
 
       {isOpened && (
         <button
@@ -1891,34 +2075,47 @@ export default function App() {
         </button>
       )}
 
-      {/* ── WELCOME ─────────────────────────────────────────── */}
-      <section id="welcome" className="py-24 px-6 text-center relative overflow-hidden" style={{ background: "#FAF7F2" }}>
-        <BackgroundOrnament position="top-right" opacity={0.95} />
-        <BackgroundOrnament position="bottom-left" opacity={0.95} />
-        <div className="relative z-10">
-          <SectionReveal className="relative z-10">
-            <PremiumFrame>
-              <SectionHeader label="With Joy We Announce" title="Welcome, Dear Guests" />
-              <div className="max-w-xl mx-auto">
-                  <p style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                fontSize: "clamp(1.1rem, 3vw, 1.4rem)",
-                color: "#8A7560",
-                fontStyle: "italic",
-                lineHeight: 1.8,
-                marginBottom: "1.5rem",
-              }}>
-                "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy."
-              </p>
-              <p className="text-xs tracking-[0.3em] uppercase" style={{ color: "#C8A96A" }}>— Surah Ar-Rum: 21 —</p>
-              <p className="mt-8 leading-relaxed" style={{ color: "#8A7560", fontSize: "0.9rem", lineHeight: 1.9 }}>
-                Dengan penuh cinta dan rasa syukur yang melimpah, kami dengan bahagia mengundang kalian untuk merayakan bersatunya dua hati kami. Kehadiran kalian akan membuat hari istimewa kami menjadi sempurna — dan selalu terkenang dalam ingatan kami.
-              </p>
-            </div>
-          </PremiumFrame>
-          </SectionReveal>
-        </div>
-      </section>
+      {/* Main Landing Page Content Container with Zoom-Out Reveal Animation */}
+      <div
+        className="w-full transition-transform duration-[1400ms]"
+        style={{
+          transform: (openingStage === 'white_screen')
+            ? "scale(1.15)"
+            : (openingStage === 'revealing')
+            ? "scale(1.0)"
+            : "scale(1.0)",
+          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+          transformOrigin: "50% 30%",
+        }}
+      >
+        {/* ── WELCOME ─────────────────────────────────────────── */}
+        <section id="welcome" className="py-24 px-6 text-center relative overflow-hidden" style={{ background: "#FAF7F2" }}>
+          <BackgroundOrnament position="top-right" opacity={0.95} />
+          <BackgroundOrnament position="bottom-left" opacity={0.95} />
+          <div className="relative z-10">
+            <SectionReveal className="relative z-10">
+              <PremiumFrame>
+                <SectionHeader label="With Joy We Announce" title="Welcome, Dear Guests" />
+                <div className="max-w-xl mx-auto">
+                    <p style={{
+                      fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "clamp(1.1rem, 3vw, 1.4rem)",
+                  color: "#8A7560",
+                  fontStyle: "italic",
+                  lineHeight: 1.8,
+                  marginBottom: "1.5rem",
+                }}>
+                  "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy."
+                </p>
+                <p className="text-xs tracking-[0.3em] uppercase" style={{ color: "#C8A96A" }}>— Surah Ar-Rum: 21 —</p>
+                <p className="mt-8 leading-relaxed" style={{ color: "#8A7560", fontSize: "0.9rem", lineHeight: 1.9 }}>
+                  Dengan penuh cinta dan rasa syukur yang melimpah, kami dengan bahagia mengundang kalian untuk merayakan bersatunya dua hati kami. Kehadiran kalian akan membuat hari istimewa kami menjadi sempurna — dan selalu terkenang dalam ingatan kami.
+                </p>
+              </div>
+            </PremiumFrame>
+            </SectionReveal>
+          </div>
+        </section>
 
       {/* ── BRIDE & GROOM ───────────────────────────────────── */}
       <section className="py-32 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
@@ -2372,6 +2569,7 @@ export default function App() {
           </div>
         </nav>
       )}
+      </div>
 
       <style>{`
         /* Background Wind Sway */
@@ -2575,6 +2773,46 @@ export default function App() {
         @keyframes flapOpen {
           0%   { transform: rotateX(0deg); }
           100% { transform: rotateX(-160deg); }
+        }
+        @keyframes flyAcrossLTR {
+          0% {
+            transform: translate(-120px, 20px) scale(0.7) rotate(-3deg);
+            opacity: 0;
+          }
+          8% {
+            opacity: 0.9;
+          }
+          50% {
+            transform: translate(calc(50vw - 30px), -25px) scale(1) rotate(2deg);
+            opacity: 1;
+          }
+          92% {
+            opacity: 0.9;
+          }
+          100% {
+            transform: translate(calc(100vw + 100px), -50px) scale(0.8) rotate(-4deg);
+            opacity: 0;
+          }
+        }
+        @keyframes flyAcrossRTL {
+          0% {
+            transform: translate(calc(100vw + 100px), -20px) scale(0.8) rotate(4deg);
+            opacity: 0;
+          }
+          8% {
+            opacity: 0.95;
+          }
+          50% {
+            transform: translate(calc(50vw - 40px), 30px) scale(1.05) rotate(-2deg);
+            opacity: 1;
+          }
+          92% {
+            opacity: 0.9;
+          }
+          100% {
+            transform: translate(-120px, 40px) scale(0.75) rotate(3deg);
+            opacity: 0;
+          }
         }
         * { scroll-behavior: smooth; }
         ::-webkit-scrollbar { width: 4px; }
