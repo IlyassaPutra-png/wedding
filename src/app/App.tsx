@@ -1683,7 +1683,7 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
 /* ─── Main App ───────────────────────────────────────────── */
 export default function App() {
   const [isOpened, setIsOpened] = useState(false);
-  const [openingStage, setOpeningStage] = useState<'closed' | 'opening_gate' | 'gate_opened' | 'zooming_in' | 'white_screen' | 'revealing' | 'opened'>('closed');
+  const [openingStage, setOpeningStage] = useState<'closed' | 'opening_gate' | 'zooming_in' | 'revealing' | 'opened'>('closed');
   const [copied, setCopied] = useState<string | null>(null);
   const [wishes, setWishes] = useState([
     { name: "Sarah & James", message: "Semoga kalian berdua dikaruniai seumur hidup yang penuh cinta, tawa, dan kebahagiaan yang tak berujung!", date: "2 hari lalu" },
@@ -1704,34 +1704,24 @@ export default function App() {
       void audioRef.current.play().catch(() => {});
     }
 
-    // Step 1: Open gate (gerbang_tertutup -> gerbsng_terbuka) with decorations remaining intact
+    // Step 1: Open gate doors (gerbang_tertutup -> gerbsng_terbuka) & slide side floral doors
     setOpeningStage('opening_gate');
 
-    // Step 2: Open gate is displayed at scale(1) with decorations for user to admire for a few seconds
-    setTimeout(() => {
-      setOpeningStage('gate_opened');
-    }, 800);
-
-    // Step 3: Now zoom in camera deep into open gate archway after ~1.3s in gate_opened state
+    // Step 2: Camera zooms in slowly & gracefully into center hole of gerbsng_terbuka.png (scale 85)
     setTimeout(() => {
       setOpeningStage('zooming_in');
-    }, 2100);
+    }, 1000);
 
-    // Step 4: Flash pure white blank screen
+    // Step 3: As camera enters deep through the gate hole, reveal the main invitation landing page
     setTimeout(() => {
-      setOpeningStage('white_screen');
       setIsOpened(true);
-    }, 3400);
-
-    // Step 5: White screen fades while camera zooms out main page back to normal scale
-    setTimeout(() => {
       setOpeningStage('revealing');
     }, 4500);
 
-    // Step 6: Complete transition
+    // Step 4: Complete transition and remove overlay
     setTimeout(() => {
       setOpeningStage('opened');
-    }, 5900);
+    }, 5600);
   };
 
   // Scroll locking & touch/wheel opening detection
@@ -1839,16 +1829,16 @@ export default function App() {
       {/* ── LUXURY OPENING COVER & GATE ANIMATION OVERLAY ──── */}
       {openingStage !== 'opened' && (
         <div
-          className="fixed inset-0 z-[60] flex flex-col items-center justify-between overflow-hidden select-none pointer-events-auto"
+          className="fixed inset-0 z-[60] flex flex-col items-center justify-between overflow-hidden select-none"
           style={{
             background: "linear-gradient(180deg, #FDFBF7 0%, #F7F2E9 50%, #FDFBF7 100%)",
             opacity: openingStage === 'revealing' ? 0 : 1,
             transition: openingStage === 'revealing' ? "opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1)" : "none",
-            pointerEvents: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? "auto" : "none",
+            pointerEvents: openingStage === 'closed' ? "auto" : "none",
           }}
         >
           {/* Animated Flying Flock of Birds across Gate */}
-          {(openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') && (
+          {(openingStage === 'closed' || openingStage === 'opening_gate') && (
             <FlyingBirdsFlock />
           )}
 
@@ -1856,9 +1846,9 @@ export default function App() {
           <div
             className="absolute inset-y-0 left-0 w-[58%] h-full pointer-events-none z-16"
             style={{
-              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(-110%)",
-              opacity: (openingStage === 'revealing' || openingStage === 'white_screen') ? 0 : 0.98,
-              transition: "transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-in-out",
+              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(-120%)",
+              opacity: (openingStage === 'revealing') ? 0 : 0.98,
+              transition: "transform 2.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease-in-out",
             }}
           >
             <img
@@ -1872,9 +1862,9 @@ export default function App() {
           <div
             className="absolute inset-y-0 right-0 w-[58%] h-full pointer-events-none z-15"
             style={{
-              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(110%)",
-              opacity: (openingStage === 'revealing' || openingStage === 'white_screen') ? 0 : 0.98,
-              transition: "transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-in-out",
+              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(120%)",
+              opacity: (openingStage === 'revealing') ? 0 : 0.98,
+              transition: "transform 2.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease-in-out",
             }}
           >
             <img
@@ -1891,10 +1881,8 @@ export default function App() {
             <div
               className="relative z-20 text-center pointer-events-none mb-2 sm:mb-4 px-4 flex flex-col items-center justify-center"
               style={{
-                opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 1 : 0,
-                transform: (openingStage === 'zooming_in' || openingStage === 'white_screen')
-                  ? "scale(3) translateY(-30px)"
-                  : "scale(1) translateY(0)",
+                opacity: openingStage === 'closed' ? 1 : 0,
+                transform: openingStage === 'closed' ? "scale(1) translateY(0)" : "scale(1.15) translateY(-20px)",
                 transition: "opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)"
               }}
             >
@@ -1926,15 +1914,18 @@ export default function App() {
               </div>
             </div>
 
-            {/* Gate Graphic Container */}
+            {/* Gate Graphic Container: Zoom smoothly into the archway hole of gerbsng_terbuka.png */}
             <div
-              className="relative w-[280px] xs:w-[340px] sm:w-[460px] md:w-[560px] lg:w-[640px] aspect-[711/837] max-h-[50vh] sm:max-h-[56vh] lg:max-h-[60vh] flex items-center justify-center transition-all duration-[1500ms]"
+              className="relative w-[280px] xs:w-[340px] sm:w-[460px] md:w-[560px] lg:w-[640px] aspect-[711/837] max-h-[50vh] sm:max-h-[56vh] lg:max-h-[60vh] flex items-center justify-center pointer-events-none"
               style={{
                 transformOrigin: "50% 50%",
-                transform: (openingStage === 'zooming_in' || openingStage === 'white_screen')
-                  ? "scale(20) translateY(-2%)"
+                transform: (openingStage === 'zooming_in' || openingStage === 'revealing')
+                  ? "scale(85) translateY(0%)"
                   : "scale(1) translateY(0)",
-                transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+                transition: (openingStage === 'zooming_in' || openingStage === 'revealing')
+                  ? "transform 3.5s cubic-bezier(0.33, 1, 0.68, 1)"
+                  : "transform 1.0s ease-out",
+                willChange: "transform",
               }}
             >
               {/* Layer 1: Open Gate (gerbsng_terbuka.png) */}
@@ -1995,13 +1986,11 @@ export default function App() {
             </div>
           </div>
 
-
-
           {/* Bottom Overlapping Flower PNG Garden Cluster (bunga8, bunga9, bunga10, bunga11, bunga2) */}
           <div
-            className="absolute bottom-0 inset-x-0 pointer-events-none z-15 overflow-hidden flex items-end justify-between transition-opacity duration-700 px-0"
+            className="absolute bottom-0 inset-x-0 pointer-events-none z-15 overflow-hidden flex items-end justify-between transition-opacity duration-500 px-0"
             style={{
-              opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 1 : 0,
+              opacity: openingStage === 'closed' ? 1 : 0,
             }}
           >
             {/* Left Overlapping Flowers Cluster */}
@@ -2060,23 +2049,6 @@ export default function App() {
         </div>
       )}
 
-      {/* White Screen Transition Flash Overlay */}
-      {(openingStage === 'zooming_in' || openingStage === 'white_screen' || openingStage === 'revealing') && (
-        <div
-          className="fixed inset-0 bg-white pointer-events-none z-[100]"
-          style={{
-            opacity: (openingStage === 'white_screen')
-              ? 1
-              : (openingStage === 'zooming_in')
-              ? 1
-              : 0,
-            transition: (openingStage === 'zooming_in')
-              ? "opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1)"
-              : "opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1)",
-          }}
-        />
-      )}
-
       {isOpened && (
         <button
           onClick={() => setIsMuted(prev => !prev)}
@@ -2088,17 +2060,12 @@ export default function App() {
         </button>
       )}
 
-      {/* Main Landing Page Content Container with Zoom-Out Reveal Animation */}
+      {/* Main Landing Page Content Container at Normal Scale (1.0) */}
       <div
-        className="w-full transition-transform duration-[1400ms]"
+        className="w-full transition-transform duration-700"
         style={{
-          transform: (openingStage === 'white_screen')
-            ? "scale(1.15)"
-            : (openingStage === 'revealing')
-            ? "scale(1.0)"
-            : "scale(1.0)",
-          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-          transformOrigin: "50% 30%",
+          transform: "scale(1.0)",
+          transformOrigin: "50% 50%",
         }}
       >
         {/* ── WELCOME ─────────────────────────────────────────── */}
