@@ -1852,11 +1852,11 @@ export default function App() {
             <FlyingBirdsFlock />
           )}
 
-          {/* Left Floral Door/Frame (bungan_opening_kiri.svg) - Full left frame, slides left on opening */}
+          {/* Left Floral Door/Frame (bungan_opening_kiri.svg) - Overlaps center, slides left on opening */}
           <div
-            className="absolute inset-y-0 left-0 w-[50%] h-full pointer-events-none z-15"
+            className="absolute inset-y-0 left-0 w-[58%] h-full pointer-events-none z-16"
             style={{
-              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(-105%)",
+              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(-110%)",
               opacity: (openingStage === 'revealing' || openingStage === 'white_screen') ? 0 : 0.98,
               transition: "transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-in-out",
             }}
@@ -1864,15 +1864,15 @@ export default function App() {
             <img
               src={bungaOpeningKiriSvg}
               alt="Left Opening Floral Frame"
-              className="w-full h-full object-cover object-left filter drop-shadow-[0_4px_16px_rgba(44,36,22,0.12)]"
+              className="w-full h-full object-cover object-left filter drop-shadow-[4px_4px_16px_rgba(44,36,22,0.18)]"
             />
           </div>
 
-          {/* Right Floral Door/Frame (bunga_opening_kanan.svg) - Full right frame, slides right on opening */}
+          {/* Right Floral Door/Frame (bunga_opening_kanan.svg) - Overlaps center, slides right on opening */}
           <div
-            className="absolute inset-y-0 right-0 w-[50%] h-full pointer-events-none z-15"
+            className="absolute inset-y-0 right-0 w-[58%] h-full pointer-events-none z-15"
             style={{
-              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(105%)",
+              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(110%)",
               opacity: (openingStage === 'revealing' || openingStage === 'white_screen') ? 0 : 0.98,
               transition: "transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-in-out",
             }}
@@ -1880,7 +1880,7 @@ export default function App() {
             <img
               src={bungaOpeningKananSvg}
               alt="Right Opening Floral Frame"
-              className="w-full h-full object-cover object-right filter drop-shadow-[0_4px_16px_rgba(44,36,22,0.12)]"
+              className="w-full h-full object-cover object-right filter drop-shadow-[-4px_4px_16px_rgba(44,36,22,0.18)]"
             />
           </div>
 
@@ -1889,10 +1889,13 @@ export default function App() {
             
             {/* Wedding Couple Name Title Overlay (ABOVE THE GATE) */}
             <div
-              className="relative z-20 text-center pointer-events-none mb-2 sm:mb-4 px-4 transition-opacity duration-700 flex flex-col items-center justify-center"
+              className="relative z-20 text-center pointer-events-none mb-2 sm:mb-4 px-4 flex flex-col items-center justify-center"
               style={{
-                opacity: openingStage === 'closed' ? 1 : 0,
-                transition: "opacity 0.6s ease-in-out"
+                opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 1 : 0,
+                transform: (openingStage === 'zooming_in' || openingStage === 'white_screen')
+                  ? "scale(3) translateY(-30px)"
+                  : "scale(1) translateY(0)",
+                transition: "opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)"
               }}
             >
               <p
