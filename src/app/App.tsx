@@ -1852,70 +1852,80 @@ export default function App() {
             <FlyingBirdsFlock />
           )}
 
-          {/* Top-Left Corner Ornament (kananAtasSvg flipped horizontally) */}
+          {/* Left Floral Door/Frame (bungan_opening_kiri.svg) - Full left frame, slides left on opening */}
           <div
-            className="absolute top-0 left-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
-            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+            className="absolute inset-y-0 left-0 w-[50%] h-full pointer-events-none z-15"
+            style={{
+              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(-105%)",
+              opacity: (openingStage === 'revealing' || openingStage === 'white_screen') ? 0 : 0.98,
+              transition: "transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-in-out",
+            }}
           >
-            <img src={kananAtasSvg} alt="Flowers Left Top Corner" className="w-full h-auto object-contain scale-x-[-1] filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.12)]" />
+            <img
+              src={bungaOpeningKiriSvg}
+              alt="Left Opening Floral Frame"
+              className="w-full h-full object-cover object-left filter drop-shadow-[0_4px_16px_rgba(44,36,22,0.12)]"
+            />
           </div>
 
-          {/* Top-Right Corner Ornament (kananAtasSvg) */}
+          {/* Right Floral Door/Frame (bunga_opening_kanan.svg) - Full right frame, slides right on opening */}
           <div
-            className="absolute top-0 right-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
-            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
+            className="absolute inset-y-0 right-0 w-[50%] h-full pointer-events-none z-15"
+            style={{
+              transform: (openingStage === 'closed') ? "translateX(0)" : "translateX(105%)",
+              opacity: (openingStage === 'revealing' || openingStage === 'white_screen') ? 0 : 0.98,
+              transition: "transform 1.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-in-out",
+            }}
           >
-            <img src={kananAtasSvg} alt="Flowers Right Top Corner" className="w-full h-auto object-contain filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.12)]" />
+            <img
+              src={bungaOpeningKananSvg}
+              alt="Right Opening Floral Frame"
+              className="w-full h-full object-cover object-right filter drop-shadow-[0_4px_16px_rgba(44,36,22,0.12)]"
+            />
           </div>
 
-          {/* Bottom-Left Corner Ornament (kananAtasSvg flipped horizontally & vertically) */}
-          <div
-            className="absolute bottom-0 left-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
-            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
-          >
-            <img src={kananAtasSvg} alt="Flowers Left Bottom Corner" className="w-full h-auto object-contain scale-x-[-1] scale-y-[-1] filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.12)]" />
-          </div>
-
-          {/* Bottom-Right Corner Ornament (kananAtasSvg flipped vertically) */}
-          <div
-            className="absolute bottom-0 right-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
-            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
-          >
-            <img src={kananAtasSvg} alt="Flowers Right Bottom Corner" className="w-full h-auto object-contain scale-y-[-1] filter drop-shadow-[0_8px_20px_rgba(44,36,22,0.12)]" />
-          </div>
-
-          {/* Left Side Continuous Floral Frame (bungan_opening_kiri.svg - Top & Bottom) */}
-          <div
-            className="absolute top-0 left-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
-            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
-          >
-            <img src={bungaOpeningKiriSvg} alt="Flowers Left Top" className="w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(44,36,22,0.1)]" />
-          </div>
-          <div
-            className="absolute bottom-0 left-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
-            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
-          >
-            <img src={bungaOpeningKiriSvg} alt="Flowers Left Bottom" className="w-full h-auto object-contain scale-y-[-1] filter drop-shadow-[0_4px_12px_rgba(44,36,22,0.1)]" />
-          </div>
-
-          {/* Right Side Continuous Floral Frame (bunga_opening_kanan.svg - Top & Bottom) */}
-          <div
-            className="absolute top-0 right-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
-            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
-          >
-            <img src={bungaOpeningKananSvg} alt="Flowers Right Top" className="w-full h-auto object-contain filter drop-shadow-[0_4px_12px_rgba(44,36,22,0.1)]" />
-          </div>
-          <div
-            className="absolute bottom-0 right-0 w-44 sm:w-64 md:w-80 lg:w-96 pointer-events-none z-10 transition-opacity duration-700"
-            style={{ opacity: (openingStage === 'closed' || openingStage === 'opening_gate' || openingStage === 'gate_opened') ? 0.95 : 0 }}
-          >
-            <img src={bungaOpeningKananSvg} alt="Flowers Right Bottom" className="w-full h-auto object-contain scale-y-[-1] filter drop-shadow-[0_4px_12px_rgba(44,36,22,0.1)]" />
-          </div>
-
-          {/* Center Gate Container */}
-          <div className="relative z-10 flex-1 flex items-center justify-center w-full my-auto py-2">
+          {/* Center Content Container: Couple Names ABOVE Gate + Gate Graphic */}
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full my-auto py-2">
+            
+            {/* Wedding Couple Name Title Overlay (ABOVE THE GATE) */}
             <div
-              className="relative w-[360px] xs:w-[440px] sm:w-[560px] md:w-[680px] lg:w-[760px] aspect-[711/837] max-h-[64vh] sm:max-h-[72vh] lg:max-h-[76vh] flex items-center justify-center transition-all duration-[1500ms]"
+              className="relative z-20 text-center pointer-events-none mb-2 sm:mb-4 px-4 transition-opacity duration-700 flex flex-col items-center justify-center"
+              style={{
+                opacity: openingStage === 'closed' ? 1 : 0,
+                transition: "opacity 0.6s ease-in-out"
+              }}
+            >
+              <p
+                className="text-[0.65rem] xs:text-xs sm:text-sm tracking-[0.25em] text-[#5C4A38] uppercase font-medium mb-1 drop-shadow-sm"
+                style={{ fontFamily: "'Cormorant Garamond', 'Poppins', serif" }}
+              >
+                The Wedding of
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2">
+                <h1
+                  className="text-xl xs:text-2xl sm:text-3xl md:text-4xl text-[#2C2416] font-serif leading-tight tracking-wide drop-shadow-sm"
+                  style={{ fontFamily: "'Great Vibes', 'Cormorant Garamond', cursive", fontWeight: 600 }}
+                >
+                  Aisyah Yusuf
+                </h1>
+                <span
+                  className="text-xs sm:text-lg text-[#8A7560] font-serif italic my-0"
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                >
+                  &
+                </span>
+                <h1
+                  className="text-xl xs:text-2xl sm:text-3xl md:text-4xl text-[#2C2416] font-serif leading-tight tracking-wide drop-shadow-sm"
+                  style={{ fontFamily: "'Great Vibes', 'Cormorant Garamond', cursive", fontWeight: 600 }}
+                >
+                  Rizky Ramadhan
+                </h1>
+              </div>
+            </div>
+
+            {/* Gate Graphic Container */}
+            <div
+              className="relative w-[280px] xs:w-[340px] sm:w-[460px] md:w-[560px] lg:w-[640px] aspect-[711/837] max-h-[50vh] sm:max-h-[56vh] lg:max-h-[60vh] flex items-center justify-center transition-all duration-[1500ms]"
               style={{
                 transformOrigin: "50% 50%",
                 transform: (openingStage === 'zooming_in' || openingStage === 'white_screen')
