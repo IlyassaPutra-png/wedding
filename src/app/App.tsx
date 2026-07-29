@@ -32,7 +32,201 @@ import bunga5Png from "./components/gambar/bunga/bunga5.png";
 import pohon1Png from "./components/gambar/pohon/pohon1.png";
 import pohon2Png from "./components/gambar/pohon/pohon2.png";
 
+import frame17Png from "./components/gambar/frames/frame17.png";
+import frame16Png from "./components/gambar/frames/frame16.png";
+import frame10Png from "./components/gambar/frames/frame10.png";
+import frame1Png from "./components/gambar/frames/frame1.png";
+import frame2Png from "./components/gambar/frames/frame2.png";
+import frame4Png from "./components/gambar/frames/frame4.png";
+import frame5Png from "./components/gambar/frames/frame5.png";
+import frame8Png from "./components/gambar/frames/frame8.png";
+import frame9Png from "./components/gambar/frames/frame9.png";
 
+import pohonPng from "./components/gambar/pohon/pohon.png";
+import pohon6Png from "./components/gambar/pohon/pohon6.png";
+import pohon7Png from "./components/gambar/pohon/pohon7.png";
+import pohon8Png from "./components/gambar/pohon/pohon8.png";
+import pohon9Png from "./components/gambar/pohon/pohon9.png";
+import pohon10Png from "./components/gambar/pohon/pohon10.png";
+
+/* ─── Background Photo Overlays & Floral Assets ─── */
+import bg1Png from "./components/gambar/bg/bg1.png";
+import bg2Png from "./components/gambar/bg/bg2.png";
+import bg3Png from "./components/gambar/bg/bg3.png";
+import bg4Png from "./components/gambar/bg/bg4.png";
+import bg5Png from "./components/gambar/bg/bg5.png";
+import daun1Png from "./components/gambar/Daun/daun1.png";
+import daun2Png from "./components/gambar/Daun/daun2.png";
+import daun7Png from "./components/gambar/Daun/daun7.png";
+import daun10Png from "./components/gambar/Daun/daun10.png";
+import tanaman1Png from "./components/gambar/tanaman/tanaman1.png";
+import tanaman5Png from "./components/gambar/tanaman/tanaman5.png";
+import bunga1Png from "./components/gambar/bunga/bunga1.png";
+import bunga6Png from "./components/gambar/bunga/bunga6.png";
+import bunga7Png from "./components/gambar/bunga/bunga7.png";
+
+/* ─── Side Trees Framing Component (Continuous Organic Swaying Animation) ─── */
+function SideTrees({
+  leftTree = pohon7Png,
+  rightTree = pohon8Png,
+  opacity = 0.85,
+  scale = 1.4,
+  top = "50%"
+}: {
+  leftTree?: string;
+  rightTree?: string;
+  opacity?: number;
+  scale?: number;
+  top?: string;
+}) {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-10">
+      {leftTree && (
+        <div
+          className="absolute -left-[45%] sm:-left-[35%] w-[85%] max-w-[340px] h-auto pointer-events-none"
+          style={{ top, opacity, transform: `translateY(-50%) scale(${scale})` }}
+        >
+          <img
+            src={leftTree}
+            alt=""
+            className="w-full h-auto object-contain filter drop-shadow-[0_10px_20px_rgba(74,58,50,0.18)] animate-living-tree-left pointer-events-none"
+          />
+        </div>
+      )}
+      {rightTree && (
+        <div
+          className="absolute -right-[45%] sm:-right-[35%] w-[85%] max-w-[340px] h-auto pointer-events-none"
+          style={{ top, opacity, transform: `translateY(-50%) scale(${scale}) scaleX(-1)` }}
+        >
+          <img
+            src={rightTree}
+            alt=""
+            className="w-full h-auto object-contain filter drop-shadow-[0_10px_20px_rgba(74,58,50,0.18)] animate-living-tree-right pointer-events-none"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Top Corner Floral Decoration (kiriatas.svg & kananatas.svg) ─── */
+function CornerFloralDecor({
+  position = "both",
+  opacity = 0.9,
+  className = "",
+}: {
+  position?: "left" | "right" | "both";
+  opacity?: number;
+  className?: string;
+}) {
+  const { ref, visible } = useInView(0.08);
+
+  return (
+    <div ref={ref} className={`absolute inset-x-0 top-0 pointer-events-none z-20 overflow-hidden ${className}`}>
+      {(position === "left" || position === "both") && (
+        <div
+          className={`absolute top-0 left-0 w-28 xs:w-36 sm:w-48 max-w-[200px] transition-all duration-1000 ${
+            visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-6 scale-90"
+          }`}
+          style={{ opacity: visible ? opacity : 0 }}
+        >
+          <img
+            src={kiriAtasSvg}
+            alt="Floral Corner Left"
+            className="w-full h-auto object-contain filter drop-shadow-[0_6px_14px_rgba(74,58,50,0.14)] animate-flower-sway-tl pointer-events-none"
+          />
+        </div>
+      )}
+      {(position === "right" || position === "both") && (
+        <div
+          className={`absolute top-0 right-0 w-28 xs:w-36 sm:w-48 max-w-[200px] transition-all duration-1000 ${
+            visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-6 scale-90"
+          }`}
+          style={{ opacity: visible ? opacity : 0, transitionDelay: "150ms" }}
+        >
+          <img
+            src={kananAtasSvg}
+            alt="Floral Corner Right"
+            className="w-full h-auto object-contain filter drop-shadow-[0_6px_14px_rgba(74,58,50,0.14)] animate-flower-sway-tr pointer-events-none"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Top Section Floral Cluster Header (bunga8, bunga10, bunga9) ─── */
+function TopFloralHeaderCluster({ opacity = 0.95 }: { opacity?: number }) {
+  const { ref, visible } = useInView(0.08);
+
+  return (
+    <div ref={ref} className="relative w-full flex items-center justify-center pt-2 -mb-4 pointer-events-none select-none z-20">
+      <div
+        className={`flex items-end justify-center transition-all duration-1000 ${
+          visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-6 scale-90"
+        }`}
+        style={{ opacity: visible ? opacity : 0 }}
+      >
+        {/* Bunga 8 - Left Accent */}
+        <img
+          src={bunga8Png}
+          alt="Floral Top Left"
+          className="w-16 xs:w-20 sm:w-28 h-auto object-contain -mr-5 sm:-mr-7 transform -rotate-12 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.12)] animate-flower-sway-tl"
+        />
+
+        {/* Bunga 10 - Center Main Bloom */}
+        <img
+          src={bunga10Png}
+          alt="Floral Top Center"
+          className="w-20 xs:w-24 sm:w-34 h-auto object-contain z-10 transform scale-105 filter drop-shadow-[0_6px_14px_rgba(74,58,50,0.15)] animate-flower-sway-center"
+        />
+
+        {/* Bunga 9 - Right Accent */}
+        <img
+          src={bunga9Png}
+          alt="Floral Top Right"
+          className="w-16 xs:w-20 sm:w-28 h-auto object-contain -ml-5 sm:-ml-7 transform rotate-12 scale-x-[-1] filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.12)] animate-flower-sway-tr"
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Framed Photo Component (Using Frame PNGs like frame17.png) ─────── */
+function FramedPhoto({
+  src,
+  alt,
+  frameSrc = frame17Png,
+  aspectRatio = "aspect-[3/4]",
+  className = "",
+  imgClassName = ""
+}: {
+  src: string;
+  alt: string;
+  frameSrc?: string;
+  aspectRatio?: string;
+  className?: string;
+  imgClassName?: string;
+}) {
+  return (
+    <div className={`relative p-3.5 sm:p-5 flex items-center justify-center ${className}`}>
+      <div className={`w-full h-full relative overflow-hidden rounded-2xl z-0 ${aspectRatio}`}>
+        <img
+          src={src}
+          alt={alt}
+          className={`w-full h-full object-cover transition-transform duration-700 hover:scale-105 ${imgClassName}`}
+        />
+      </div>
+      {frameSrc && (
+        <img
+          src={frameSrc}
+          alt="Ornate Frame"
+          className="absolute inset-0 w-full h-full object-fill pointer-events-none z-10 filter drop-shadow-md"
+        />
+      )}
+    </div>
+  );
+}
 
 /* ─── Animated Flying Birds Component ─────────────────── */
 function FlappingBird({
@@ -126,6 +320,52 @@ function FlyingBirdsFlock() {
         style={{ animation: "flyAcrossRTL 16s linear infinite 7.1s" }}
       >
         <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={30} flapSpeed={200} flipX={false} />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Section Background Photo Overlay Component ─── */
+function SectionBackgroundPhoto({ src, opacity = 0.14 }: { src: string; opacity?: number }) {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+      <img
+        src={src}
+        alt=""
+        className="w-full h-full object-cover filter saturate-[0.8] contrast-[1.05] animate-bg-wind pointer-events-none"
+        style={{ opacity }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, rgba(248,245,240,0.55) 0%, rgba(248,245,240,0.92) 100%)"
+        }}
+      />
+    </div>
+  );
+}
+
+/* ─── Section Birds Flock Component for content sections ─── */
+function SectionBirdsFlock({ delay = 0, top = "12vh" }: { delay?: number; top?: string }) {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
+      <div
+        className="absolute left-0"
+        style={{ top, animation: `flyAcrossLTR 15s linear infinite ${delay}s` }}
+      >
+        <FlappingBird frameA={burung01Png} frameB={burung02Png} size={36} flapSpeed={240} flipX={false} />
+      </div>
+      <div
+        className="absolute left-0"
+        style={{ top: `calc(${top} + 4vh)`, animation: `flyAcrossLTR 15s linear infinite ${delay + 1.6}s` }}
+      >
+        <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={28} flapSpeed={280} flipX={true} />
+      </div>
+      <div
+        className="absolute right-0"
+        style={{ top: `calc(${top} + 8vh)`, animation: `flyAcrossRTL 18s linear infinite ${delay + 6}s` }}
+      >
+        <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={32} flapSpeed={220} flipX={true} />
       </div>
     </div>
   );
@@ -652,9 +892,9 @@ function SectionHeader({
   label: string; title: string; description?: string; light?: boolean;
 }) {
   const { ref, visible } = useInView(0.15);
-  const gold = light ? "rgba(232,208,154,0.75)" : "#C8A96A";
-  const titleColor = light ? "#FAF7F2" : "#2C2416";
-  const descColor = light ? "rgba(255,255,255,0.55)" : "#8A7560";
+  const gold = "#C7A86D";
+  const titleColor = "#4A3A32";
+  const descColor = "#8A7560";
 
   return (
     <div ref={ref} className="text-center mb-14">
@@ -799,664 +1039,294 @@ function scrollContainerToChild(container: HTMLElement | null, child: HTMLElemen
   });
 }
 
-/* ─── Love Story Section ────────────────────────────────── */
-type StoryItem = { year: string; title: string; desc: string; icon: string };
+/* ─── Love Story Section (Revamped Aksara Style with Framed Photos & Descriptions Underneath) ─── */
+interface StoryItemData {
+  year: string;
+  date: string;
+  title: string;
+  desc: string;
+  photo: string;
+}
 
-function LoveStorySection({ timeline }: { timeline: StoryItem[] }) {
+function LoveStorySection({ timeline }: { timeline?: any[] }) {
+  const storyTimeline: StoryItemData[] = [
+    {
+      year: "2021",
+      date: "15 April 2021",
+      title: "Pertama Bertemu",
+      photo: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=450&fit=crop&auto=format",
+      desc: "Pandangan kami pertama kali bertemu di sebuah acara alumni kampus. Berawal dari percakapan hangat mengenai impian masa depan, kami menyadari ada getaran manis yang menyatukan hati."
+    },
+    {
+      year: "2023",
+      date: "20 Agustus 2023",
+      title: "Mengikat Janji",
+      photo: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&h=450&fit=crop&auto=format",
+      desc: "Setelah dua tahun saling mengenal dan menguatkan dalam suka dan duka, kami memutuskan untuk melangkah lebih serius sebagai pasangan yang siap tumbuh dan melengkapi bersama."
+    },
+    {
+      year: "2025",
+      date: "10 Januari 2025",
+      title: "Momen Lamaran",
+      photo: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=450&fit=crop&auto=format",
+      desc: "Di hadapan keluarga besar yang kami cintai, sebuah cincin tersemat indah. Suasana haru dan kebahagiaan menyelimuti saat pinangan resmi diterima dengan senyuman terbaik."
+    },
+    {
+      year: "2026",
+      date: "20 September 2026",
+      title: "Menuju Pernikahan",
+      photo: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&h=450&fit=crop&auto=format",
+      desc: "Hari yang kami tunggu akhirnya tiba. Bersama doa dan rida orang tua serta kehangatan keluarga tercinta, kami mengucap janji ikatan pernikahan suci untuk selamanya."
+    }
+  ];
+
   const [active, setActive] = useState(0);
-  const [prevActive, setPrevActive] = useState<number | null>(null);
-  const [dir, setDir] = useState<1 | -1>(1);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const touchX = useRef(0);
-  const touchY = useRef(0);
-
-  const go = (idx: number) => {
-    if (idx === active) return;
-    setDir(idx > active ? 1 : -1);
-    setPrevActive(active);
-    setActive(idx);
-    // scroll step indicator into view on mobile
-    setTimeout(() => {
-      const dots = trackRef.current?.querySelectorAll<HTMLElement>("[data-dot]");
-      const dot = dots?.[idx];
-      scrollContainerToChild(trackRef.current, dot);
-    }, 50);
-  };
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchX.current = e.touches[0].clientX;
-      touchY.current = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const dx = Math.abs(e.touches[0].clientX - touchX.current);
-      const dy = Math.abs(e.touches[0].clientY - touchY.current);
-      if (dx > 10 && dx > dy) {
-        e.preventDefault();
-      }
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const dx = touchX.current - e.changedTouches[0].clientX;
-      if (Math.abs(dx) > 40) {
-        go(Math.max(0, Math.min(timeline.length - 1, active + (dx > 0 ? 1 : -1))));
-      }
-    };
-
-    section.addEventListener("touchstart", handleTouchStart, { passive: false });
-    section.addEventListener("touchmove", handleTouchMove, { passive: false });
-    section.addEventListener("touchend", handleTouchEnd, { passive: false });
-
-    return () => {
-      section.removeEventListener("touchstart", handleTouchStart);
-      section.removeEventListener("touchmove", handleTouchMove);
-      section.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [active, go, timeline.length]);
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchX.current = e.touches[0].clientX;
-    touchY.current = e.touches[0].clientY;
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    const dx = Math.abs(e.touches[0].clientX - touchX.current);
-    const dy = Math.abs(e.touches[0].clientY - touchY.current);
-    if (dx > 10 && dx > dy) {
-      e.preventDefault();
-    }
-  };
-
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const dx = touchX.current - e.changedTouches[0].clientX;
-    if (Math.abs(dx) > 40) {
-      go(Math.max(0, Math.min(timeline.length - 1, active + (dx > 0 ? 1 : -1))));
-    }
-  };
-
-  const iconMap = ["🌸", "🕯️", "💑", "💍"];
-  const colorMap = ["#E8D09A", "#D4B87A", "#A8B8A5", "#C8A96A"];
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-24 relative overflow-hidden"
-      style={{ background: "#FAF7F2", touchAction: "pan-y", overscrollBehaviorX: "contain" }}
-    >
-      <BackgroundOrnament position="top-left" opacity={0.95} />
-      <BackgroundOrnament position="bottom-right" opacity={0.95} />
-      <div className="relative z-10">
-        <PremiumFrame>
-          <SectionHeader label="Our Journey Together" title="Our Love Story" />
+    <section id="story" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+      <SectionBackgroundPhoto src={bg3Png} opacity={0.16} />
+      <SectionBirdsFlock delay={1} top="8vh" />
+      <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.85} />
 
-          {/* ── Step tabs ──────────────────────────────────────── */}
-          <div ref={trackRef} className="flex justify-center gap-3 mb-10 px-6 overflow-x-auto" style={{ scrollbarWidth: "none", touchAction: "pan-y", overscrollBehaviorX: "contain" }}>
-            {timeline.map((item, i) => (
-              <button
-                key={i}
-                data-dot="1"
-                onClick={() => go(i)}
-                className="flex flex-col items-center gap-1 flex-shrink-0 transition-all duration-300"
-                style={{ opacity: i === active ? 1 : 0.45 }}
+      <div className="relative z-20 max-w-md mx-auto">
+        <SectionHeader label="Our Journey Together" title="Our Love Story" light={false} />
+
+        {/* Milestone Navigation Tabs */}
+        <div className="flex justify-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-none">
+          {storyTimeline.map((item, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActive(idx)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase transition-all duration-300 ${
+                active === idx
+                  ? "bg-[#C7A86D] text-white font-semibold shadow-md shadow-[#C7A86D]/20 scale-105"
+                  : "bg-[#F3DDD7]/80 text-[#4A3A32] hover:bg-[#F3DDD7] border border-[#D8B6B0]/50"
+              }`}
+            >
+              {item.year}
+            </button>
+          ))}
+        </div>
+
+        {/* Story Card (Framed Photo + Description Underneath) */}
+        <div className="space-y-6">
+          {storyTimeline.map((item, idx) => {
+            if (idx !== active) return null;
+            return (
+              <div
+                key={idx}
+                className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)] transition-all duration-500"
               >
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-base transition-all duration-500"
-                  style={{
-                    background: i === active ? colorMap[i % 4] : "transparent",
-                    border: `1.5px solid ${colorMap[i % 4]}`,
-                    transform: i === active ? "scale(1.15)" : "scale(1)",
-                    boxShadow: i === active ? `0 4px 16px ${colorMap[i % 4]}50` : "none",
-                  }}
-                >
-                  {iconMap[i % 4]}
+                {/* Framed Photo on top */}
+                <div className="relative mb-5 max-w-[320px] mx-auto">
+                  <FramedPhoto
+                    src={item.photo}
+                    alt={item.title}
+                    frameSrc={frame17Png}
+                    aspectRatio="aspect-[4/3]"
+                  />
                 </div>
-                <span
-                  className="text-xs tracking-[0.25em] uppercase whitespace-nowrap transition-all duration-300"
-                  style={{
-                    color: i === active ? "#C8A96A" : "#B0967A",
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: i === active ? 500 : 300,
-                  }}
-                >
-                  {item.year}
-                </span>
-              </button>
-            ))}
-          </div>
 
-          {/* ── Progress line ──────────────────────────────────── */}
-          <div className="max-w-md mx-auto px-10 mb-10">
-            <div className="relative h-px" style={{ background: "rgba(200,169,106,0.2)" }}>
-              <div
-                className="absolute top-0 left-0 h-full transition-all duration-500"
-                style={{
-                  width: `${((active) / (timeline.length - 1)) * 100}%`,
-                  background: "linear-gradient(to right, #C8A96A, #E8D09A)",
-                }}
-              />
-            </div>
-          </div>
-
-          {/* ── Story card ─────────────────────────────────────── */}
-          <div
-            className="max-w-xl mx-auto px-2"
-            style={{ touchAction: "pan-y" }}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-          >
-            {timeline.map((item, i) => (
-              <div
-                key={i}
-                style={{
-                  display: i === active ? "block" : "none",
-                  animation: i === active
-                    ? `storyIn${dir > 0 ? "R" : "L"} 0.55s cubic-bezier(0.22,1,0.36,1) both`
-                    : undefined,
-                }}
-              >
-                <div
-                  className="rounded-3xl p-6 md:p-10 relative overflow-hidden"
-                  style={{
-                    background: "linear-gradient(145deg, #FFFDF9 0%, #FAF7F2 100%)",
-                    border: "1px solid rgba(200,169,106,0.22)",
-                    boxShadow: "0 20px 60px rgba(44,36,22,0.08), 0 4px 20px rgba(200,169,106,0.1)",
-                  }}
-                >
-                  {/* Background year watermark */}
-                  <div
-                    className="absolute right-6 top-4 select-none pointer-events-none"
-                    style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "6rem",
-                      fontWeight: 700,
-                      color: colorMap[i % 4],
-                      opacity: 0.07,
-                      lineHeight: 1,
-                      letterSpacing: "-0.03em",
-                    }}
-                  >
-                    {item.year}
-                  </div>
-
-                  {/* Top accent bar */}
-                  <div className="absolute top-0 left-0 right-0 h-1 rounded-t-3xl" style={{
-                    background: `linear-gradient(to right, ${colorMap[i % 4]}, transparent)`,
-                  }} />
-
-                  {/* Icon + year row */}
-                  <div className="flex items-center gap-3 mb-5">
-                    <div
-                      className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
-                      style={{
-                        background: `${colorMap[i % 4]}18`,
-                        border: `1px solid ${colorMap[i % 4]}40`,
-                      }}
-                    >
-                      {iconMap[i % 4]}
-                    </div>
-                    <div>
-                      <p className="text-xs tracking-[0.35em] uppercase" style={{ color: colorMap[i % 4], fontWeight: 400 }}>
-                        {item.year}
-                      </p>
-                      <p className="text-xs" style={{ color: "#B0967A", fontFamily: "'Poppins', sans-serif", fontWeight: 300 }}>
-                        Chapter {i + 1} of {timeline.length}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Title */}
-                  <h3
-                    className="mb-4"
-                    style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: "clamp(1.7rem, 5vw, 2.3rem)",
-                      color: "#2C2416",
-                      fontWeight: 400,
-                      lineHeight: 1.2,
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
+                {/* Title & Date badge below photo */}
+                <div className="text-center mb-3">
+                  <span className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold tracking-widest uppercase bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0]">
+                    {item.date}
+                  </span>
+                  <h3 className="font-serif text-2xl text-[#4A3A32] mt-2 font-normal">
                     {item.title}
                   </h3>
+                </div>
 
-                  {/* Divider */}
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="h-px flex-1" style={{ background: `linear-gradient(to right, ${colorMap[i % 4]}60, transparent)` }} />
-                    <div className="w-1.5 h-1.5 rotate-45 flex-shrink-0" style={{ background: colorMap[i % 4] }} />
-                  </div>
+                {/* Story Description Text Underneath Photo */}
+                <p className="text-[#4A3A32]/85 text-sm leading-relaxed text-center font-light px-2">
+                  {item.desc}
+                </p>
 
-                  {/* Description */}
-                  <p
-                    className="leading-relaxed"
-                    style={{ color: "#6B5A45", fontFamily: "'Poppins', sans-serif", fontWeight: 300, fontSize: "0.95rem", lineHeight: 1.9 }}
+                {/* Bottom Navigation Controls */}
+                <div className="flex items-center justify-between mt-6 pt-4 border-t border-[#D8B6B0]/40">
+                  <button
+                    onClick={() => setActive(Math.max(0, active - 1))}
+                    disabled={active === 0}
+                    className="text-xs uppercase tracking-widest text-[#C7A86D] disabled:opacity-30 hover:underline font-semibold"
                   >
-                    {item.desc}
-                  </p>
-
-                  {/* Bottom nav arrows */}
-                  <div className="flex items-center justify-between mt-8">
-                    <button
-                      onClick={() => go(Math.max(0, active - 1))}
-                      disabled={active === 0}
-                      className="flex items-center gap-2 text-xs tracking-widest uppercase transition-all duration-200 hover:gap-3 disabled:opacity-20"
-                      style={{ color: "#C8A96A", fontFamily: "'Poppins', sans-serif" }}
-                    >
-                      ← Prev
-                    </button>
-                    <div className="flex gap-1.5">
-                      {timeline.map((_, di) => (
-                        <button
-                          key={di}
-                          onClick={() => go(di)}
-                          className="transition-all duration-300"
-                          style={{
-                            width: di === active ? 20 : 6,
-                            height: 6,
-                            borderRadius: 3,
-                            background: di === active ? "#C8A96A" : "rgba(200,169,106,0.3)",
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <button
-                      onClick={() => go(Math.min(timeline.length - 1, active + 1))}
-                      disabled={active === timeline.length - 1}
-                      className="flex items-center gap-2 text-xs tracking-widest uppercase transition-all duration-200 hover:gap-3 disabled:opacity-20"
-                      style={{ color: "#C8A96A", fontFamily: "'Poppins', sans-serif" }}
-                    >
-                      Next →
-                    </button>
+                    ← Prev
+                  </button>
+                  <div className="flex gap-1.5">
+                    {storyTimeline.map((_, di) => (
+                      <span
+                        key={di}
+                        onClick={() => setActive(di)}
+                        className={`h-2 rounded-full cursor-pointer transition-all ${
+                          di === active ? "w-6 bg-[#C7A86D]" : "w-2 bg-[#D8B6B0]"
+                        }`}
+                      />
+                    ))}
                   </div>
+                  <button
+                    onClick={() => setActive(Math.min(storyTimeline.length - 1, active + 1))}
+                    disabled={active === storyTimeline.length - 1}
+                    className="text-xs uppercase tracking-widest text-[#C7A86D] disabled:opacity-30 hover:underline font-semibold"
+                  >
+                    Next →
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Hint text */}
-          <p className="text-center mt-6 text-xs tracking-[0.3em] uppercase" style={{ color: "rgba(200,169,106,0.4)" }}>
-            Tap to explore · Swipe on mobile
-          </p>
-        </PremiumFrame>
+            );
+          })}
+        </div>
       </div>
-
-      <style>{`
-        @keyframes storyInR {
-          from { opacity: 0; transform: translateX(48px) scale(0.97); }
-          to   { opacity: 1; transform: translateX(0) scale(1); }
-        }
-        @keyframes storyInL {
-          from { opacity: 0; transform: translateX(-48px) scale(0.97); }
-          to   { opacity: 1; transform: translateX(0) scale(1); }
-        }
-      `}</style>
     </section>
   );
 }
 
-/* ─── Gallery Section ───────────────────────────────────── */
-function GallerySection({ photos }: { photos: string[] }) {
-  const [active, setActive] = useState(0);
-  const [lightbox, setLightbox] = useState(false);
-  const [prevActive, setPrevActive] = useState<number | null>(null);
-  const [direction, setDirection] = useState<"left" | "right">("right");
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const touchStartX = useRef<number>(0);
-  const touchStartY = useRef<number>(0);
-  const thumbsRef = useRef<HTMLDivElement>(null);
+/* ─── Gallery Section (Matching Exact Screenshot Grid & Scroll Reveal Animation) ─── */
+interface GalleryPhotoItem {
+  id: number;
+  src: string;
+  aspect: string;
+  isWide?: boolean;
+}
 
-  const go = (idx: number, dir: "left" | "right") => {
-    setDirection(dir);
-    setPrevActive(active);
-    setActive(idx);
-    setTimeout(() => setPrevActive(null), 400);
-    // scroll thumbnail into view
-    const el = thumbsRef.current?.children[idx] as HTMLElement;
-    scrollContainerToChild(thumbsRef.current, el);
-  };
+function GalleryScrollCard({
+  photo,
+  index,
+  onSelect
+}: {
+  photo: GalleryPhotoItem;
+  index: number;
+  onSelect: () => void;
+}) {
+  const [visible, setVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartX.current = e.touches[0].clientX;
-      touchStartY.current = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
-      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
-      if (dx > 10 && dx > dy) {
-        e.preventDefault();
-      }
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const dx = e.changedTouches[0].clientX - touchStartX.current;
-      const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
-      if (Math.abs(dx) > 40 && Math.abs(dx) > dy) {
-        dx < 0 ? next() : prev();
-      }
-    };
-
-    section.addEventListener("touchstart", handleTouchStart, { passive: false });
-    section.addEventListener("touchmove", handleTouchMove, { passive: false });
-    section.addEventListener("touchend", handleTouchEnd, { passive: false });
-
-    return () => {
-      section.removeEventListener("touchstart", handleTouchStart);
-      section.removeEventListener("touchmove", handleTouchMove);
-      section.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [active]);
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
-    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
-    if (dx > 10 && dx > dy) {
-      e.preventDefault();
-    }
-  };
-
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
-    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) {
-      dx < 0 ? next() : prev();
-    }
-  };
-
-  const prev = () => go((active - 1 + photos.length) % photos.length, "left");
-  const next = () => go((active + 1) % photos.length, "right");
-
-  // layout: photos in a 3-col mosaic (featured large + 2 small + 2 small)
-  const featured = photos[active];
-  const sideTop = photos[(active + 1) % photos.length];
-  const sideMid = photos[(active + 2) % photos.length];
-  const sideBot1 = photos[(active + 3) % photos.length];
-  const sideBot2 = photos[(active + 4) % photos.length];
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+    if (cardRef.current) observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-24 overflow-hidden relative"
-      style={{ background: "#FAF7F2", touchAction: "pan-y", overscrollBehaviorX: "contain" }}
+    <div
+      ref={cardRef}
+      onClick={onSelect}
+      className={`relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-700 ease-out transform ${
+        photo.isWide ? "col-span-2" : "col-span-1"
+      } ${
+        visible
+          ? "opacity-100 translate-y-0 scale-100"
+          : "opacity-0 translate-y-8 scale-95"
+      }`}
+      style={{
+        transitionDelay: `${(index % 3) * 90}ms`,
+        boxShadow: "0 6px 20px rgba(74, 58, 50, 0.12)",
+      }}
     >
-      <BackgroundOrnament position="top-right" opacity={0.95} />
-      <BackgroundOrnament position="bottom-left" opacity={0.95} />
-      <FadeSection>
-        <PremiumFrame>
-          <SectionHeader label="Our Memories" title="Photo Gallery" />
-
-          {/* ── Desktop mosaic layout ── */}
-          <div className="hidden md:block max-w-5xl mx-auto">
-            <div className="grid gap-3" style={{ gridTemplateColumns: "1fr 1fr 1fr", gridTemplateRows: "300px 300px" }}>
-              {/* Featured large - spans 2 rows */}
-              <div
-                className="row-span-2 relative overflow-hidden rounded-3xl cursor-pointer group"
-                onClick={() => setLightbox(true)}
-              >
-                <img
-                  key={active}
-                  src={featured}
-                  alt="Featured wedding photo"
-                  className="w-full h-full object-cover"
-                  style={{ animation: "fadeImg 0.4s ease" }}
-                />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col items-center justify-end pb-8" style={{ background: "linear-gradient(to top, rgba(44,36,22,0.6) 0%, transparent 50%)" }}>
-                  <span className="text-xs tracking-widest uppercase text-white mb-2" style={{ fontWeight: 300 }}>View Full</span>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(200,169,106,0.9)" }}>
-                    <Heart size={13} fill="white" color="white"/>
-                  </div>
-                </div>
-                {/* counter badge */}
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs" style={{ background: "rgba(255,255,255,0.85)", backdropFilter: "blur(8px)", color: "#8A7560", letterSpacing: "0.1em" }}>
-                  {active + 1} / {photos.length}
-                </div>
-              </div>
-              {/* Top right */}
-              <div className="relative overflow-hidden rounded-3xl cursor-pointer group" onClick={() => { go((active + 1) % photos.length, "right"); }}>
-                <img src={sideTop} alt="Gallery" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "rgba(200,169,106,0.15)" }}/>
-              </div>
-              {/* Middle right */}
-              <div className="relative overflow-hidden rounded-3xl cursor-pointer group" onClick={() => { go((active + 2) % photos.length, "right"); }}>
-                <img src={sideMid} alt="Gallery" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "rgba(200,169,106,0.15)" }}/>
-              </div>
-              {/* Bottom left */}
-              <div className="relative overflow-hidden rounded-3xl cursor-pointer group" onClick={() => { go((active + 3) % photos.length, "right"); }}>
-                <img src={sideBot1} alt="Gallery" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "rgba(200,169,106,0.15)" }}/>
-              </div>
-              {/* Bottom right */}
-              <div className="relative overflow-hidden rounded-3xl cursor-pointer group" onClick={() => { go((active + 4) % photos.length, "right"); }}>
-                <img src={sideBot2} alt="Gallery" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "rgba(200,169,106,0.15)" }}/>
-              </div>
-            </div>
-
-            {/* Desktop nav + thumbnails */}
-            <div className="flex items-center gap-4 mt-5">
-              <button onClick={prev} className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all hover:scale-110" style={{ background: "rgba(200,169,106,0.12)", border: "1px solid rgba(200,169,106,0.3)", color: "#C8A96A" }}>
-                <ChevronDown size={16} style={{ transform: "rotate(90deg)" }}/>
-              </button>
-              <div ref={thumbsRef} className="flex gap-2 overflow-x-auto flex-1" style={{ scrollbarWidth: "none", touchAction: "pan-y", overscrollBehaviorX: "contain", scrollSnapType: "x mandatory" }}>
-                {photos.map((src, i) => (
-                  <button
-                    key={i}
-                    onClick={() => go(i, i > active ? "right" : "left")}
-                    className="flex-shrink-0 relative overflow-hidden transition-all duration-300"
-                    style={{
-                      width: 64, height: 48,
-                      borderRadius: 12,
-                      border: active === i ? "2px solid #C8A96A" : "2px solid transparent",
-                      opacity: active === i ? 1 : 0.55,
-                      transform: active === i ? "scale(1.08)" : "scale(1)",
-                    }}
-                  >
-                    <img src={src} alt="" className="w-full h-full object-cover"/>
-                  </button>
-                ))}
-              </div>
-              <button onClick={next} className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all hover:scale-110" style={{ background: "rgba(200,169,106,0.12)", border: "1px solid rgba(200,169,106,0.3)", color: "#C8A96A" }}>
-                <ChevronDown size={16} style={{ transform: "rotate(-90deg)" }}/>
-              </button>
-            </div>
+      <div className={`w-full ${photo.aspect} relative overflow-hidden group`}>
+        <img
+          src={photo.src}
+          alt={`Gallery item ${index + 1}`}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-[#4A3A32]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-[#C7A86D] text-white flex items-center justify-center shadow-lg">
+            <Heart size={14} fill="currentColor" />
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-          {/* ── Mobile: swipeable carousel ── */}
-          <div className="md:hidden">
-            {/* Main photo */}
-            <div
-              className="relative overflow-hidden rounded-3xl"
-              style={{ height: "65vw", maxHeight: 380, touchAction: "pan-y" }}
-              onTouchStart={onTouchStart}
-              onTouchMove={onTouchMove}
-              onTouchEnd={onTouchEnd}
-              onClick={() => setLightbox(true)}
-            >
-              {/* Previous photo (slide out) */}
-              {prevActive !== null && (
-                <img
-                  src={photos[prevActive]}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{
-                    animation: `slideOut${direction === "right" ? "Left" : "Right"} 0.4s ease forwards`,
-                  }}
-                />
-              )}
-              {/* Active photo (slide in) */}
-              <img
-                key={active}
-                src={photos[active]}
-                alt={`Wedding photo ${active + 1}`}
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                  animation: prevActive !== null ? `slideIn${direction === "right" ? "Right" : "Left"} 0.4s ease forwards` : "none",
-                }}
-              />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to top, rgba(44,36,22,0.5) 0%, transparent 40%)" }}/>
-              {/* Bottom info */}
-              <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between pointer-events-none">
-                <span className="text-xs tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.7)", fontWeight: 300 }}>
-                  Tap to open
-                </span>
-                <span className="text-xs px-3 py-1 rounded-full" style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)", color: "rgba(255,255,255,0.8)", letterSpacing: "0.1em" }}>
-                  {active + 1} / {photos.length}
-                </span>
-              </div>
-              {/* Swipe hint arrows */}
-              <button
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center pointer-events-auto"
-                style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(6px)" }}
-                onClick={e => { e.stopPropagation(); prev(); }}
-              >
-                <ChevronDown size={16} style={{ transform: "rotate(90deg)", color: "#fff" }}/>
-              </button>
-              <button
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center pointer-events-auto"
-                style={{ background: "rgba(255,255,255,0.2)", backdropFilter: "blur(6px)" }}
-                onClick={e => { e.stopPropagation(); next(); }}
-              >
-                <ChevronDown size={16} style={{ transform: "rotate(-90deg)", color: "#fff" }}/>
-              </button>
-            </div>
+function GallerySection({ photos }: { photos?: any[] }) {
+  const galleryItems: GalleryPhotoItem[] = [
+    // Row 1 (3 vertical photos)
+    { id: 1, src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 2, src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 3, src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    // Row 2 (1 vertical photo left, 1 wide horizontal photo span-2 right)
+    { id: 4, src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 5, src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1000&h=650&fit=crop&auto=format", aspect: "aspect-[16/10]", isWide: true },
+    // Row 3 (3 vertical photos)
+    { id: 6, src: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 7, src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 8, src: "https://images.unsplash.com/photo-1472653431158-6364773b2a56?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    // Row 4 (3 vertical photos)
+    { id: 9, src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 10, src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 11, src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+  ];
 
-            {/* Dot indicators */}
-            <div className="flex justify-center gap-1.5 mt-4">
-              {photos.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => go(i, i > active ? "right" : "left")}
-                  style={{
-                    width: active === i ? 20 : 6,
-                    height: 6,
-                    borderRadius: 3,
-                    background: active === i ? "#C8A96A" : "rgba(200,169,106,0.3)",
-                    border: "none",
-                    padding: 0,
-                    transition: "all 0.3s ease",
-                    cursor: "pointer",
-                  }}
-                />
-              ))}
-            </div>
+  const [activeLightbox, setActiveLightbox] = useState<number | null>(null);
 
-            {/* Horizontal thumbnail filmstrip */}
-            <div
-              ref={thumbsRef}
-              className="flex gap-2 overflow-x-auto mt-5 pb-1"
-              style={{ scrollbarWidth: "none", scrollSnapType: "x mandatory", touchAction: "pan-y" }}
-              onTouchMove={onTouchMove}
-            >
-              {photos.map((src, i) => (
-                <button
-                  key={i}
-                  onClick={() => go(i, i > active ? "right" : "left")}
-                  className="flex-shrink-0 relative overflow-hidden"
-                  style={{
-                    width: 60, height: 60,
-                    borderRadius: 12,
-                    scrollSnapAlign: "start",
-                    border: active === i ? "2.5px solid #C8A96A" : "2.5px solid transparent",
-                    opacity: active === i ? 1 : 0.5,
-                    transform: active === i ? "scale(1.06)" : "scale(1)",
-                    transition: "all 0.3s ease",
-                    padding: 0,
-                    cursor: "pointer",
-                  }}
-                >
-                  <img src={src} alt="" className="w-full h-full object-cover"/>
-                  {active === i && (
-                    <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(200,169,106,0.15)" }}>
-                      <div className="w-3 h-3 rounded-full" style={{ background: "rgba(200,169,106,0.8)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#fff" }}/>
-                      </div>
-                    </div>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        </PremiumFrame>
-      </FadeSection>
+  return (
+    <section id="gallery" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
+      <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
+      <SectionBirdsFlock delay={3} top="12vh" />
+      <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.85} />
 
-      {/* ── Lightbox ── */}
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ background: "rgba(20,14,8,0.96)", backdropFilter: "blur(16px)" }}
-          onClick={() => setLightbox(false)}
-        >
-          {/* Close */}
-          <button
-            className="absolute top-5 right-5 w-11 h-11 rounded-full flex items-center justify-center z-10"
-            style={{ background: "rgba(200,169,106,0.15)", border: "1px solid rgba(200,169,106,0.3)", color: "#C8A96A" }}
-          >
-            <X size={18}/>
-          </button>
-          {/* Prev */}
-          <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10"
-            style={{ background: "rgba(200,169,106,0.12)", border: "1px solid rgba(200,169,106,0.25)", color: "#C8A96A" }}
-            onClick={e => { e.stopPropagation(); prev(); }}
-          >
-            <ChevronDown size={18} style={{ transform: "rotate(90deg)" }}/>
-          </button>
-          {/* Next */}
-          <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10"
-            style={{ background: "rgba(200,169,106,0.12)", border: "1px solid rgba(200,169,106,0.25)", color: "#C8A96A" }}
-            onClick={e => { e.stopPropagation(); next(); }}
-          >
-            <ChevronDown size={18} style={{ transform: "rotate(-90deg)" }}/>
-          </button>
-          {/* Photo */}
-          <div className="relative px-16 max-w-4xl w-full" onClick={e => e.stopPropagation()}>
-            <img
-              key={active}
-              src={photos[active]}
-              alt={`Wedding photo ${active + 1}`}
-              className="w-full max-h-[80vh] object-contain rounded-2xl"
-              style={{ animation: "fadeImg 0.3s ease", boxShadow: "0 30px 80px rgba(0,0,0,0.5)" }}
+      <div className="relative z-20 max-w-md mx-auto">
+        <SectionHeader label="Captured Moments" title="Our Gallery" light={false} />
+
+        {/* 3-Column Grid matching Screenshot */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-2.5 mt-6">
+          {galleryItems.map((photo, index) => (
+            <GalleryScrollCard
+              key={photo.id}
+              photo={photo}
+              index={index}
+              onSelect={() => setActiveLightbox(index)}
             />
-            {/* Caption */}
-            <div className="flex items-center justify-between mt-4 px-2">
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic", color: "rgba(232,208,154,0.7)", fontSize: "0.9rem" }}>
-                Aisyah & Rizky · 2026
-              </p>
-              <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)", letterSpacing: "0.15em" }}>
-                {active + 1} / {photos.length}
-              </p>
+          ))}
+        </div>
+      </div>
+
+      {/* Lightbox Modal */}
+      {activeLightbox !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-[#F8F5F0]/95 backdrop-blur-xl flex flex-col items-center justify-center p-4"
+          onClick={() => setActiveLightbox(null)}
+        >
+          <button
+            onClick={() => setActiveLightbox(null)}
+            className="absolute top-5 right-5 text-[#4A3A32] hover:text-[#C7A86D] p-2 z-50"
+          >
+            <X size={28} />
+          </button>
+          <div
+            className="relative max-w-lg w-full max-h-[85vh] overflow-hidden rounded-2xl border border-[#C7A86D]/40 shadow-2xl bg-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={galleryItems[activeLightbox].src}
+              alt="Gallery Lightbox"
+              className="w-full h-full object-contain max-h-[75vh] mx-auto rounded-t-xl"
+            />
+            <div className="flex justify-between items-center px-4 py-3 bg-[#FAF7F2] border-t border-[#D8B6B0]/40 text-[#4A3A32] text-xs font-medium">
+              <span>{activeLightbox + 1} / {galleryItems.length}</span>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setActiveLightbox((prev) => (prev !== null ? (prev - 1 + galleryItems.length) % galleryItems.length : 0))}
+                  className="hover:underline uppercase tracking-wider text-[#C7A86D] font-semibold"
+                >
+                  ← Prev
+                </button>
+                <button
+                  onClick={() => setActiveLightbox((prev) => (prev !== null ? (prev + 1) % galleryItems.length : 0))}
+                  className="hover:underline uppercase tracking-wider text-[#C7A86D] font-semibold"
+                >
+                  Next →
+                </button>
+              </div>
             </div>
-          </div>
-          {/* Dot nav */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
-            {photos.map((_, i) => (
-              <button
-                key={i}
-                onClick={e => { e.stopPropagation(); go(i, i > active ? "right" : "left"); }}
-                style={{
-                  width: active === i ? 20 : 6, height: 6, borderRadius: 3, padding: 0, border: "none",
-                  background: active === i ? "#C8A96A" : "rgba(200,169,106,0.3)",
-                  transition: "all 0.3s ease", cursor: "pointer",
-                }}
-              />
-            ))}
           </div>
         </div>
       )}
@@ -1498,7 +1368,7 @@ function QRCode() {
           y={Math.floor(i / size) * cell}
           width={cell}
           height={cell}
-          fill="#2C2416"
+          fill="#4A3A32"
           rx="1"
         />
       ) : null)}
@@ -1517,134 +1387,97 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
   };
 
   return (
-    <section className="py-24 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
-      <BackgroundOrnament position="top-left" opacity={0.95} />
-      <BackgroundOrnament position="bottom-right" opacity={0.95} />
-      <div className="relative z-10">
-        <PremiumFrame>
+    <section id="gift" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+      <SectionBackgroundPhoto src={bg5Png} opacity={0.16} />
+      <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.85} />
+      <div className="relative z-20 max-w-md mx-auto">
+        <SectionReveal className="relative z-10">
           <SectionHeader
             label="Your Blessings Mean The World"
             title="Wedding Gift"
-            description="Kehadiran kalian adalah kebahagiaan terbesar kami. Jika kalian ingin berbagi berkah, kami menerimanya dengan sepenuh hati."
+            light={false}
           />
 
-          <div className="max-w-2xl mx-auto space-y-6">
+          <div className="space-y-6">
 
             {/* ── Envelope / QRIS card ── */}
-            <div className="rounded-3xl overflow-hidden" style={{
-              background: "#FAF7F2",
-              border: "1px solid rgba(200,169,106,0.25)",
-              boxShadow: "0 8px 40px rgba(200,169,106,0.1)",
-            }}>
+            <div className="rounded-3xl overflow-hidden bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]">
               {/* Envelope closed state */}
               {!envelopeOpen && (
-                <div className="flex flex-col items-center text-center px-8 py-12">
+                <div className="flex flex-col items-center text-center px-6 py-10">
                   {/* Envelope illustration */}
-                  <div className="relative mb-6" style={{ width: 120, height: 88 }}>
-                    <svg viewBox="0 0 120 88" fill="none" className="w-full h-full drop-shadow-lg">
-                      {/* Envelope body */}
-                      <rect x="2" y="20" width="116" height="66" rx="6" fill="#FFF8EE" stroke="#C8A96A" strokeWidth="1.5"/>
-                      {/* Envelope flap closed */}
-                      <path d="M2 20 L60 54 L118 20 Z" fill="#EFE7DD" stroke="#C8A96A" strokeWidth="1.5" strokeLinejoin="round"/>
-                      {/* Wax seal */}
-                      <circle cx="60" cy="52" r="11" fill="#C8A96A" opacity="0.9"/>
-                      <circle cx="60" cy="52" r="8" fill="#D4B87A"/>
-                      <text x="60" y="56" textAnchor="middle" fontSize="9" fill="#2C2416" fontFamily="serif">A&E</text>
-                      {/* Envelope fold lines */}
-                      <path d="M2 86 L46 54" stroke="#C8A96A" strokeWidth="1" opacity="0.3"/>
-                      <path d="M118 86 L74 54" stroke="#C8A96A" strokeWidth="1" opacity="0.3"/>
-                      {/* Small floral accent */}
-                      <ellipse cx="18" cy="32" rx="5" ry="7" fill="#A8B8A5" opacity="0.5" transform="rotate(-30 18 32)"/>
-                      <ellipse cx="102" cy="32" rx="5" ry="7" fill="#A8B8A5" opacity="0.5" transform="rotate(30 102 32)"/>
+                  <div className="relative mb-5" style={{ width: 110, height: 80 }}>
+                    <svg viewBox="0 0 120 88" fill="none" className="w-full h-full drop-shadow-md">
+                      <rect x="2" y="20" width="116" height="66" rx="6" fill="#F8F5F0" stroke="#C7A86D" strokeWidth="1.5"/>
+                      <path d="M2 20 L60 54 L118 20 Z" fill="#F3DDD7" stroke="#C7A86D" strokeWidth="1.5" strokeLinejoin="round"/>
+                      <circle cx="60" cy="52" r="11" fill="#C7A86D" opacity="0.9"/>
+                      <circle cx="60" cy="52" r="8" fill="#B39358"/>
+                      <text x="60" y="55" textAnchor="middle" fontSize="8" fill="#FFFFFF" fontWeight="bold">A&R</text>
                     </svg>
                   </div>
 
-                  <p className="text-xs tracking-[0.35em] uppercase mb-2" style={{ color: "#C8A96A", fontWeight: 300 }}>
-                    Digital Gift
+                  <p className="text-[10px] tracking-[0.35em] uppercase mb-1 text-[#C7A86D] font-semibold">
+                    Digital Envelope
                   </p>
-                  <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.6rem", color: "#2C2416", fontWeight: 400 }}>
+                  <h3 className="font-serif text-xl text-[#4A3A32]">
                     Ada hadiah untuk kami?
                   </h3>
-                  <p className="text-sm mt-3 mb-8 max-w-xs leading-relaxed" style={{ color: "#8A7560" }}>
-                    Sentuh amplop ini untuk membuka dan melihat kode QRIS kami. Terima kasih atas kebaikan hatimu. 🌸
+                  <p className="text-xs mt-2 mb-6 text-[#4A3A32]/80 font-light leading-relaxed max-w-xs">
+                    Sentuh amplop ini untuk melihat info rekening dan kode QRIS kami. Terima kasih atas kebaikan hatimu. 🌸
                   </p>
                   <button
                     onClick={handleOpenEnvelope}
-                    className="group relative flex items-center gap-3 px-8 py-4 rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95"
-                    style={{
-                      background: "linear-gradient(135deg, #C8A96A, #D4B87A)",
-                      color: "#fff",
-                      boxShadow: "0 6px 24px rgba(200,169,106,0.35)",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
+                    className="flex items-center gap-2.5 px-6 py-3 rounded-full uppercase tracking-widest text-xs font-semibold bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white shadow-md hover:scale-105 transition-transform"
                   >
-                    <span style={{ fontSize: "1.1rem" }}>💌</span>
-                    <span className="text-sm tracking-widest uppercase" style={{ fontWeight: 400 }}>Buka Amplop</span>
+                    <span>💌</span>
+                    <span>Buka Amplop</span>
                   </button>
                 </div>
               )}
 
               {/* Envelope opening animation + QRIS revealed */}
               {envelopeOpen && (
-                <div
-                  style={{
-                    animation: "envelopeReveal 0.5s cubic-bezier(0.34,1.56,0.64,1) both",
-                  }}
-                >
-                  {/* Flap opening visual */}
-                  <div className="flex justify-center pt-8 pb-4">
-                    <div className="relative" style={{ width: 120, height: 88 }}>
-                      <svg viewBox="0 0 120 88" fill="none" className="w-full h-full drop-shadow-lg">
-                        <rect x="2" y="20" width="116" height="66" rx="6" fill="#FFF8EE" stroke="#C8A96A" strokeWidth="1.5"/>
-                        {/* Flap open = rotated up */}
-                        <path d="M2 20 L60 2 L118 20 Z" fill="#EFE7DD" stroke="#C8A96A" strokeWidth="1.5" strokeLinejoin="round"
-                          style={{ transformOrigin: "60px 20px", animation: "flapOpen 0.5s ease forwards" }}
-                        />
-                        <path d="M2 86 L46 54" stroke="#C8A96A" strokeWidth="1" opacity="0.3"/>
-                        <path d="M118 86 L74 54" stroke="#C8A96A" strokeWidth="1" opacity="0.3"/>
-                        <ellipse cx="18" cy="32" rx="5" ry="7" fill="#A8B8A5" opacity="0.5" transform="rotate(-30 18 32)"/>
-                        <ellipse cx="102" cy="32" rx="5" ry="7" fill="#A8B8A5" opacity="0.5" transform="rotate(30 102 32)"/>
+                <div style={{ animation: "envelopeReveal 0.5s ease both" }}>
+                  <div className="flex justify-center pt-6 pb-2">
+                    <div className="relative" style={{ width: 100, height: 70 }}>
+                      <svg viewBox="0 0 120 88" fill="none" className="w-full h-full drop-shadow-md">
+                        <rect x="2" y="20" width="116" height="66" rx="6" fill="#F8F5F0" stroke="#C7A86D" strokeWidth="1.5"/>
+                        <path d="M2 20 L60 2 L118 20 Z" fill="#F3DDD7" stroke="#C7A86D" strokeWidth="1.5" strokeLinejoin="round" />
                       </svg>
                     </div>
                   </div>
 
-                  {/* QRIS content slides up */}
                   <div
-                    className="px-8 pb-10"
+                    className="px-6 pb-8"
                     style={{
                       opacity: qrisOpen ? 1 : 0,
-                      transform: qrisOpen ? "translateY(0)" : "translateY(20px)",
-                      transition: "opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s",
+                      transform: qrisOpen ? "translateY(0)" : "translateY(15px)",
+                      transition: "opacity 0.5s ease, transform 0.5s ease",
                     }}
                   >
-                    <div className="text-center mb-6">
-                      <p className="text-xs tracking-[0.35em] uppercase mb-1" style={{ color: "#C8A96A", fontWeight: 300 }}>
+                    <div className="text-center mb-4">
+                      <p className="text-[10px] tracking-[0.35em] uppercase mb-0.5 text-[#C7A86D] font-semibold">
                         QRIS Payment
                       </p>
-                      <h4 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.4rem", color: "#2C2416" }}>
+                      <h4 className="font-serif text-lg text-[#4A3A32]">
                         Scan & Kirim Hadiahmu
                       </h4>
-                      <p className="text-xs mt-1" style={{ color: "#8A7560" }}>
+                      <p className="text-[11px] text-[#4A3A32]/70 mt-0.5">
                         Bisa digunakan di semua aplikasi mobile banking & e-wallet
                       </p>
                     </div>
 
                     {/* QR code */}
-                    <div className="flex justify-center mb-5">
-                      <div className="p-5 rounded-2xl" style={{
-                        background: "#fff",
-                        border: "1px solid rgba(200,169,106,0.3)",
-                        boxShadow: "0 4px 20px rgba(200,169,106,0.1)",
-                      }}>
+                    <div className="flex justify-center mb-4">
+                      <div className="p-4 rounded-2xl bg-[#F8F5F0] border border-[#C7A86D]/30 shadow-md">
                         <QRCode />
-                        <p className="text-center text-xs mt-3 tracking-widest" style={{ color: "#8A7560", fontFamily: "'Poppins', sans-serif" }}>
+                        <p className="text-center text-[11px] mt-2 tracking-widest text-[#4A3A32] font-semibold">
                           Aisyah & Rizky
                         </p>
                       </div>
                     </div>
 
-                    <p className="text-center text-xs" style={{ color: "#A8957A" }}>
+                    <p className="text-center text-[11px] text-[#C7A86D]">
                       Terima kasih banyak atas kebaikan dan cinta kalian 🌸
                     </p>
                   </div>
@@ -1654,27 +1487,29 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
 
             {/* Bank accounts */}
             {[
-              { bank: "Bank Mandiri", account: "1234-5678-9012-3456", name: "Aisyah Yusuf" },
-              { bank: "Bank BCA", account: "0987-6543-2109-8765", name: "Rizky Ramadhan" },
+              { bank: "Bank BCA", account: "0987654321", name: "Aisyah Yusuf" },
+              { bank: "Bank Mandiri", account: "1234567890", name: "Rizky Ramadhan" },
             ].map((b) => (
-              <div key={b.bank} className="rounded-3xl p-6 flex items-center justify-between gap-4" style={{ background: "#FAF7F2", border: "1px solid rgba(200,169,106,0.25)", boxShadow: "0 4px 20px rgba(200,169,106,0.06)" }}>
+              <div
+                key={b.bank}
+                className="rounded-2xl p-4 flex items-center justify-between gap-3 bg-white/95 border border-[#C7A86D]/30 shadow-md"
+              >
                 <div>
-                  <p className="text-xs tracking-[0.3em] uppercase mb-0.5" style={{ color: "#C8A96A" }}>{b.bank}</p>
-                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.2rem", color: "#2C2416", letterSpacing: "0.05em" }}>{b.account}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "#8A7560" }}>a.n. {b.name}</p>
+                  <p className="text-[10px] tracking-[0.3em] uppercase text-[#C7A86D] font-semibold">{b.bank}</p>
+                  <p className="font-serif text-lg text-[#4A3A32] tracking-wider mt-0.5 font-medium">{b.account}</p>
+                  <p className="text-[11px] text-[#8A7560]">a.n. {b.name}</p>
                 </div>
                 <button
-                  onClick={() => handleCopy(b.account.replace(/-/g, ""), b.bank)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs tracking-wide transition-all hover:scale-105"
-                  style={{ background: copied === b.bank ? "rgba(168,184,165,0.2)" : "rgba(200,169,106,0.12)", border: "1px solid rgba(200,169,106,0.3)", color: copied === b.bank ? "#A8B8A5" : "#C8A96A" }}
+                  onClick={() => handleCopy(b.account, b.bank)}
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium tracking-wider uppercase transition-all bg-[#F3DDD7] border border-[#D8B6B0] text-[#4A3A32] hover:bg-[#C7A86D] hover:text-white"
                 >
                   {copied === b.bank ? <Check size={13}/> : <Copy size={13}/>}
-                  {copied === b.bank ? "Copied!" : "Copy"}
+                  {copied === b.bank ? "Copied" : "Copy"}
                 </button>
               </div>
             ))}
           </div>
-        </PremiumFrame>
+        </SectionReveal>
       </div>
     </section>
   );
@@ -2052,312 +1887,254 @@ export default function App() {
       {isOpened && (
         <button
           onClick={() => setIsMuted(prev => !prev)}
-          className="fixed left-4 z-50 flex items-center gap-2 rounded-full bg-white/85 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#2C2416] shadow-lg shadow-black/10 backdrop-blur-xl transition hover:scale-105"
-          style={{ border: "1px solid rgba(44, 36, 22, 0.12)", bottom: "calc(env(safe-area-inset-bottom, 1rem) + 1.5rem)" }}
+          className="fixed left-4 z-50 flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#4A3A32] shadow-lg border border-[#C7A86D]/35 backdrop-blur-xl transition hover:scale-105"
+          style={{ bottom: "calc(env(safe-area-inset-bottom, 1rem) + 1.5rem)" }}
         >
-          <Music size={16} />
+          <Music size={16} className="text-[#C7A86D]" />
           <span>{isMuted ? "Muted" : "Sound"}</span>
         </button>
       )}
 
       {/* Main Landing Page Content Container at Normal Scale (1.0) */}
-      <div
-        className="w-full transition-transform duration-700"
-        style={{
-          transform: "scale(1.0)",
-          transformOrigin: "50% 50%",
-        }}
-      >
+      {/* Main Landing Page Content Container (Responsive Aksara Mobile Container) */}
+      <div className="invitation-wrapper shadow-2xl relative bg-[#F8F5F0] text-[#4A3A32]">
+
         {/* ── WELCOME ─────────────────────────────────────────── */}
-        <section id="welcome" className="py-24 px-6 text-center relative overflow-hidden" style={{ background: "#FAF7F2" }}>
-          <BackgroundOrnament position="top-right" opacity={0.95} />
-          <BackgroundOrnament position="bottom-left" opacity={0.95} />
-          <div className="relative z-10">
+        <section id="welcome" className="py-20 px-6 text-center relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+          <CornerFloralDecor position="both" />
+          <SectionBackgroundPhoto src={bg1Png} opacity={0.18} />
+          <SectionBirdsFlock delay={0} top="8vh" />
+          <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.85} />
+          <div className="relative z-20 max-w-sm mx-auto">
             <SectionReveal className="relative z-10">
-              <PremiumFrame>
-                <SectionHeader label="With Joy We Announce" title="Welcome, Dear Guests" />
-                <div className="max-w-xl mx-auto">
-                    <p style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "clamp(1.1rem, 3vw, 1.4rem)",
-                  color: "#8A7560",
-                  fontStyle: "italic",
-                  lineHeight: 1.8,
-                  marginBottom: "1.5rem",
-                }}>
+              <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]">
+                <SectionHeader label="With Joy We Announce" title="Welcome, Dear Guests" light={false} />
+                <p className="font-serif italic text-[#4A3A32]/90 text-sm leading-relaxed mb-4">
                   "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy."
                 </p>
-                <p className="text-xs tracking-[0.3em] uppercase" style={{ color: "#C8A96A" }}>— Surah Ar-Rum: 21 —</p>
-                <p className="mt-8 leading-relaxed" style={{ color: "#8A7560", fontSize: "0.9rem", lineHeight: 1.9 }}>
+                <p className="text-[11px] tracking-[0.25em] uppercase text-[#C7A86D] font-semibold">— Surah Ar-Rum: 21 —</p>
+                <p className="mt-6 text-xs leading-relaxed text-[#4A3A32]/80 font-light">
                   Dengan penuh cinta dan rasa syukur yang melimpah, kami dengan bahagia mengundang kalian untuk merayakan bersatunya dua hati kami. Kehadiran kalian akan membuat hari istimewa kami menjadi sempurna — dan selalu terkenang dalam ingatan kami.
                 </p>
               </div>
-            </PremiumFrame>
             </SectionReveal>
           </div>
         </section>
 
-      {/* ── BRIDE & GROOM ───────────────────────────────────── */}
-      <section className="py-32 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
-        {/* Background wind sway */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 animate-bg-wind" style={{ background: `url(${bg85Svg}) no-repeat center/cover` }} />
-        {/* Curved Section Divider (Lengkungan) at the top */}
-        <div className="absolute top-0 inset-x-0 h-16 w-full overflow-hidden pointer-events-none z-10" style={{ transform: "translateY(-1px)" }}>
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full" style={{ fill: "#FAF7F2" }}>
-            <path d="M0,0 C300,70 900,70 1200,0 L1200,120 L0,120 Z" />
-          </svg>
-        </div>
+        {/* ── BRIDE & GROOM ───────────────────────────────────── */}
+        <section id="couple" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
+          <CornerFloralDecor position="both" />
+          <SectionBackgroundPhoto src={bg2Png} opacity={0.15} />
+          <SectionBirdsFlock delay={2} top="12vh" />
+          <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.85} />
 
-        {/* Curved Section Divider (Lengkungan) at the bottom */}
-        <div className="absolute bottom-0 inset-x-0 h-16 w-full overflow-hidden pointer-events-none z-10" style={{ transform: "rotate(180deg) translateY(-1px)" }}>
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full" style={{ fill: "#FAF7F2" }}>
-            <path d="M0,0 C300,70 900,70 1200,0 L1200,120 L0,120 Z" />
-          </svg>
-        </div>
+          <div className="relative z-20 max-w-md mx-auto">
+            <SectionHeader label="The Happy Couple" title="Bride & Groom" light={false} />
 
-        <BackgroundOrnament position="top-left" opacity={0.95} />
-        <BackgroundOrnament position="bottom-right" opacity={0.95} />
-        <SectionReveal className="relative z-10">
-          <PremiumFrame>
-            <SectionHeader label="The Happy Couple" title="Bride & Groom" />
-            <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+            <div className="space-y-12">
               {/* Bride */}
               <FadeSection variant="left" delay={100} className="flex flex-col items-center text-center">
-                <div className="relative mb-8 group cursor-pointer">
-                  {/* Floral Background Spray */}
-                  <div className="absolute inset-0 -m-8 pointer-events-none select-none z-0 opacity-75 scale-115 group-hover:scale-120 group-hover:rotate-6 transition-all duration-700 ease-out">
-                    <img src={bunga1Svg} className="w-full h-full object-contain" alt="" style={{ animation: "floralFloat 12s ease-in-out infinite alternate" }} />
-                  </div>
-
-                  {/* Arched Portrait Frame */}
-                  <div className="w-44 h-60 rounded-t-full rounded-b-[2rem] overflow-hidden relative z-10 shadow-xl group-hover:-translate-y-2 group-hover:shadow-2xl transition-all duration-500 ease-out" style={{ border: "3px solid #C8A96A", padding: "5px", background: "#FAF7F2" }}>
-                    <img src="https://images.unsplash.com/photo-1594463750939-ebb28c3f7f75?w=400&h=600&fit=crop&auto=format" alt="Aisyah - Bride" className="w-full h-full object-cover rounded-t-full rounded-b-[1.75rem]"/>
-                  </div>
-                  
-                  {/* Badge */}
-                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-5 py-1 rounded-full text-xs tracking-widest uppercase z-20 shadow-md group-hover:scale-105 transition-all duration-500 ease-out" style={{ background: "#C8A96A", color: "#fff", fontWeight: 400, fontSize: "0.6rem" }}>
-                    Bride
-                  </div>
+                <div className="w-56 h-72 relative mb-4">
+                  <FramedPhoto
+                    src="https://images.unsplash.com/photo-1594463750939-ebb28c3f7f75?w=500&h=700&fit=crop&auto=format"
+                    alt="Aisyah Yusuf - Bride"
+                    frameSrc={frame17Png}
+                    aspectRatio="aspect-[3/4]"
+                  />
                 </div>
-                <h3 style={{ fontFamily: "'Great Vibes', cursive", fontSize: "2.5rem", color: "#2C2416" }}>Aisyah Yusuf</h3>
-                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic", color: "#8A7560", marginTop: "0.25rem" }}>Putri dari</p>
-                <p className="font-medium text-sm mt-1" style={{ color: "#2C2416" }}>Mr. Ahmad Yusuf & Mrs. Fatima Yusuf</p>
-                <div className="flex gap-4 mt-5">
-                  <a href="#" className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(200,169,106,0.15)", color: "#C8A96A" }}>
-                    <Instagram size={15}/>
+                <span className="px-4 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-semibold bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0] mb-2">
+                  The Bride
+                </span>
+                <h3 className="font-script text-4xl text-[#4A3A32]" style={{ fontFamily: "'Great Vibes', cursive" }}>
+                  Aisyah Yusuf, S.Ked
+                </h3>
+                <p className="text-[#8A7560] font-serif italic text-xs mt-1">Putri dari</p>
+                <p className="text-[#4A3A32] text-xs font-medium mt-0.5">Bpk. Ahmad Yusuf & Ibu Fatima Yusuf</p>
+                <div className="flex gap-3 mt-3">
+                  <a href="#" className="w-8 h-8 rounded-full bg-white border border-[#C7A86D]/40 text-[#C7A86D] flex items-center justify-center hover:scale-110 transition-transform shadow-sm">
+                    <Instagram size={14} />
                   </a>
-                  <a href="#" className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(200,169,106,0.15)", color: "#C8A96A" }}>
-                    <Facebook size={15}/>
+                  <a href="#" className="w-8 h-8 rounded-full bg-white border border-[#C7A86D]/40 text-[#C7A86D] flex items-center justify-center hover:scale-110 transition-transform shadow-sm">
+                    <Facebook size={14} />
                   </a>
                 </div>
               </FadeSection>
+
+              {/* Heart connector */}
+              <div className="flex items-center justify-center gap-4">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#C7A86D]/60" />
+                <Heart size={22} className="text-[#C7A86D] fill-[#C7A86D] animate-pulse" />
+                <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#C7A86D]/60" />
+              </div>
+
               {/* Groom */}
               <FadeSection variant="right" delay={200} className="flex flex-col items-center text-center">
-                <div className="relative mb-8 group cursor-pointer">
-                  {/* Floral Background Spray */}
-                  <div className="absolute inset-0 -m-8 pointer-events-none select-none z-0 opacity-75 scale-115 group-hover:scale-120 group-hover:-rotate-6 transition-all duration-700 ease-out">
-                    <img src={bunga2Svg} className="w-full h-full object-contain" alt="" style={{ animation: "floralFloat 12s ease-in-out infinite alternate" }} />
-                  </div>
-
-                  {/* Arched Portrait Frame */}
-                  <div className="w-44 h-60 rounded-t-full rounded-b-[2rem] overflow-hidden relative z-10 shadow-xl group-hover:-translate-y-2 group-hover:shadow-2xl transition-all duration-500 ease-out" style={{ border: "3px solid #C8A96A", padding: "5px", background: "#FAF7F2" }}>
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&auto=format" alt="Rizky - Groom" className="w-full h-full object-cover rounded-t-full rounded-b-[1.75rem]"/>
-                  </div>
-                  
-                  {/* Badge */}
-                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-5 py-1 rounded-full text-xs tracking-widest uppercase z-20 shadow-md group-hover:scale-105 transition-all duration-500 ease-out" style={{ background: "#2C2416", color: "#C8A96A", fontWeight: 400, fontSize: "0.6rem" }}>
-                    Groom
-                  </div>
+                <div className="w-56 h-72 relative mb-4">
+                  <FramedPhoto
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=700&fit=crop&auto=format"
+                    alt="Rizky Ramadhan - Groom"
+                    frameSrc={frame17Png}
+                    aspectRatio="aspect-[3/4]"
+                  />
                 </div>
-                <h3 style={{ fontFamily: "'Great Vibes', cursive", fontSize: "2.5rem", color: "#2C2416" }}>Rizky Ramadhan</h3>
-                <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic", color: "#8A7560", marginTop: "0.25rem" }}>Putra dari</p>
-                <p className="font-medium text-sm mt-1" style={{ color: "#2C2416" }}>Mr. Ibrahim Ramadhan & Mrs. Khadijah Ramadhan</p>
-                <div className="flex gap-4 mt-5">
-                  <a href="#" className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(200,169,106,0.15)", color: "#C8A96A" }}>
-                    <Instagram size={15}/>
+                <span className="px-4 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-semibold bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0] mb-2">
+                  The Groom
+                </span>
+                <h3 className="font-script text-4xl text-[#4A3A32]" style={{ fontFamily: "'Great Vibes', cursive" }}>
+                  Rizky Ramadhan, S.T.
+                </h3>
+                <p className="text-[#8A7560] font-serif italic text-xs mt-1">Putra dari</p>
+                <p className="text-[#4A3A32] text-xs font-medium mt-0.5">Bpk. Ibrahim Ramadhan & Ibu Khadijah Ramadhan</p>
+                <div className="flex gap-3 mt-3">
+                  <a href="#" className="w-8 h-8 rounded-full bg-white border border-[#C7A86D]/40 text-[#C7A86D] flex items-center justify-center hover:scale-110 transition-transform shadow-sm">
+                    <Instagram size={14} />
                   </a>
-                  <a href="#" className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(200,169,106,0.15)", color: "#C8A96A" }}>
-                    <Facebook size={15}/>
+                  <a href="#" className="w-8 h-8 rounded-full bg-white border border-[#C7A86D]/40 text-[#C7A86D] flex items-center justify-center hover:scale-110 transition-transform shadow-sm">
+                    <Facebook size={14} />
                   </a>
                 </div>
               </FadeSection>
             </div>
-            {/* Heart connector */}
-            <div className="flex justify-center mt-8">
-              <div className="flex items-center gap-4">
-                <div className="h-px w-16" style={{ background: "linear-gradient(to right, transparent, #C8A96A)" }}/>
-                <Heart size={22} fill="#C8A96A" style={{ color: "#C8A96A" }}/>
-                <div className="h-px w-16" style={{ background: "linear-gradient(to left, transparent, #C8A96A)" }}/>
-              </div>
-            </div>
-          </PremiumFrame>
-        </SectionReveal>
-      </section>
+          </div>
+        </section>
 
       {/* ── LOVE STORY ──────────────────────────────────────── */}
       <LoveStorySection timeline={timeline} />
 
       {/* ── COUNTDOWN ───────────────────────────────────────── */}
-      <section className="py-24 px-6 relative overflow-hidden" style={{ background: `#FAF7F2 url(${hitungMundurSvg}) no-repeat center/cover` }}>
-        <BackgroundOrnament position="top-left" opacity={0.95} />
-        <BackgroundOrnament position="bottom-right" opacity={0.95} />
-        <FloralScatter tint="#C8A96A" opacity={0.06}/>
-        <SectionReveal className="relative z-10">
-          <SectionHeader label="The Big Day" title="Counting Down With Joy" light={false} />
-          <StaggerChildren className="flex flex-wrap justify-center gap-5 mt-10" variant="zoom" staggerMs={120} baseDelay={100}>
-            {[
-              { label: "Hari", value: countdown.days },
-              { label: "Jam", value: countdown.hours },
-              { label: "Menit", value: countdown.minutes },
-              { label: "Detik", value: countdown.seconds },
-            ].map(({ label, value }) => (
-              <div key={label} className="flex flex-col items-center justify-center w-28 h-28 rounded-2xl" style={{
-                background: "rgba(255,255,255,0.85)",
-                backdropFilter: "blur(12px)",
-                border: "1px solid rgba(200,169,106,0.3)",
-                boxShadow: "0 8px 32px rgba(44,36,22,0.08)",
-              }}>
-                <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2.8rem", color: "#C8A96A", lineHeight: 1, fontWeight: 300 }}>
-                  {String(value).padStart(2, "0")}
-                </span>
-                <span className="text-xs tracking-[0.25em] uppercase mt-1" style={{ color: "#8A7560", fontWeight: 400 }}>
-                  {label}
-                </span>
-              </div>
-            ))}
-          </StaggerChildren>
-        </SectionReveal>
+      <section id="countdown" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F5F0E8] text-[#4A3A32]">
+        <TopFloralHeaderCluster />
+        <SectionBackgroundPhoto src={bg4Png} opacity={0.16} />
+        <SideTrees leftTree={pohon6Png} rightTree={pohon1Png} opacity={0.8} />
+        <div className="relative z-20 max-w-md mx-auto text-center">
+          <SectionReveal className="relative z-10">
+            <SectionHeader label="The Big Day" title="Counting Down With Joy" light={false} />
+            <StaggerChildren className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-8" variant="zoom" staggerMs={120} baseDelay={100}>
+              {[
+                { label: "Hari", value: countdown.days },
+                { label: "Jam", value: countdown.hours },
+                { label: "Menit", value: countdown.minutes },
+                { label: "Detik", value: countdown.seconds },
+              ].map(({ label, value }) => (
+                <div
+                  key={label}
+                  className="flex flex-col items-center justify-center w-20 sm:w-24 h-22 sm:h-26 rounded-2xl bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_8px_24px_rgba(74,58,50,0.08)]"
+                >
+                  <span className="font-serif text-3xl sm:text-4xl text-[#4A3A32] font-semibold leading-none">
+                    {String(value).padStart(2, "0")}
+                  </span>
+                  <span className="text-[10px] tracking-[0.2em] uppercase mt-1 text-[#8A7560] font-semibold">
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </StaggerChildren>
+          </SectionReveal>
+        </div>
       </section>
 
       {/* ── EVENTS ──────────────────────────────────────────── */}
-      <section id="events" className="py-24 px-6 relative overflow-hidden">
-        {/* Background wind sway */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 animate-bg-wind" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }} />
-        <BackgroundOrnament position="top-right" opacity={0.95} />
-        <BackgroundOrnament position="bottom-left" opacity={0.95} />
-        <FloralLineart tint="#A8B8A5" opacity={0.09}/>
-        <FloralScatter tint="#C8A96A" opacity={0.055}/>
-        <SectionReveal className="relative z-10">
-          <SectionHeader label="Save The Date" title="Wedding Events" />
-          <StaggerChildren className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8" variant="up" staggerMs={150} baseDelay={80}>
-            {[
-              {
-                title: "Akad Nikah",
-                subtitle: "Ijab Kabul",
-                date: "Sabtu, 20 September 2025",
-                time: "08:00 – 11:00 WIB",
-                location: "Al-Ikhlas Grand Mosque",
-                address: "Jl. Sudirman No. 12, Jakarta Pusat",
-                icon: "✦",
-                bg: "#EFE7DD",
-              },
-              {
-                title: "Reception",
-                subtitle: "Resepsi Pernikahan",
-                date: "Sabtu, 20 September 2025",
-                time: "12:00 – 21:00 WIB",
-                location: "The Ivory Palace Grand Ballroom",
-                address: "Jl. Gatot Subroto No. 88, Jakarta Selatan",
-                icon: "✦",
-                bg: "#FAF7F2",
-              },
-            ].map((ev) => (
-              <div key={ev.title} className="rounded-3xl p-8 relative overflow-hidden" style={{
-                background: ev.bg,
-                border: "1px solid rgba(200,169,106,0.25)",
-                boxShadow: "0 4px 30px rgba(200,169,106,0.08)",
-              }}>
-                <div className="absolute top-4 right-4 opacity-10" style={{ fontSize: "5rem", lineHeight: 1, fontFamily: "'Cormorant Garamond', serif", color: "#C8A96A" }}>
-                  {ev.icon}
-                </div>
-                <p className="text-xs tracking-[0.3em] uppercase mb-2" style={{ color: "#C8A96A", fontWeight: 300 }}>{ev.subtitle}</p>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "2rem", color: "#2C2416", fontWeight: 400 }}>{ev.title}</h3>
-                <div className="mt-6 space-y-3">
-                  <div className="flex items-start gap-3">
-                    <Calendar size={14} style={{ color: "#C8A96A", marginTop: "3px", flexShrink: 0 }}/>
-                    <span className="text-sm" style={{ color: "#8A7560" }}>{ev.date}</span>
+      <section id="events" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+        <CornerFloralDecor position="both" />
+        <SectionBackgroundPhoto src={bg4Png} opacity={0.16} />
+        <SectionBirdsFlock delay={4} top="10vh" />
+        <SideTrees leftTree={pohon2Png} rightTree={pohon7Png} opacity={0.85} />
+        <div className="relative z-20 max-w-md mx-auto">
+          <SectionReveal className="relative z-10">
+            <SectionHeader label="Save The Date" title="Wedding Events" light={false} />
+            <StaggerChildren className="space-y-6" variant="up" staggerMs={150} baseDelay={80}>
+              {[
+                {
+                  title: "Akad Nikah",
+                  subtitle: "Ijab Kabul",
+                  date: "Sabtu, 20 September 2026",
+                  time: "08:00 – 11:00 WIB",
+                  location: "Al-Ikhlas Grand Mosque",
+                  address: "Jl. Sudirman No. 12, Jakarta Pusat",
+                  icon: "✦",
+                },
+                {
+                  title: "Reception",
+                  subtitle: "Resepsi Pernikahan",
+                  date: "Sabtu, 20 September 2026",
+                  time: "12:00 – 21:00 WIB",
+                  location: "The Ivory Palace Grand Ballroom",
+                  address: "Jl. Gatot Subroto No. 88, Jakarta Selatan",
+                  icon: "✦",
+                },
+              ].map((ev) => (
+                <div
+                  key={ev.title}
+                  className="rounded-3xl p-6 relative overflow-hidden bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]"
+                >
+                  <div className="absolute top-4 right-4 opacity-20 text-4xl text-[#C7A86D] font-serif">
+                    {ev.icon}
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Clock size={14} style={{ color: "#C8A96A", marginTop: "3px", flexShrink: 0 }}/>
-                    <span className="text-sm" style={{ color: "#8A7560" }}>{ev.time}</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <MapPin size={14} style={{ color: "#C8A96A", marginTop: "3px", flexShrink: 0 }}/>
-                    <div>
-                      <p className="text-sm font-medium" style={{ color: "#2C2416" }}>{ev.location}</p>
-                      <p className="text-xs mt-0.5" style={{ color: "#8A7560" }}>{ev.address}</p>
+                  <p className="text-[10px] tracking-[0.3em] uppercase mb-1 text-[#C7A86D] font-semibold">{ev.subtitle}</p>
+                  <h3 className="font-serif text-2xl text-[#4A3A32] font-normal">{ev.title}</h3>
+                  <div className="mt-5 space-y-3">
+                    <div className="flex items-start gap-3 text-[#4A3A32]/85 text-xs">
+                      <Calendar size={15} className="text-[#C7A86D] mt-0.5 flex-shrink-0" />
+                      <span>{ev.date}</span>
+                    </div>
+                    <div className="flex items-start gap-3 text-[#4A3A32]/85 text-xs">
+                      <Clock size={15} className="text-[#C7A86D] mt-0.5 flex-shrink-0" />
+                      <span>{ev.time}</span>
+                    </div>
+                    <div className="flex items-start gap-3 text-[#4A3A32]/85 text-xs">
+                      <MapPin size={15} className="text-[#C7A86D] mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium text-[#4A3A32] text-sm">{ev.location}</p>
+                        <p className="text-[11px] text-[#8A7560] mt-0.5">{ev.address}</p>
+                      </div>
                     </div>
                   </div>
+                  <button className="mt-6 w-full py-2.5 rounded-full text-xs uppercase tracking-widest bg-[#F3DDD7] border border-[#C7A86D]/40 text-[#4A3A32] font-semibold hover:bg-[#C7A86D] hover:text-white transition-all">
+                    Add to Calendar
+                  </button>
                 </div>
-                <button className="mt-6 text-xs tracking-widest uppercase px-6 py-2.5 rounded-full transition-all hover:scale-105" style={{ background: "rgba(200,169,106,0.12)", border: "1px solid rgba(200,169,106,0.4)", color: "#C8A96A" }}>
-                  Add to Calendar
-                </button>
-              </div>
-            ))}
-          </StaggerChildren>
-        </SectionReveal>
+              ))}
+            </StaggerChildren>
+          </SectionReveal>
+        </div>
       </section>
 
       {/* ── LOCATION ────────────────────────────────────────── */}
-      <section id="location" className="py-24 px-6 relative overflow-hidden">
-        {/* Background wind sway */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 animate-bg-wind" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }} />
-        <BackgroundOrnament position="top-left" opacity={0.95} />
-        <BackgroundOrnament position="bottom-right" opacity={0.95} />
-        <FloralScatter tint="#C8A96A" opacity={0.07}/>
-        <FloralWatercolor opacity={0.05}/>
-        <SectionReveal className="relative z-10">
-          <SectionHeader label="How to Find Us" title="Location" />
-          <div className="max-w-3xl mx-auto">
-            <div className="rounded-3xl overflow-hidden" style={{ border: "1px solid rgba(200,169,106,0.25)", boxShadow: "0 8px 40px rgba(200,169,106,0.1)" }}>
-              <div className="relative w-full max-w-5xl mx-auto p-2 md:p-6" style={{ background: "linear-gradient(180deg, #F6EEE4 0%, #E9DDD1 100%)" }}>
-                <div className="relative mx-auto w-full" style={{ maxWidth: "980px", aspectRatio: "1 / 1.02" }}>
-                  <div
-                    className="absolute left-1/2 top-[16%] w-[100%] h-[84%] -translate-x-1/2 overflow-hidden shadow-[0_28px_70px_rgba(0,0,0,0.16)]"
-                    style={{
-                      background: "#E7D7C8",
-                      clipPath: "polygon(10% 24%, 22% 14%, 36% 10%, 64% 10%, 78% 14%, 90% 24%, 90% 84%, 10% 84%)",
-                      border: "1px solid rgba(255,255,255,0.75)",
-                    }}
-                  >
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1944491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sJl.%20Sudirman%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, filter: "sepia(20%) saturate(0.8)" }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Wedding Location"
-                    />
-                  </div>
-                  <img
-                    src={rumahSvg}
-                    alt="House location frame"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    style={{ zIndex: 2, pointerEvents: "none" }}
-                  />
-                </div>
+      <section id="location" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
+        <CornerFloralDecor position="both" />
+        <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
+        <SideTrees leftTree={pohon8Png} rightTree={pohon9Png} opacity={0.85} />
+        <div className="relative z-20 max-w-md mx-auto">
+          <SectionReveal className="relative z-10">
+            <SectionHeader label="How to Find Us" title="Location" light={false} />
+            <div className="rounded-3xl overflow-hidden bg-white/95 border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]">
+              <div className="relative w-full aspect-[4/3] bg-[#F8F5F0] overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1944491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sJl.%20Sudirman%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, filter: "brightness(0.95) contrast(1.05)" }}
+                  allowFullScreen
+                  loading="lazy"
+                  title="Wedding Location Map"
+                />
               </div>
-              <div className="p-6 flex flex-col md:flex-row items-center justify-between gap-4" style={{ background: "#FAF7F2" }}>
-                <div>
-                  <p className="font-medium" style={{ color: "#2C2416", fontFamily: "'Cormorant Garamond', serif", fontSize: "1.2rem" }}>The Ivory Palace Grand Ballroom</p>
-                  <p className="text-sm mt-1" style={{ color: "#8A7560" }}>Jl. Gatot Subroto No. 88, Jakarta Selatan 12710</p>
-                </div>
+              <div className="p-5 text-center bg-white">
+                <p className="font-serif text-lg text-[#4A3A32] font-medium">The Ivory Palace Grand Ballroom</p>
+                <p className="text-xs text-[#8A7560] mt-1">Jl. Gatot Subroto No. 88, Jakarta Selatan 12710</p>
                 <a
                   href="https://maps.google.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 rounded-full text-sm tracking-widest uppercase transition-all hover:scale-105 whitespace-nowrap"
-                  style={{ background: "#C8A96A", color: "#fff", textDecoration: "none", fontWeight: 400, fontSize: "0.7rem" }}
+                  className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs tracking-widest uppercase bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white font-semibold shadow-md hover:scale-105 transition-all"
                 >
-                  <MapPin size={13}/>
+                  <MapPin size={14} />
                   Get Directions
                 </a>
               </div>
             </div>
-          </div>
-        </SectionReveal>
+          </SectionReveal>
+        </div>
       </section>
 
       {/* ── GALLERY ─────────────────────────────────────────── */}
@@ -2367,182 +2144,169 @@ export default function App() {
       <GiftSection copied={copied} handleCopy={handleCopy} />
 
       {/* ── RSVP ────────────────────────────────────────────── */}
-      <section id="rsvp" className="py-24 px-6 relative overflow-hidden">
-        {/* Background wind sway */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none select-none z-0 animate-bg-wind" style={{ background: `url(${bg80Svg}) no-repeat center/cover` }} />
-        <BackgroundOrnament position="top-left" opacity={0.95} />
-        <BackgroundOrnament position="bottom-right" opacity={0.95} />
-        <FloralLineart tint="#C8A96A" opacity={0.07}/>
-        <FloralScatter tint="#A8B8A5" opacity={0.065}/>
-        <SectionReveal className="relative z-10">
-          <SectionHeader label="Will You Join Us?" title="RSVP" />
-          <div className="max-w-lg mx-auto">
+      <section id="rsvp" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+        <TopFloralHeaderCluster />
+        <SectionBackgroundPhoto src={bg5Png} opacity={0.16} />
+        <SectionBirdsFlock delay={1} top="10vh" />
+        <SideTrees leftTree={pohon10Png} rightTree={pohon1Png} opacity={0.8} />
+        <div className="relative z-20 max-w-md mx-auto">
+          <SectionReveal className="relative z-10">
+            <SectionHeader label="Will You Join Us?" title="RSVP" light={false} />
             {rsvpSent ? (
-              <div className="text-center py-12 rounded-3xl" style={{ background: "#EFE7DD", border: "1px solid rgba(200,169,106,0.2)" }}>
-                <Heart size={36} fill="#C8A96A" style={{ color: "#C8A96A", margin: "0 auto 1rem" }}/>
-                <h3 style={{ fontFamily: "'Great Vibes', cursive", fontSize: "2.5rem", color: "#2C2416" }}>Terima Kasih!</h3>
-                <p className="mt-3 text-sm" style={{ color: "#8A7560" }}>Konfirmasi kehadiran kalian telah kami terima. Kami tidak sabar untuk merayakan bersama kalian!</p>
+              <div className="text-center py-10 px-6 rounded-3xl bg-white/95 border border-[#C7A86D]/30 shadow-md">
+                <Heart size={36} className="text-[#C7A86D] fill-[#C7A86D] mx-auto mb-3" />
+                <h3 className="font-script text-3xl text-[#4A3A32]" style={{ fontFamily: "'Great Vibes', cursive" }}>Terima Kasih!</h3>
+                <p className="mt-2 text-xs text-[#4A3A32]/80">Konfirmasi kehadiran kalian telah kami terima. Kami tidak sabar untuk merayakan bersama kalian!</p>
               </div>
             ) : (
-              <form onSubmit={handleRsvp} className="space-y-5 rounded-3xl p-8" style={{ background: "#EFE7DD", border: "1px solid rgba(200,169,106,0.2)", boxShadow: "0 4px 30px rgba(200,169,106,0.06)" }}>
+              <form onSubmit={handleRsvp} className="space-y-4 rounded-3xl p-6 bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]">
                 <div>
-                  <label className="block text-xs tracking-widest uppercase mb-2" style={{ color: "#8A7560" }}>Nama Lengkap</label>
+                  <label className="block text-[10px] tracking-widest uppercase text-[#C7A86D] font-semibold mb-1">Nama Lengkap</label>
                   <input
                     type="text"
                     required
                     value={rsvpForm.name}
                     onChange={e => setRsvpForm(p => ({ ...p, name: e.target.value }))}
                     placeholder="Nama kamu"
-                    className="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-1"
-                    style={{ background: "#FAF7F2", border: "1px solid rgba(200,169,106,0.3)", color: "#2C2416", fontFamily: "'Poppins', sans-serif", focusRingColor: "#C8A96A" }}
+                    className="w-full px-4 py-2.5 rounded-xl text-xs bg-[#F8F5F0] border border-[#D8B6B0] text-[#4A3A32] placeholder-[#8A7560]/60 outline-none focus:border-[#C7A86D]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs tracking-widest uppercase mb-2" style={{ color: "#8A7560" }}>Kehadiran</label>
-                  <div className="flex gap-3">
+                  <label className="block text-[10px] tracking-widest uppercase text-[#C7A86D] font-semibold mb-1">Kehadiran</label>
+                  <div className="flex gap-2">
                     {["yes", "no", "maybe"].map(opt => (
                       <button
                         key={opt}
                         type="button"
                         onClick={() => setRsvpForm(p => ({ ...p, attendance: opt }))}
-                        className="flex-1 py-3 rounded-xl text-xs tracking-widest uppercase transition-all"
-                        style={{
-                          background: rsvpForm.attendance === opt ? "#C8A96A" : "rgba(200,169,106,0.1)",
-                          color: rsvpForm.attendance === opt ? "#fff" : "#8A7560",
-                          border: `1px solid ${rsvpForm.attendance === opt ? "#C8A96A" : "rgba(200,169,106,0.3)"}`,
-                        }}
+                        className={`flex-1 py-2.5 rounded-xl text-[11px] font-semibold uppercase tracking-wider transition-all ${
+                          rsvpForm.attendance === opt
+                            ? "bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white shadow-md"
+                            : "bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0]"
+                        }`}
                       >
-                        {opt === "yes" ? "Hadir" : opt === "no" ? "Tidak Hadir" : "Mungkin"}
+                        {opt === "yes" ? "Hadir" : opt === "no" ? "Absen" : "Ragu"}
                       </button>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs tracking-widest uppercase mb-2" style={{ color: "#8A7560" }}>Jumlah Tamu</label>
+                  <label className="block text-[10px] tracking-widest uppercase text-[#C7A86D] font-semibold mb-1">Jumlah Tamu</label>
                   <select
                     value={rsvpForm.guests}
                     onChange={e => setRsvpForm(p => ({ ...p, guests: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                    style={{ background: "#FAF7F2", border: "1px solid rgba(200,169,106,0.3)", color: "#2C2416", fontFamily: "'Poppins', sans-serif" }}
+                    className="w-full px-4 py-2.5 rounded-xl text-xs bg-[#F8F5F0] border border-[#D8B6B0] text-[#4A3A32] outline-none focus:border-[#C7A86D]"
                   >
                     {["1","2","3","4","5+"].map(n => <option key={n} value={n}>{n} Tamu</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs tracking-widest uppercase mb-2" style={{ color: "#8A7560" }}>Ucapan & Pesan</label>
+                  <label className="block text-[10px] tracking-widest uppercase text-[#C7A86D] font-semibold mb-1">Ucapan & Doa</label>
                   <textarea
-                    rows={4}
+                    rows={3}
                     value={rsvpForm.wishes}
                     onChange={e => setRsvpForm(p => ({ ...p, wishes: e.target.value }))}
-                    placeholder="Tuliskan doa dan ucapan terbaikmu untuk kami..."
-                    className="w-full px-4 py-3 rounded-xl text-sm outline-none resize-none"
-                    style={{ background: "#FAF7F2", border: "1px solid rgba(200,169,106,0.3)", color: "#2C2416", fontFamily: "'Poppins', sans-serif" }}
+                    placeholder="Tuliskan doa dan ucapan terbaikmu..."
+                    className="w-full px-4 py-2.5 rounded-xl text-xs bg-[#F8F5F0] border border-[#D8B6B0] text-[#4A3A32] placeholder-[#8A7560]/60 outline-none resize-none focus:border-[#C7A86D]"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-4 rounded-xl flex items-center justify-center gap-2 text-sm tracking-widest uppercase transition-all hover:opacity-90 hover:scale-[1.01]"
-                  style={{ background: "linear-gradient(135deg, #C8A96A, #D4B87A)", color: "#fff", fontWeight: 400 }}
+                  className="w-full py-3 rounded-xl flex items-center justify-center gap-2 text-xs font-semibold tracking-widest uppercase bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white shadow-md hover:opacity-95 transition-all"
                 >
-                  <Send size={14}/>
-                  Send RSVP
+                  <Send size={14} />
+                  Kirim RSVP
                 </button>
               </form>
             )}
-          </div>
-        </SectionReveal>
+          </SectionReveal>
+        </div>
       </section>
 
       {/* ── WISHES ──────────────────────────────────────────── */}
-      <section id="wishes" className="py-24 px-6 relative overflow-hidden" style={{ background: "#EFE7DD" }}>
-        <BackgroundOrnament position="top-right" opacity={0.95} />
-        <BackgroundOrnament position="bottom-left" opacity={0.95} />
-        <FloralLineart tint="#A8B8A5" opacity={0.09}/>
-        <FloralWatercolor opacity={0.055}/>
-        <SectionReveal className="relative z-10">
-          <SectionHeader label="Kind Words" title="Guest Wishes" />
-          <StaggerChildren className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" variant="zoom" staggerMs={100}>
-            {wishes.map((w, i) => (
-              <div key={i} className="rounded-3xl p-6 relative" style={{
-                background: "#FAF7F2",
-                border: "1px solid rgba(200,169,106,0.2)",
-                boxShadow: "0 4px 20px rgba(200,169,106,0.06)",
-              }}>
-                <div className="absolute top-4 right-5 opacity-20" style={{ fontFamily: "'Great Vibes', cursive", fontSize: "3rem", color: "#C8A96A", lineHeight: 1 }}>"</div>
-                <p className="text-sm leading-relaxed mb-5" style={{ color: "#5A4A3A", lineHeight: 1.8 }}>{w.message}</p>
-                <div className="flex items-center gap-3 pt-4" style={{ borderTop: "1px solid rgba(200,169,106,0.15)" }}>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{ background: "rgba(200,169,106,0.15)", color: "#C8A96A" }}>
-                    {w.name[0]}
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium" style={{ color: "#2C2416" }}>{w.name}</p>
-                    <p className="text-xs" style={{ color: "#A8957A" }}>{w.date}</p>
+      <section id="wishes" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
+        <CornerFloralDecor position="both" />
+        <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
+        <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.8} />
+        <div className="relative z-20 max-w-md mx-auto">
+          <SectionReveal className="relative z-10">
+            <SectionHeader label="Kind Words" title="Guest Wishes" light={false} />
+            <StaggerChildren className="space-y-4" variant="zoom" staggerMs={100}>
+              {wishes.map((w, i) => (
+                <div key={i} className="rounded-2xl p-4 bg-white/95 border border-[#C7A86D]/25 shadow-md relative">
+                  <p className="text-xs leading-relaxed text-[#4A3A32]/90 font-light mb-3">"{w.message}"</p>
+                  <div className="flex items-center gap-2.5 pt-2 border-t border-[#D8B6B0]/30">
+                    <div className="w-7 h-7 rounded-full bg-[#F3DDD7] border border-[#D8B6B0] text-[#4A3A32] text-xs font-semibold flex items-center justify-center">
+                      {w.name[0]}
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-[#4A3A32]">{w.name}</p>
+                      <p className="text-[10px] text-[#8A7560]">{w.date}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </StaggerChildren>
-        </SectionReveal>
+              ))}
+            </StaggerChildren>
+          </SectionReveal>
+        </div>
       </section>
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
-      <footer className="relative py-20 px-6 text-center overflow-hidden" style={{ background: "#2C2416" }}>
-        <BackgroundOrnament position="top-left" opacity={0.85} />
-        <BackgroundOrnament position="top-right" opacity={0.85} />
-        <SectionReveal className="relative z-10">
-          <p className="text-xs tracking-[0.4em] uppercase mb-4" style={{ color: "rgba(200,169,106,0.6)", fontWeight: 300 }}>
-            With All Our Love
-          </p>
-          <h2 style={{
-            fontFamily: "'Great Vibes', cursive",
-            fontSize: "clamp(3rem, 10vw, 5.5rem)",
-            color: "#C8A96A",
-            textShadow: "0 4px 30px rgba(200,169,106,0.25)",
-          }}>
-            Aisyah & Rizky
-          </h2>
-          <div className="flex items-center justify-center gap-4 my-6">
-            <div className="h-px w-12" style={{ background: "rgba(200,169,106,0.3)" }}/>
-            <Heart size={14} fill="#C8A96A" style={{ color: "#C8A96A" }}/>
-            <div className="h-px w-12" style={{ background: "rgba(200,169,106,0.3)" }}/>
-          </div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: "italic", color: "rgba(232,208,154,0.6)", fontSize: "1rem" }}>
-            20 September 2026 · Jakarta, Indonesia
-          </p>
-          <div className="flex justify-center gap-4 mt-8">
-            {[Instagram, Facebook, Music].map((Icon, i) => (
-              <a key={i} href="#" className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(200,169,106,0.1)", border: "1px solid rgba(200,169,106,0.2)", color: "#C8A96A" }}>
-                <Icon size={15}/>
-              </a>
-            ))}
-          </div>
-          <p className="mt-10 text-xs" style={{ color: "rgba(255,255,255,0.2)", letterSpacing: "0.15em" }}>
-            Dibuat dengan cinta · #AisyahRizky2026
-          </p>
-        </SectionReveal>
+      <footer className="relative py-16 px-6 text-center overflow-hidden bg-[#F4EFEA] text-[#4A3A32] border-t border-[#C7A86D]/30">
+        <TopFloralHeaderCluster />
+        <SectionBackgroundPhoto src={bg5Png} opacity={0.18} />
+        <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.7} />
+        <div className="relative z-20 max-w-sm mx-auto">
+          <SectionReveal className="relative z-10">
+            <p className="text-[10px] tracking-[0.4em] uppercase text-[#C7A86D] font-semibold mb-2">
+              With All Our Love
+            </p>
+            <h2 className="font-script text-4xl sm:text-5xl text-[#4A3A32]" style={{ fontFamily: "'Great Vibes', cursive" }}>
+              Aisyah & Rizky
+            </h2>
+            <div className="flex items-center justify-center gap-3 my-4">
+              <div className="h-px w-10 bg-[#C7A86D]/50" />
+              <Heart size={14} className="text-[#C7A86D] fill-[#C7A86D]" />
+              <div className="h-px w-10 bg-[#C7A86D]/50" />
+            </div>
+            <p className="font-serif italic text-[#8A7560] text-xs">
+              20 September 2026 · Jakarta, Indonesia
+            </p>
+            <div className="flex justify-center gap-3 mt-6">
+              {[Instagram, Facebook, Music].map((Icon, i) => (
+                <a key={i} href="#" className="w-8 h-8 rounded-full bg-white border border-[#C7A86D]/40 text-[#C7A86D] flex items-center justify-center hover:scale-110 transition-transform shadow-sm">
+                  <Icon size={14} />
+                </a>
+              ))}
+            </div>
+            <p className="mt-8 text-[10px] text-[#8A7560] tracking-widest">
+              Dibuat dengan cinta · #AisyahRizky2026
+            </p>
+          </SectionReveal>
+        </div>
       </footer>
 
       {isOpened && (
-        <nav className="fixed left-1/2 z-50 -translate-x-1/2 w-[min(94vw,680px)] rounded-full border border-white/25 bg-white/70 px-2 py-2 shadow-2xl shadow-black/10 backdrop-blur-2xl"
+        <nav className="fixed left-1/2 z-50 -translate-x-1/2 w-[min(92vw,440px)] rounded-full border border-[#C7A86D]/35 bg-[#F8F5F0]/90 px-2 py-2 shadow-[0_10px_30px_rgba(74,58,50,0.15)] backdrop-blur-xl"
           style={{ bottom: "calc(env(safe-area-inset-bottom, 1rem) + 0.75rem)" }}
         >
           <div className="flex items-center justify-between gap-1">
             {[
               { href: "#welcome", label: "Home", Icon: Home },
+              { href: "#couple", label: "Couple", Icon: Heart },
               { href: "#events", label: "Events", Icon: Calendar },
               { href: "#location", label: "Location", Icon: MapPin },
               { href: "#rsvp", label: "RSVP", Icon: Send },
-              { href: "#wishes", label: "Wishes", Icon: Heart },
             ].map(({ href, label, Icon }) => (
               <a
                 key={href}
                 href={href}
-                className="flex min-w-[56px] flex-1 items-center justify-center rounded-3xl px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-[#5A4F40] transition-all duration-200 hover:bg-[#F6EFE4] hover:text-[#2C2416]"
+                className="flex min-w-[48px] flex-1 items-center justify-center rounded-3xl px-2 py-1.5 text-center text-[9px] font-semibold uppercase tracking-wider text-[#4A3A32] transition-all duration-200 hover:bg-[#F3DDD7] hover:text-[#C7A86D]"
                 aria-label={label}
               >
-                <div className="flex items-center justify-center gap-1 sm:gap-2">
-                  <Icon size={16} />
-                  <span className="hidden sm:inline">{label}</span>
+                <div className="flex flex-col items-center justify-center gap-0.5">
+                  <Icon size={15} />
+                  <span>{label}</span>
                 </div>
               </a>
             ))}

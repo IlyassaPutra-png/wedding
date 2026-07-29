@@ -8,6 +8,66 @@ html, body, #root {
   touch-action: pan-y;
 }
 
+/* Luxury Wedding Warm Ivory Theme & Mobile Wrapper Container */
+body {
+  background-color: #F8F5F0;
+  background-image: radial-gradient(circle at 50% 20%, #FAF7F2 0%, #F4EFEA 100%);
+  background-attachment: fixed;
+  color: #4A3A32;
+  margin: 0;
+  padding: 0;
+}
+
+.invitation-wrapper {
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  background-color: #F8F5F0;
+  color: #4A3A32;
+  box-shadow: 0 0 60px rgba(74, 58, 50, 0.12), 0 0 25px rgba(0, 0, 0, 0.08);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Half Tree Side Ornaments */
+.half-tree-left {
+  position: absolute;
+  top: 50%;
+  left: -38%;
+  transform: translateY(-50%) scale(1.4);
+  width: 75%;
+  max-width: 340px;
+  pointer-events: none;
+  z-index: 5;
+  filter: drop-shadow(4px 10px 18px rgba(0, 0, 0, 0.5));
+  animation: windSwayLeft 16s ease-in-out infinite alternate;
+}
+
+.half-tree-right {
+  position: absolute;
+  top: 50%;
+  right: -38%;
+  transform: translateY(-50%) scale(1.4) scaleX(-1);
+  width: 75%;
+  max-width: 340px;
+  pointer-events: none;
+  z-index: 5;
+  filter: drop-shadow(-4px 10px 18px rgba(0, 0, 0, 0.5));
+  animation: windSwayRight 16s ease-in-out infinite alternate;
+}
+
+@keyframes windSwayLeft {
+  0%, 100% { transform: translateY(-50%) scale(1.4) rotate(0deg); }
+  50% { transform: translateY(-52%) scale(1.43) rotate(1.5deg); }
+}
+
+@keyframes windSwayRight {
+  0%, 100% { transform: translateY(-50%) scale(1.4) scaleX(-1) rotate(0deg); }
+  50% { transform: translateY(-52%) scale(1.43) scaleX(-1) rotate(-1.5deg); }
+}
+
 @keyframes floatBird1 {
   0% { transform: translate(0, 0) rotate(0deg); }
   50% { transform: translate(15px, -10px) rotate(3deg); }
@@ -38,4 +98,5 @@ html, body, #root {
 .animate-float-butterfly {
   animation: floatButterfly 6s ease-in-out infinite;
 }
+
 
