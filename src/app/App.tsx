@@ -1183,6 +1183,82 @@ interface StoryItemData {
   photo: string;
 }
 
+/* ─── Story Item Block (Inside Unified Continuous Shape Container) ─── */
+function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
+  const { ref, visible } = useInView(0.08);
+  const isEven = idx % 2 === 0;
+
+  return (
+    <div ref={ref} className="relative pt-6 pb-8 border-b border-[#C7A86D]/20 last:border-b-0 last:pb-2">
+      {/* Year & Date Badge */}
+      <div
+        className="flex justify-center mb-4 transition-all duration-1000 ease-out"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0) scale(1)" : "translateY(-18px) scale(0.9)",
+          transitionDelay: "100ms",
+        }}
+      >
+        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0] shadow-sm">
+          <span>✦ {item.year}</span>
+          <span className="opacity-40">•</span>
+          <span>{item.date} ✦</span>
+        </div>
+      </div>
+
+      {/* Photo - Full Width across shape container (NO FRAME) */}
+      <div
+        className="relative w-full aspect-[4/5] xs:aspect-[3/4] sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-md border border-[#C7A86D]/25 mb-4 transition-all duration-1000 ease-out pointer-events-none select-none"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0) scale(1)" : "translateY(-25px) scale(0.96)",
+          transitionDelay: "250ms",
+        }}
+      >
+        <img
+          src={item.photo}
+          alt={item.title}
+          className="w-full h-full object-cover filter contrast-[1.03] brightness-[0.98] pointer-events-none"
+        />
+      </div>
+
+      {/* Title */}
+      <div
+        className="text-center mb-2 transition-all duration-1000 ease-out"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible
+            ? "translateX(0)"
+            : isEven
+            ? "translateX(-35px)"
+            : "translateX(35px)",
+          transitionDelay: "400ms",
+        }}
+      >
+        <h3 className="font-serif text-2xl sm:text-3xl text-[#4A3A32] font-semibold tracking-wide">
+          {item.title}
+        </h3>
+      </div>
+
+      {/* Description Text */}
+      <p
+        className="text-[#4A3A32]/85 text-xs sm:text-sm leading-relaxed text-center font-light px-2 transition-all duration-1000 ease-out"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible
+            ? "translateX(0)"
+            : isEven
+            ? "translateX(-25px)"
+            : "translateX(25px)",
+          transitionDelay: "550ms",
+        }}
+      >
+        {item.desc}
+      </p>
+    </div>
+  );
+}
+
 function LoveStorySection({ timeline }: { timeline?: any[] }) {
   const storyTimeline: StoryItemData[] = [
     {
@@ -1215,8 +1291,6 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
     }
   ];
 
-  const [active, setActive] = useState(0);
-
   return (
     <section id="story" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
       <FloatingButterflies count={2} />
@@ -1227,88 +1301,14 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
       <div className="relative z-20 max-w-md mx-auto">
         <SectionHeader label="Our Journey Together" title="Our Love Story" light={false} />
 
-        {/* Milestone Navigation Tabs */}
-        <div className="flex justify-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-none">
+        {/* Unified Continuous Shape Container */}
+        <div className="mt-8 bg-white/95 backdrop-blur-md rounded-3xl p-4 xs:p-5 sm:p-7 border border-[#C7A86D]/35 shadow-[0_16px_44px_rgba(74,58,50,0.1)] relative overflow-hidden">
+          {/* Top Decorative Soft Pastel Line Accent */}
+          <div className="w-full h-1.5 bg-gradient-to-r from-[#F5E6E0] via-[#C7A86D]/45 to-[#E6EFE6] rounded-full mb-2" />
+
           {storyTimeline.map((item, idx) => (
-            <button
-              key={idx}
-              onClick={() => setActive(idx)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase transition-all duration-300 ${
-                active === idx
-                  ? "bg-[#C7A86D] text-white font-semibold shadow-md shadow-[#C7A86D]/20 scale-105"
-                  : "bg-[#F3DDD7]/80 text-[#4A3A32] hover:bg-[#F3DDD7] border border-[#D8B6B0]/50"
-              }`}
-            >
-              {item.year}
-            </button>
+            <StoryItemBlock key={idx} item={item} idx={idx} />
           ))}
-        </div>
-
-        {/* Story Card (Framed Photo + Description Underneath) */}
-        <div className="space-y-6">
-          {storyTimeline.map((item, idx) => {
-            if (idx !== active) return null;
-            return (
-              <div
-                key={idx}
-                className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)] transition-all duration-500"
-              >
-                {/* Framed Photo on top */}
-                <div className="relative mb-5 max-w-[320px] mx-auto">
-                  <FramedPhoto
-                    src={item.photo}
-                    alt={item.title}
-                    frameSrc={frame17Png}
-                    aspectRatio="aspect-[4/3]"
-                  />
-                </div>
-
-                {/* Title & Date badge below photo */}
-                <div className="text-center mb-3">
-                  <span className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold tracking-widest uppercase bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0]">
-                    {item.date}
-                  </span>
-                  <h3 className="font-serif text-2xl text-[#4A3A32] mt-2 font-normal">
-                    {item.title}
-                  </h3>
-                </div>
-
-                {/* Story Description Text Underneath Photo */}
-                <p className="text-[#4A3A32]/85 text-sm leading-relaxed text-center font-light px-2">
-                  {item.desc}
-                </p>
-
-                {/* Bottom Navigation Controls */}
-                <div className="flex items-center justify-between mt-6 pt-4 border-t border-[#D8B6B0]/40">
-                  <button
-                    onClick={() => setActive(Math.max(0, active - 1))}
-                    disabled={active === 0}
-                    className="text-xs uppercase tracking-widest text-[#C7A86D] disabled:opacity-30 hover:underline font-semibold"
-                  >
-                    ← Prev
-                  </button>
-                  <div className="flex gap-1.5">
-                    {storyTimeline.map((_, di) => (
-                      <span
-                        key={di}
-                        onClick={() => setActive(di)}
-                        className={`h-2 rounded-full cursor-pointer transition-all ${
-                          di === active ? "w-6 bg-[#C7A86D]" : "w-2 bg-[#D8B6B0]"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setActive(Math.min(storyTimeline.length - 1, active + 1))}
-                    disabled={active === storyTimeline.length - 1}
-                    className="text-xs uppercase tracking-widest text-[#C7A86D] disabled:opacity-30 hover:underline font-semibold"
-                  >
-                    Next →
-                  </button>
-                </div>
-              </div>
-            );
-          })}
         </div>
       </div>
     </section>
