@@ -71,7 +71,7 @@ function SideTrees({
   leftTree = pohon7Png,
   rightTree = pohon8Png,
   opacity = 0.85,
-  scale = 1.4,
+  scale = 1.3,
   top = "50%"
 }: {
   leftTree?: string;
@@ -84,7 +84,7 @@ function SideTrees({
     <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-10">
       {leftTree && (
         <div
-          className="absolute -left-[45%] sm:-left-[35%] w-[85%] max-w-[340px] h-auto pointer-events-none"
+          className="absolute -left-[32%] xs:-left-[26%] sm:-left-[20%] md:-left-[15%] w-[75%] sm:w-[60%] max-w-[360px] h-auto pointer-events-none"
           style={{ top, opacity, transform: `translateY(-50%) scale(${scale})`, transformOrigin: "left center" }}
         >
           <img
@@ -96,14 +96,16 @@ function SideTrees({
       )}
       {rightTree && (
         <div
-          className="absolute -right-[45%] sm:-right-[35%] w-[85%] max-w-[340px] h-auto pointer-events-none"
+          className="absolute -right-[32%] xs:-right-[26%] sm:-right-[20%] md:-right-[15%] w-[75%] sm:w-[60%] max-w-[360px] h-auto pointer-events-none"
           style={{ top, opacity, transform: `translateY(-50%) scale(${scale})`, transformOrigin: "right center" }}
         >
-          <img
-            src={rightTree}
-            alt=""
-            className="w-full h-auto object-contain filter drop-shadow-[0_10px_20px_rgba(74,58,50,0.18)] animate-living-tree-right scale-x-[-1] pointer-events-none"
-          />
+          <div className="w-full h-auto [transform:scaleX(-1)] pointer-events-none">
+            <img
+              src={rightTree}
+              alt=""
+              className="w-full h-auto object-contain filter drop-shadow-[0_10px_20px_rgba(74,58,50,0.18)] animate-living-tree-right pointer-events-none"
+            />
+          </div>
         </div>
       )}
     </div>
