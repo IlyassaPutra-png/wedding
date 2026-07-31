@@ -1189,7 +1189,7 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
   const isEven = idx % 2 === 0;
 
   return (
-    <div ref={ref} className="relative pt-6 pb-8 border-b border-[#C7A86D]/20 last:border-b-0 last:pb-2">
+    <div ref={ref} className="relative pt-6 pb-8 border-b border-[#C7A86D]/25 last:border-b-0 last:pb-2">
       {/* Year & Date Badge */}
       <div
         className="flex justify-center mb-4 transition-all duration-1000 ease-out"
@@ -1199,7 +1199,7 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
           transitionDelay: "100ms",
         }}
       >
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0] shadow-sm">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0] shadow-sm">
           <span>✦ {item.year}</span>
           <span className="opacity-40">•</span>
           <span>{item.date} ✦</span>
@@ -1208,7 +1208,7 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
 
       {/* Photo - Full Width across shape container (NO FRAME) */}
       <div
-        className="relative w-full aspect-[4/5] xs:aspect-[3/4] sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-md border border-[#C7A86D]/25 mb-4 transition-all duration-1000 ease-out pointer-events-none select-none"
+        className="relative w-full aspect-[4/5] xs:aspect-[3/4] sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-md border border-[#C7A86D]/30 mb-4 transition-all duration-1000 ease-out pointer-events-none select-none"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0) scale(1)" : "translateY(-25px) scale(0.96)",
@@ -1235,14 +1235,14 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
           transitionDelay: "400ms",
         }}
       >
-        <h3 className="font-serif text-2xl sm:text-3xl text-[#4A3A32] font-semibold tracking-wide">
+        <h3 className="font-serif text-2xl sm:text-3xl text-[#2E3C2E] font-semibold tracking-wide">
           {item.title}
         </h3>
       </div>
 
       {/* Description Text */}
       <p
-        className="text-[#4A3A32]/85 text-xs sm:text-sm leading-relaxed text-center font-light px-2 transition-all duration-1000 ease-out"
+        className="text-[#364836]/90 text-xs sm:text-sm leading-relaxed text-center font-light px-2 transition-all duration-1000 ease-out"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible
@@ -1301,10 +1301,10 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
       <div className="relative z-20 max-w-md mx-auto">
         <SectionHeader label="Our Journey Together" title="Our Love Story" light={false} />
 
-        {/* Unified Continuous Shape Container */}
-        <div className="mt-8 bg-white/95 backdrop-blur-md rounded-3xl p-4 xs:p-5 sm:p-7 border border-[#C7A86D]/35 shadow-[0_16px_44px_rgba(74,58,50,0.1)] relative overflow-hidden">
-          {/* Top Decorative Soft Pastel Line Accent */}
-          <div className="w-full h-1.5 bg-gradient-to-r from-[#F5E6E0] via-[#C7A86D]/45 to-[#E6EFE6] rounded-full mb-2" />
+        {/* Full-Width Mobile Background Shape Container in Soft Sage Green & Pink Accent */}
+        <div className="mt-8 -mx-4 xs:mx-0 bg-gradient-to-b from-[#E4ECE3] via-[#EAF0E9] to-[#E2EBE2] backdrop-blur-md rounded-none xs:rounded-3xl p-5 xs:p-6 sm:p-8 border-y xs:border border-[#B8C9B8]/90 shadow-[0_16px_48px_rgba(52,68,52,0.12)] relative overflow-hidden">
+          {/* Top Decorative Line Accent */}
+          <div className="w-full h-1.5 bg-gradient-to-r from-[#C7A86D] via-[#F3DDD7] to-[#C7A86D] rounded-full mb-3" />
 
           {storyTimeline.map((item, idx) => (
             <StoryItemBlock key={idx} item={item} idx={idx} />
