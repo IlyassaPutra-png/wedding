@@ -1183,7 +1183,7 @@ interface StoryItemData {
   photo: string;
 }
 
-/* ─── Story Item Block (Inside Unified Continuous Shape Container) ─── */
+/* ─── Story Item Block (Inside Unified Soft Pink Continuous Shape Container) ─── */
 function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
   const { ref, visible } = useInView(0.08);
   const isEven = idx % 2 === 0;
@@ -1206,20 +1206,104 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
         </div>
       </div>
 
-      {/* Photo - Full Width across shape container (NO FRAME) */}
+      {/* Photo Wrapper Container with Corner Floral Ornaments */}
       <div
-        className="relative w-full aspect-[4/5] xs:aspect-[3/4] sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-md border border-[#C7A86D]/30 mb-4 transition-all duration-1000 ease-out pointer-events-none select-none"
+        className="relative my-4 transition-all duration-1000 ease-out pointer-events-none select-none"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0) scale(1)" : "translateY(-25px) scale(0.96)",
           transitionDelay: "250ms",
         }}
       >
-        <img
-          src={item.photo}
-          alt={item.title}
-          className="w-full h-full object-cover filter contrast-[1.03] brightness-[0.98] pointer-events-none"
-        />
+        {/* Photo Container */}
+        <div className="w-full aspect-[4/5] xs:aspect-[3/4] sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-md border border-[#C7A86D]/30 relative z-0">
+          <img
+            src={item.photo}
+            alt={item.title}
+            className="w-full h-full object-cover filter contrast-[1.03] brightness-[0.98] pointer-events-none"
+          />
+        </div>
+
+        {/* Corner Floral Ornaments depending on Item Index */}
+        {idx % 4 === 0 && (
+          <>
+            <img
+              src={bunga7Png}
+              alt=""
+              className="absolute -top-3.5 -left-3.5 sm:-top-4 sm:-left-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tl"
+            />
+            <img
+              src={bunga11Png}
+              alt=""
+              className="absolute -top-3.5 -right-3.5 sm:-top-4 sm:-right-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tr"
+            />
+            <img
+              src={bunga9Png}
+              alt=""
+              className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 w-12 xs:w-16 sm:w-20 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
+            />
+          </>
+        )}
+
+        {idx % 4 === 1 && (
+          <>
+            <img
+              src={bunga7Png}
+              alt=""
+              className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
+            />
+            <img
+              src={bunga11Png}
+              alt=""
+              className="absolute -top-3.5 -right-3.5 sm:-top-4 sm:-right-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tr"
+            />
+            <img
+              src={bunga9Png}
+              alt=""
+              className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
+            />
+          </>
+        )}
+
+        {idx % 4 === 2 && (
+          <>
+            <img
+              src={bunga7Png}
+              alt=""
+              className="absolute -top-3.5 -left-3.5 sm:-top-4 sm:-left-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tl"
+            />
+            <img
+              src={bunga11Png}
+              alt=""
+              className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
+            />
+            <img
+              src={bunga9Png}
+              alt=""
+              className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
+            />
+          </>
+        )}
+
+        {idx % 4 === 3 && (
+          <>
+            <img
+              src={bunga7Png}
+              alt=""
+              className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
+            />
+            <img
+              src={bunga11Png}
+              alt=""
+              className="absolute -top-3.5 -right-3.5 sm:-top-4 sm:-right-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tr"
+            />
+            <img
+              src={bunga9Png}
+              alt=""
+              className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 w-12 xs:w-16 sm:w-20 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
+            />
+          </>
+        )}
       </div>
 
       {/* Title */}
@@ -1235,14 +1319,14 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
           transitionDelay: "400ms",
         }}
       >
-        <h3 className="font-serif text-2xl sm:text-3xl text-[#2E3C2E] font-semibold tracking-wide">
+        <h3 className="font-serif text-2xl sm:text-3xl text-[#4A3A32] font-semibold tracking-wide">
           {item.title}
         </h3>
       </div>
 
       {/* Description Text */}
       <p
-        className="text-[#364836]/90 text-xs sm:text-sm leading-relaxed text-center font-light px-2 transition-all duration-1000 ease-out"
+        className="text-[#4A3A32]/85 text-xs sm:text-sm leading-relaxed text-center font-light px-2 transition-all duration-1000 ease-out"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible
@@ -1301,9 +1385,9 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
       <div className="relative z-20 max-w-md mx-auto">
         <SectionHeader label="Our Journey Together" title="Our Love Story" light={false} />
 
-        {/* Full-Width Mobile Background Shape Container in Soft Sage Green & Pink Accent */}
-        <div className="mt-8 -mx-4 xs:mx-0 bg-gradient-to-b from-[#E4ECE3] via-[#EAF0E9] to-[#E2EBE2] backdrop-blur-md rounded-none xs:rounded-3xl p-5 xs:p-6 sm:p-8 border-y xs:border border-[#B8C9B8]/90 shadow-[0_16px_48px_rgba(52,68,52,0.12)] relative overflow-hidden">
-          {/* Top Decorative Line Accent */}
+        {/* Full-Width Mobile Background Shape Container in Soft Pink Tint */}
+        <div className="mt-8 -mx-4 xs:mx-0 bg-gradient-to-b from-[#FAF2EF] via-[#F6ECE8] to-[#FAF2EF] backdrop-blur-md rounded-none xs:rounded-3xl p-5 xs:p-6 sm:p-8 border-y xs:border border-[#E5C7C0]/90 shadow-[0_16px_48px_rgba(110,65,55,0.1)] relative overflow-hidden">
+          {/* Top Decorative Soft Rose Accent Line */}
           <div className="w-full h-1.5 bg-gradient-to-r from-[#C7A86D] via-[#F3DDD7] to-[#C7A86D] rounded-full mb-3" />
 
           {storyTimeline.map((item, idx) => (
