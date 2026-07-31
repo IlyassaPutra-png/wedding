@@ -2064,20 +2064,49 @@ export default function App() {
       <div className="invitation-wrapper shadow-2xl relative bg-[#F8F5F0] text-[#4A3A32]">
 
         {/* ── WELCOME ─────────────────────────────────────────── */}
-        <section id="welcome" className="py-20 px-6 text-center relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+        <section id="welcome" className="py-16 px-0 text-center relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
           <FloatingButterflies count={2} />
           <SectionBackgroundPhoto src={bg1Png} opacity={0.18} />
           <SectionBirdsFlock delay={0} top="8vh" />
           <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.85} />
-          <div className="relative z-20 max-w-sm mx-auto">
-            <SectionReveal className="relative z-10">
-              <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]">
-                <SectionHeader label="With Joy We Announce" title="Welcome, Dear Guests" light={false} />
-                <p className="font-serif italic text-[#4A3A32]/90 text-sm leading-relaxed mb-4">
-                  "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy."
+          
+          {/* Top-Left Corner Floral Ornament */}
+          <div className="absolute top-0 left-0 w-28 xs:w-36 sm:w-44 z-20 pointer-events-none opacity-90">
+            <img
+              src={bungaOpeningKiriSvg}
+              alt="Floral Corner"
+              className="w-full h-auto object-contain filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.12)] animate-flower-sway-tl pointer-events-none"
+            />
+          </div>
+
+          {/* Transparent Full-Width Mobile Shape Overlay */}
+          <div className="relative z-20 w-full px-4 sm:px-6">
+            <SectionReveal className="relative z-10 w-full">
+              <div className="w-full bg-white/20 backdrop-blur-[3px] rounded-2xl py-10 px-5 sm:px-8 border border-[#C7A86D]/30 shadow-sm transition-all duration-300">
+                {/* Monogram Header Logo (R | A) */}
+                <div className="flex items-center justify-center gap-3 mb-5">
+                  <span className="font-serif text-3xl sm:text-4xl font-light text-[#4A3A32] tracking-wider">R</span>
+                  <div className="w-[1.5px] h-8 bg-[#4A3A32]/60"></div>
+                  <span className="font-script text-3xl sm:text-4xl text-[#4A3A32]" style={{ fontFamily: "'Great Vibes', cursive" }}>A</span>
+                </div>
+
+                <p className="text-[11px] tracking-[0.35em] uppercase text-[#C7A86D] font-semibold mb-2">With Joy We Announce</p>
+                
+                <h2 className="font-script text-4xl sm:text-5xl text-[#4A3A32] mb-6 leading-tight" style={{ fontFamily: "'Great Vibes', cursive" }}>
+                  We Found Love
+                </h2>
+
+                <p className="font-serif italic text-[#4A3A32]/90 text-sm sm:text-base leading-relaxed mb-5 max-w-md mx-auto">
+                  "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir."
                 </p>
-                <p className="text-[11px] tracking-[0.25em] uppercase text-[#C7A86D] font-semibold">— Surah Ar-Rum: 21 —</p>
-                <p className="mt-6 text-xs leading-relaxed text-[#4A3A32]/80 font-light">
+                
+                <p className="text-xs sm:text-sm tracking-wider text-[#4A3A32] font-serif mb-6">
+                  - <span className="underline underline-offset-4 font-semibold">QS. Ar-Rum</span> : 21 -
+                </p>
+
+                <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#C7A86D]/60 to-transparent mx-auto mb-6"></div>
+
+                <p className="text-xs sm:text-sm leading-relaxed text-[#4A3A32]/85 font-light max-w-md mx-auto">
                   Dengan penuh cinta dan rasa syukur yang melimpah, kami dengan bahagia mengundang kalian untuk merayakan bersatunya dua hati kami. Kehadiran kalian akan membuat hari istimewa kami menjadi sempurna — dan selalu terkenang dalam ingatan kami.
                 </p>
               </div>
