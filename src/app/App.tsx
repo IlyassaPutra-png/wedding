@@ -12,6 +12,7 @@ import burungBaru1Png from "./components/gambar/burung/burungbaru1.png";
 import burungBaru2Png from "./components/gambar/burung/burungbaru2.png";
 import burungBaru3Png from "./components/gambar/burung/burungbaru3.png";
 import burungBaru4Png from "./components/gambar/burung/burungbaru4.png";
+import kupuPng from "./components/gambar/burung/kupu.png";
 import hitungMundurSvg from "./components/gambar/hitungmundur.svg";
 import bunga1Svg from "./components/gambar/1.svg";
 import kiriAtasSvg from "./components/gambar/kiriatas.svg";
@@ -65,7 +66,7 @@ import bunga1Png from "./components/gambar/bunga/bunga1.png";
 import bunga6Png from "./components/gambar/bunga/bunga6.png";
 import bunga7Png from "./components/gambar/bunga/bunga7.png";
 
-/* ─── Side Trees Framing Component (Continuous Organic Swaying Animation) ─── */
+/* ─── Side Trees Framing Component (Continuous Lifelike Swaying Animation) ─── */
 function SideTrees({
   leftTree = pohon7Png,
   rightTree = pohon8Png,
@@ -84,7 +85,7 @@ function SideTrees({
       {leftTree && (
         <div
           className="absolute -left-[45%] sm:-left-[35%] w-[85%] max-w-[340px] h-auto pointer-events-none"
-          style={{ top, opacity, transform: `translateY(-50%) scale(${scale})` }}
+          style={{ top, opacity, transform: `translateY(-50%) scale(${scale})`, transformOrigin: "left center" }}
         >
           <img
             src={leftTree}
@@ -96,7 +97,7 @@ function SideTrees({
       {rightTree && (
         <div
           className="absolute -right-[45%] sm:-right-[35%] w-[85%] max-w-[340px] h-auto pointer-events-none"
-          style={{ top, opacity, transform: `translateY(-50%) scale(${scale}) scaleX(-1)` }}
+          style={{ top, opacity, transform: `translateY(-50%) scale(${scale}) scaleX(-1)`, transformOrigin: "right center" }}
         >
           <img
             src={rightTree}
@@ -109,10 +110,10 @@ function SideTrees({
   );
 }
 
-/* ─── Top Corner Floral Decoration (kiriatas.svg & kananatas.svg) ─── */
+/* ─── Top Corner Floral Decoration (kiriatas.svg & kananatas.svg) with Entrance Animation ─── */
 function CornerFloralDecor({
   position = "both",
-  opacity = 0.9,
+  opacity = 0.95,
   className = "",
 }: {
   position?: "left" | "right" | "both";
@@ -126,7 +127,9 @@ function CornerFloralDecor({
       {(position === "left" || position === "both") && (
         <div
           className={`absolute top-0 left-0 w-28 xs:w-36 sm:w-48 max-w-[200px] transition-all duration-1000 ${
-            visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-6 scale-90"
+            visible
+              ? "opacity-100 translate-y-0 translate-x-0 scale-100 rotate-0"
+              : "opacity-0 -translate-y-8 -translate-x-8 scale-75 rotate-[-25deg]"
           }`}
           style={{ opacity: visible ? opacity : 0 }}
         >
@@ -140,7 +143,9 @@ function CornerFloralDecor({
       {(position === "right" || position === "both") && (
         <div
           className={`absolute top-0 right-0 w-28 xs:w-36 sm:w-48 max-w-[200px] transition-all duration-1000 ${
-            visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-6 scale-90"
+            visible
+              ? "opacity-100 translate-y-0 translate-x-0 scale-100 rotate-0"
+              : "opacity-0 -translate-y-8 translate-x-8 scale-75 rotate-[25deg]"
           }`}
           style={{ opacity: visible ? opacity : 0, transitionDelay: "150ms" }}
         >
@@ -155,39 +160,167 @@ function CornerFloralDecor({
   );
 }
 
-/* ─── Top Section Floral Cluster Header (bunga8, bunga10, bunga9) ─── */
+/* ─── Bottom Corner Floral Decoration (kiribawah.svg & kananbawah.svg) ─── */
+function CornerFloralDecorBottom({
+  position = "both",
+  opacity = 0.85,
+  className = "",
+}: {
+  position?: "left" | "right" | "both";
+  opacity?: number;
+  className?: string;
+}) {
+  const { ref, visible } = useInView(0.08);
+
+  return (
+    <div ref={ref} className={`absolute inset-x-0 bottom-0 pointer-events-none z-20 overflow-hidden ${className}`}>
+      {(position === "left" || position === "both") && (
+        <div
+          className={`absolute bottom-0 left-0 w-28 xs:w-36 sm:w-48 max-w-[200px] transition-all duration-1000 ${
+            visible
+              ? "opacity-100 translate-y-0 translate-x-0 scale-100 rotate-0"
+              : "opacity-0 translate-y-8 -translate-x-8 scale-75 rotate-[25deg]"
+          }`}
+          style={{ opacity: visible ? opacity : 0 }}
+        >
+          <img
+            src={kiriBawahSvg}
+            alt="Floral Bottom Left"
+            className="w-full h-auto object-contain filter drop-shadow-[0_6px_14px_rgba(74,58,50,0.14)] animate-flower-sway-bl pointer-events-none"
+          />
+        </div>
+      )}
+      {(position === "right" || position === "both") && (
+        <div
+          className={`absolute bottom-0 right-0 w-28 xs:w-36 sm:w-48 max-w-[200px] transition-all duration-1000 ${
+            visible
+              ? "opacity-100 translate-y-0 translate-x-0 scale-100 rotate-0"
+              : "opacity-0 translate-y-8 translate-x-8 scale-75 rotate-[-25deg]"
+          }`}
+          style={{ opacity: visible ? opacity : 0, transitionDelay: "150ms" }}
+        >
+          <img
+            src={kananBawahSvg}
+            alt="Floral Bottom Right"
+            className="w-full h-auto object-contain filter drop-shadow-[0_6px_14px_rgba(74,58,50,0.14)] animate-flower-sway-br pointer-events-none"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Top Section Floral Cluster Header (bunga10, bunga9, bunga11, bunga8) ─── */
 function TopFloralHeaderCluster({ opacity = 0.95 }: { opacity?: number }) {
   const { ref, visible } = useInView(0.08);
 
   return (
-    <div ref={ref} className="relative w-full flex items-center justify-center pt-2 -mb-4 pointer-events-none select-none z-20">
+    <div ref={ref} className="relative w-full flex items-center justify-center pt-3 -mb-4 pointer-events-none select-none z-20">
       <div
-        className={`flex items-end justify-center transition-all duration-1000 ${
-          visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-6 scale-90"
-        }`}
+        className="flex items-end justify-center transition-all duration-1000 ease-out"
         style={{ opacity: visible ? opacity : 0 }}
       >
-        {/* Bunga 8 - Left Accent */}
-        <img
-          src={bunga8Png}
-          alt="Floral Top Left"
-          className="w-16 xs:w-20 sm:w-28 h-auto object-contain -mr-5 sm:-mr-7 transform -rotate-12 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.12)] animate-flower-sway-tl"
-        />
+        {/* Bunga 11 - Left Outer Accent */}
+        <div
+          className={`transition-all duration-1000 ${
+            visible
+              ? "opacity-100 translate-x-0 translate-y-0 rotate-[-12deg] scale-100"
+              : "opacity-0 -translate-x-8 -translate-y-6 rotate-[-35deg] scale-75"
+          }`}
+          style={{ transitionDelay: "100ms" }}
+        >
+          <img
+            src={bunga11Png}
+            alt="Floral Accent Left"
+            className="w-14 xs:w-18 sm:w-24 h-auto object-contain -mr-4 sm:-mr-6 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.12)] animate-flower-sway-tl"
+          />
+        </div>
+
+        {/* Bunga 8 - Left Inner Accent */}
+        <div
+          className={`transition-all duration-1000 ${
+            visible
+              ? "opacity-100 translate-x-0 translate-y-0 rotate-[-6deg] scale-100"
+              : "opacity-0 -translate-x-4 -translate-y-4 rotate-[-20deg] scale-80"
+          }`}
+          style={{ transitionDelay: "200ms" }}
+        >
+          <img
+            src={bunga8Png}
+            alt="Floral Top Left"
+            className="w-16 xs:w-20 sm:w-28 h-auto object-contain -mr-5 sm:-mr-7 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.12)] animate-flower-sway-tl"
+          />
+        </div>
 
         {/* Bunga 10 - Center Main Bloom */}
-        <img
-          src={bunga10Png}
-          alt="Floral Top Center"
-          className="w-20 xs:w-24 sm:w-34 h-auto object-contain z-10 transform scale-105 filter drop-shadow-[0_6px_14px_rgba(74,58,50,0.15)] animate-flower-sway-center"
-        />
+        <div
+          className={`transition-all duration-1000 z-10 ${
+            visible
+              ? "opacity-100 translate-y-0 scale-105 rotate-0"
+              : "opacity-0 -translate-y-8 scale-60 rotate-[-15deg]"
+          }`}
+          style={{ transitionDelay: "0ms" }}
+        >
+          <img
+            src={bunga10Png}
+            alt="Floral Top Center"
+            className="w-22 xs:w-26 sm:w-36 h-auto object-contain filter drop-shadow-[0_6px_14px_rgba(74,58,50,0.15)] animate-flower-sway-center"
+          />
+        </div>
 
-        {/* Bunga 9 - Right Accent */}
-        <img
-          src={bunga9Png}
-          alt="Floral Top Right"
-          className="w-16 xs:w-20 sm:w-28 h-auto object-contain -ml-5 sm:-ml-7 transform rotate-12 scale-x-[-1] filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.12)] animate-flower-sway-tr"
-        />
+        {/* Bunga 9 - Right Inner Accent */}
+        <div
+          className={`transition-all duration-1000 ${
+            visible
+              ? "opacity-100 translate-x-0 translate-y-0 rotate-[12deg] scale-100"
+              : "opacity-0 translate-x-4 -translate-y-4 rotate-[20deg] scale-80"
+          }`}
+          style={{ transitionDelay: "200ms" }}
+        >
+          <img
+            src={bunga9Png}
+            alt="Floral Top Right"
+            className="w-16 xs:w-20 sm:w-28 h-auto object-contain -ml-5 sm:-ml-7 scale-x-[-1] filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.12)] animate-flower-sway-tr"
+          />
+        </div>
       </div>
+    </div>
+  );
+}
+
+/* ─── Animated Floating Butterflies (kupu.png) ─── */
+function FloatingButterflies({ count = 3, className = "" }: { count?: number; className?: string }) {
+  const butterflyConfigs = [
+    { top: "12%", left: "6%", delay: "0s", duration: "8s", scale: 0.75 },
+    { top: "35%", right: "8%", delay: "2.2s", duration: "10s", scale: 0.85, flip: true },
+    { top: "65%", left: "10%", delay: "4.5s", duration: "9s", scale: 0.7 },
+    { top: "82%", right: "12%", delay: "1.5s", duration: "11s", scale: 0.8, flip: true },
+  ];
+  
+  const activeButterflies = butterflyConfigs.slice(0, count);
+
+  return (
+    <div className={`absolute inset-0 pointer-events-none overflow-hidden select-none z-25 ${className}`}>
+      {activeButterflies.map((b, i) => (
+        <div
+          key={i}
+          className="absolute animate-butterfly-float pointer-events-none"
+          style={{
+            top: b.top,
+            left: b.left,
+            right: b.right,
+            animationDelay: b.delay,
+            animationDuration: b.duration,
+            transform: `scale(${b.scale}) ${b.flip ? "scaleX(-1)" : ""}`,
+          }}
+        >
+          <img
+            src={kupuPng}
+            alt="Butterfly"
+            className="w-7 sm:w-9 h-auto object-contain filter drop-shadow-[0_4px_8px_rgba(74,58,50,0.2)] animate-butterfly-wings pointer-events-none"
+          />
+        </div>
+      ))}
     </div>
   );
 }
@@ -1084,6 +1217,9 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
 
   return (
     <section id="story" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+      <CornerFloralDecor position="both" />
+      <TopFloralHeaderCluster />
+      <FloatingButterflies count={2} />
       <SectionBackgroundPhoto src={bg3Png} opacity={0.16} />
       <SectionBirdsFlock delay={1} top="8vh" />
       <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.85} />
@@ -1269,6 +1405,9 @@ function GallerySection({ photos }: { photos?: any[] }) {
 
   return (
     <section id="gallery" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
+      <CornerFloralDecor position="both" />
+      <TopFloralHeaderCluster />
+      <FloatingButterflies count={2} />
       <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
       <SectionBirdsFlock delay={3} top="12vh" />
       <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.85} />
@@ -1388,6 +1527,9 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
 
   return (
     <section id="gift" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+      <CornerFloralDecor position="both" />
+      <TopFloralHeaderCluster />
+      <FloatingButterflies count={2} />
       <SectionBackgroundPhoto src={bg5Png} opacity={0.16} />
       <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.85} />
       <div className="relative z-20 max-w-md mx-auto">
@@ -1672,6 +1814,8 @@ export default function App() {
             pointerEvents: openingStage === 'closed' ? "auto" : "none",
           }}
         >
+          <CornerFloralDecor position="both" />
+          <FloatingButterflies count={3} />
           {/* Animated Flying Flock of Birds across Gate */}
           {(openingStage === 'closed' || openingStage === 'opening_gate') && (
             <FlyingBirdsFlock />
@@ -1902,6 +2046,8 @@ export default function App() {
         {/* ── WELCOME ─────────────────────────────────────────── */}
         <section id="welcome" className="py-20 px-6 text-center relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
           <CornerFloralDecor position="both" />
+          <TopFloralHeaderCluster />
+          <FloatingButterflies count={2} />
           <SectionBackgroundPhoto src={bg1Png} opacity={0.18} />
           <SectionBirdsFlock delay={0} top="8vh" />
           <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.85} />
@@ -1924,6 +2070,8 @@ export default function App() {
         {/* ── BRIDE & GROOM ───────────────────────────────────── */}
         <section id="couple" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
           <CornerFloralDecor position="both" />
+          <TopFloralHeaderCluster />
+          <FloatingButterflies count={2} />
           <SectionBackgroundPhoto src={bg2Png} opacity={0.15} />
           <SectionBirdsFlock delay={2} top="12vh" />
           <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.85} />
@@ -2003,7 +2151,9 @@ export default function App() {
 
       {/* ── COUNTDOWN ───────────────────────────────────────── */}
       <section id="countdown" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F5F0E8] text-[#4A3A32]">
+        <CornerFloralDecor position="both" />
         <TopFloralHeaderCluster />
+        <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg4Png} opacity={0.16} />
         <SideTrees leftTree={pohon6Png} rightTree={pohon1Png} opacity={0.8} />
         <div className="relative z-20 max-w-md mx-auto text-center">
@@ -2036,6 +2186,8 @@ export default function App() {
       {/* ── EVENTS ──────────────────────────────────────────── */}
       <section id="events" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
         <CornerFloralDecor position="both" />
+        <TopFloralHeaderCluster />
+        <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg4Png} opacity={0.16} />
         <SectionBirdsFlock delay={4} top="10vh" />
         <SideTrees leftTree={pohon2Png} rightTree={pohon7Png} opacity={0.85} />
@@ -2102,6 +2254,8 @@ export default function App() {
       {/* ── LOCATION ────────────────────────────────────────── */}
       <section id="location" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
         <CornerFloralDecor position="both" />
+        <TopFloralHeaderCluster />
+        <CornerFloralDecorBottom position="both" />
         <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
         <SideTrees leftTree={pohon8Png} rightTree={pohon9Png} opacity={0.85} />
         <div className="relative z-20 max-w-md mx-auto">
@@ -2145,7 +2299,9 @@ export default function App() {
 
       {/* ── RSVP ────────────────────────────────────────────── */}
       <section id="rsvp" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+        <CornerFloralDecor position="both" />
         <TopFloralHeaderCluster />
+        <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg5Png} opacity={0.16} />
         <SectionBirdsFlock delay={1} top="10vh" />
         <SideTrees leftTree={pohon10Png} rightTree={pohon1Png} opacity={0.8} />
@@ -2226,6 +2382,8 @@ export default function App() {
       {/* ── WISHES ──────────────────────────────────────────── */}
       <section id="wishes" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
         <CornerFloralDecor position="both" />
+        <TopFloralHeaderCluster />
+        <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
         <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.8} />
         <div className="relative z-20 max-w-md mx-auto">
@@ -2253,7 +2411,9 @@ export default function App() {
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
       <footer className="relative py-16 px-6 text-center overflow-hidden bg-[#F4EFEA] text-[#4A3A32] border-t border-[#C7A86D]/30">
+        <CornerFloralDecor position="both" />
         <TopFloralHeaderCluster />
+        <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg5Png} opacity={0.18} />
         <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.7} />
         <div className="relative z-20 max-w-sm mx-auto">
@@ -2316,6 +2476,102 @@ export default function App() {
       </div>
 
       <style>{`
+        /* Continuous Lifelike Sway for Side Trees (Pohon Bergerak Seperti Hidup) */
+        @keyframes livingTreeSwayLeft {
+          0% {
+            transform: rotate(0deg) scale(1) translate(0px, 0px);
+          }
+          20% {
+            transform: rotate(2.6deg) scale(1.025) translate(4px, -3px);
+          }
+          40% {
+            transform: rotate(-1.6deg) scale(0.985) translate(-3px, 2px);
+          }
+          60% {
+            transform: rotate(3.2deg) scale(1.03) translate(5px, -4px);
+          }
+          80% {
+            transform: rotate(1.2deg) scale(1.01) translate(2px, -1px);
+          }
+          100% {
+            transform: rotate(0deg) scale(1) translate(0px, 0px);
+          }
+        }
+
+        @keyframes livingTreeSwayRight {
+          0% {
+            transform: rotate(0deg) scale(1) translate(0px, 0px);
+          }
+          25% {
+            transform: rotate(-2.8deg) scale(1.03) translate(-5px, -4px);
+          }
+          50% {
+            transform: rotate(1.8deg) scale(0.988) translate(3px, 2px);
+          }
+          75% {
+            transform: rotate(-2.2deg) scale(1.02) translate(-4px, -2px);
+          }
+          100% {
+            transform: rotate(0deg) scale(1) translate(0px, 0px);
+          }
+        }
+
+        .animate-living-tree-left {
+          transform-origin: bottom left;
+          animation: livingTreeSwayLeft 12s ease-in-out infinite;
+          will-change: transform;
+        }
+
+        .animate-living-tree-right {
+          transform-origin: bottom right;
+          animation: livingTreeSwayRight 15s ease-in-out infinite 1.5s;
+          will-change: transform;
+        }
+
+        /* Butterfly Wing Flapping & Path Floating */
+        @keyframes butterflyWings {
+          0%, 100% {
+            transform: scaleX(1) rotate(0deg);
+          }
+          25% {
+            transform: scaleX(0.22) rotate(8deg);
+          }
+          50% {
+            transform: scaleX(0.95) rotate(-5deg);
+          }
+          75% {
+            transform: scaleX(0.28) rotate(10deg);
+          }
+        }
+
+        @keyframes butterflyFloat {
+          0% {
+            transform: translate(0px, 0px) rotate(0deg);
+          }
+          25% {
+            transform: translate(16px, -22px) rotate(8deg);
+          }
+          50% {
+            transform: translate(-12px, -38px) rotate(-8deg);
+          }
+          75% {
+            transform: translate(22px, -18px) rotate(12deg);
+          }
+          100% {
+            transform: translate(0px, 0px) rotate(0deg);
+          }
+        }
+
+        .animate-butterfly-wings {
+          animation: butterflyWings 0.55s ease-in-out infinite alternate;
+          transform-origin: center center;
+        }
+
+        .animate-butterfly-float {
+          animation: butterflyFloat 9s ease-in-out infinite;
+          will-change: transform;
+        }
+
         /* Background Wind Sway */
         @keyframes bgWindSway {
           0%, 100% {
@@ -2472,14 +2728,6 @@ export default function App() {
         @keyframes float {
           0% { transform: translateY(0px) rotate(0deg); }
           100% { transform: translateY(-20px) rotate(15deg); }
-        }
-        @keyframes windSwayLeft {
-          0%, 100% { transform: rotate(0deg) translateX(0px); }
-          50% { transform: rotate(0.9deg) translateX(3px); }
-        }
-        @keyframes windSwayRight {
-          0%, 100% { transform: rotate(0deg) translateX(0px); }
-          50% { transform: rotate(-0.9deg) translateX(-3px); }
         }
         @keyframes bounce {
           0%, 100% { transform: translateY(0); }
