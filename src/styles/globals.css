@@ -102,61 +102,62 @@ body {
 /* ─── Aksara Wedding Tree & Plant Sway Animations ─────────── */
 @keyframes swayTreeLeftTop {
   0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(-2.5deg) scale(1.015) translateY(-2px); }
-  100% { transform: rotate(0.8deg) scale(1); }
+  50% { transform: rotate(-4.5deg) scale(1.03) translateY(-4px); }
+  100% { transform: rotate(0deg) scale(1); }
 }
 
 @keyframes swayTreeRightTop {
   0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(2.5deg) scale(1.015) translateY(-2px); }
-  100% { transform: rotate(-0.8deg) scale(1); }
+  50% { transform: rotate(4.5deg) scale(1.03) translateY(-4px); }
+  100% { transform: rotate(0deg) scale(1); }
 }
 
 @keyframes swayTreeLeftBottom {
   0% { transform: rotate(0deg) translateY(0); }
-  50% { transform: rotate(-2deg) translateY(-3px); }
-  100% { transform: rotate(1deg) translateY(0); }
+  50% { transform: rotate(-5deg) scale(1.02) translateY(-5px); }
+  100% { transform: rotate(0deg) translateY(0); }
 }
 
 @keyframes swayTreeRightBottom {
   0% { transform: rotate(0deg) translateY(0); }
-  50% { transform: rotate(2.2deg) translateY(-3px); }
-  100% { transform: rotate(-1deg) translateY(0); }
+  50% { transform: rotate(5deg) scale(1.02) translateY(-5px); }
+  100% { transform: rotate(0deg) translateY(0); }
 }
 
-/* Plant sway left vs plant sway right for opposite movement */
+/* Plant sway left vs plant sway right for prominent opposite movement */
 @keyframes swayPlantLeft {
   0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(-6.8deg) scale(1.04); }
-  100% { transform: rotate(1deg) scale(1); }
+  50% { transform: rotate(-12deg) scale(1.06); }
+  100% { transform: rotate(0deg) scale(1); }
 }
 
 @keyframes swayPlantRight {
   0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(6.8deg) scale(1.04); }
-  100% { transform: rotate(-1deg) scale(1); }
+  50% { transform: rotate(12deg) scale(1.06); }
+  100% { transform: rotate(0deg) scale(1); }
 }
 
 .animate-sway-tree-left-top {
-  animation: swayTreeLeftTop 7s ease-in-out infinite alternate;
+  animation: swayTreeLeftTop 5.5s ease-in-out infinite;
 }
 
 .animate-sway-tree-right-top {
-  animation: swayTreeRightTop 8s ease-in-out infinite alternate;
+  animation: swayTreeRightTop 6s ease-in-out infinite;
 }
 
 .animate-sway-tree-left-bottom {
-  animation: swayTreeLeftBottom 9s ease-in-out infinite alternate;
+  animation: swayTreeLeftBottom 6.5s ease-in-out infinite;
 }
 
 .animate-sway-tree-right-bottom {
-  animation: swayTreeRightBottom 8.5s ease-in-out infinite alternate;
+  animation: swayTreeRightBottom 7s ease-in-out infinite;
 }
 
 .animate-sway-plant-left {
-  animation: swayPlantLeft 3.8s ease-in-out infinite alternate;
+  animation: swayPlantLeft 3.2s ease-in-out infinite;
 }
 
 .animate-sway-plant-right {
-  animation: swayPlantRight 4.4s ease-in-out infinite alternate;
+  animation: swayPlantRight 3.6s ease-in-out infinite;
 }
+

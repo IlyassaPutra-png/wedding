@@ -47,34 +47,34 @@ export default function AksaraHeroSection({
   ];
 
   return (
-    <section className="relative w-full h-[92vh] sm:h-[95vh] min-h-[580px] max-h-[900px] overflow-hidden bg-[#F5EFE6] select-none flex flex-col justify-between items-center shadow-lg">
+    <section className="relative w-full h-[90vh] sm:h-[95vh] min-h-[580px] max-h-[880px] overflow-hidden bg-[#F5EFE6] select-none flex flex-col justify-between items-center shadow-lg">
       
-      {/* ── Background Subtle Vignette & Warm Glow ───────────────── */}
+      {/* ── Background Soft Glow & Vignette ─────────────────────── */}
       <div 
         className="absolute inset-0 pointer-events-none z-0"
         style={{
-          background: "radial-gradient(circle at 50% 35%, rgba(255, 253, 248, 0.95) 0%, rgba(245, 239, 230, 0.98) 60%, rgba(235, 227, 214, 1) 100%)"
+          background: "radial-gradient(ellipse at 50% 35%, rgba(255, 254, 250, 0.98) 0%, rgba(245, 239, 230, 0.98) 55%, rgba(232, 224, 210, 1) 100%)"
         }}
       />
 
-      {/* ── 1. LAYER 0: Rearmost Trees (STATIC - NO sway animation per requirement) ── */}
-      {/* Rear Center Tree */}
+      {/* ── 1. LAYER 0: Dense Background Trees (STATIC backdrop framing center) ── */}
+      {/* Rear Center Tree - Fills middle gap behind gazebo */}
       <img
         src={pohonTengahPng}
         alt="Pohon Tengah Belakang"
-        className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[70%] sm:w-[60%] max-w-[500px] pointer-events-none z-10 opacity-95 filter drop-shadow-sm"
+        className="absolute bottom-[8%] left-1/2 -translate-x-1/2 w-[95%] sm:w-[70%] max-w-[580px] h-[65%] sm:h-[60%] object-cover object-bottom pointer-events-none z-10 opacity-95 filter drop-shadow-sm"
       />
-      {/* Rear Left Tree */}
+      {/* Rear Mid Left Tree - Overlaps upper left canopy and lower trunk */}
       <img
         src={pohonKiriBelakangPng}
         alt="Pohon Kiri Belakang"
-        className="absolute bottom-[12%] left-[-12%] xs:left-[-8%] sm:left-[-4%] w-[50%] sm:w-[42%] max-w-[360px] pointer-events-none z-10 opacity-90"
+        className="absolute top-[12%] sm:top-[8%] left-[-18%] xs:left-[-12%] sm:left-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[420px] h-[62%] object-cover pointer-events-none z-10 opacity-95"
       />
-      {/* Rear Right Tree */}
+      {/* Rear Mid Right Tree - Overlaps upper right canopy and lower trunk */}
       <img
         src={pohonKananBelakangPng}
         alt="Pohon Kanan Belakang"
-        className="absolute bottom-[12%] right-[-12%] xs:right-[-8%] sm:right-[-4%] w-[50%] sm:w-[42%] max-w-[360px] pointer-events-none z-10 opacity-90"
+        className="absolute top-[12%] sm:top-[8%] right-[-18%] xs:right-[-12%] sm:right-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[420px] h-[62%] object-cover pointer-events-none z-10 opacity-95"
       />
 
 
@@ -83,25 +83,25 @@ export default function AksaraHeroSection({
       <img
         src={pohonKiriAtasPng}
         alt="Pohon Kiri Atas"
-        className="absolute top-0 left-0 w-[46%] xs:w-[42%] sm:w-[36%] max-w-[340px] pointer-events-none z-20 origin-top-left animate-sway-tree-left-top filter drop-shadow-sm"
+        className="absolute top-[-3%] left-[-8%] xs:left-[-4%] sm:left-0 w-[62%] xs:w-[54%] sm:w-[42%] max-w-[400px] pointer-events-none z-20 origin-top-left animate-sway-tree-left-top filter drop-shadow-sm"
       />
       {/* Upper Right Canopy Tree (sways right-top) */}
       <img
         src={pohonKananAtasPng}
         alt="Pohon Kanan Atas"
-        className="absolute top-0 right-0 w-[44%] xs:w-[40%] sm:w-[34%] max-w-[320px] pointer-events-none z-20 origin-top-right animate-sway-tree-right-top filter drop-shadow-sm"
+        className="absolute top-[-3%] right-[-8%] xs:right-[-4%] sm:right-0 w-[60%] xs:w-[52%] sm:w-[40%] max-w-[380px] pointer-events-none z-20 origin-top-right animate-sway-tree-right-top filter drop-shadow-sm"
       />
-      {/* Lower Left Trunk & Foliage Tree (sways left-bottom) */}
+      {/* Lower Left Trunk & Dense Foliage Tree (sways left-bottom) */}
       <img
         src={pohonKiriBawahPng}
         alt="Pohon Kiri Bawah"
-        className="absolute bottom-[1%] left-[-8%] xs:left-[-4%] sm:left-0 w-[58%] xs:w-[54%] sm:w-[48%] max-w-[440px] pointer-events-none z-25 origin-bottom-left animate-sway-tree-left-bottom filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.12)]"
+        className="absolute bottom-0 left-[-12%] xs:left-[-8%] sm:left-[-4%] w-[74%] xs:w-[66%] sm:w-[52%] max-w-[480px] pointer-events-none z-25 origin-bottom-left animate-sway-tree-left-bottom filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
       />
       {/* Lower Right Twisted Trunk Tree (sways right-bottom) */}
       <img
         src={pohonKananBawahPng}
         alt="Pohon Kanan Bawah"
-        className="absolute bottom-[1%] right-[-8%] xs:right-[-4%] sm:right-0 w-[60%] xs:w-[56%] sm:w-[50%] max-w-[460px] pointer-events-none z-25 origin-bottom-right animate-sway-tree-right-bottom filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.12)]"
+        className="absolute bottom-0 right-[-12%] xs:right-[-8%] sm:right-[-4%] w-[76%] xs:w-[68%] sm:w-[54%] max-w-[500px] pointer-events-none z-25 origin-bottom-right animate-sway-tree-right-bottom filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
       />
 
 
@@ -109,11 +109,11 @@ export default function AksaraHeroSection({
       <img
         src={fondasiTengahPng}
         alt="Fondasi Tengah Gazebo"
-        className="absolute bottom-[3.8%] left-1/2 -translate-x-1/2 w-[82%] xs:w-[74%] sm:w-[62%] md:w-[54%] max-w-[480px] pointer-events-none z-30 filter drop-shadow-[0_14px_28px_rgba(35,45,30,0.22)]"
+        className="absolute bottom-[3%] left-1/2 -translate-x-1/2 w-[88%] xs:w-[82%] sm:w-[68%] md:w-[58%] max-w-[500px] pointer-events-none z-30 filter drop-shadow-[0_14px_28px_rgba(35,45,30,0.22)]"
       />
 
 
-      {/* ── 4. LAYER 3: Lined-up Bottom Plants (SWAYING IN OPPOSITE DIRECTIONS) ── */}
+      {/* ── 4. LAYER 3: Dense Lined-up Bottom Plants (SWAYING IN OPPOSITE DIRECTIONS) ── */}
       <div className="absolute bottom-0 left-0 right-0 w-full z-40 flex justify-between items-end overflow-hidden px-0 pointer-events-none h-24 xs:h-28 sm:h-36 md:h-40">
         {plantTypes.map((plantSrc, idx) => {
           const isEven = idx % 2 === 0;
@@ -124,7 +124,7 @@ export default function AksaraHeroSection({
           return (
             <div
               key={idx}
-              className={`flex-1 min-w-[28px] xs:min-w-[34px] sm:min-w-[44px] -mx-1.5 xs:-mx-2 sm:-mx-2.5 flex items-end justify-center ${animationClass}`}
+              className={`flex-1 min-w-[30px] xs:min-w-[36px] sm:min-w-[46px] -mx-2 xs:-mx-2.5 sm:-mx-3 flex items-end justify-center ${animationClass}`}
               style={{
                 animationDelay: `${delaySec}s`,
                 transformOrigin: "bottom center"
@@ -133,7 +133,7 @@ export default function AksaraHeroSection({
               <img
                 src={plantSrc}
                 alt={`Tanaman ${idx}`}
-                className="w-full h-auto max-h-[85px] xs:max-h-[105px] sm:max-h-[135px] md:max-h-[155px] object-contain object-bottom filter drop-shadow-[0_4px_8px_rgba(20,35,25,0.18)]"
+                className="w-full h-auto max-h-[90px] xs:max-h-[110px] sm:max-h-[140px] md:max-h-[160px] object-contain object-bottom filter drop-shadow-[0_4px_8px_rgba(20,35,25,0.18)]"
               />
             </div>
           );
@@ -141,7 +141,7 @@ export default function AksaraHeroSection({
       </div>
 
 
-      {/* ── 5. LAYER 4: Top Header Crest & Typography (Matching referensi.png) ── */}
+      {/* ── 5. LAYER 4: Top Header Crest & Luxury Typography ── */}
       <div className="relative z-50 text-center pt-6 xs:pt-8 sm:pt-12 px-4 flex flex-col items-center max-w-lg mx-auto">
         
         {/* Top Bouquet Crest */}
@@ -155,7 +155,7 @@ export default function AksaraHeroSection({
 
         {/* Subtitle: "The Wedding of" */}
         <p
-          className="text-[11px] xs:text-xs sm:text-sm tracking-[0.28em] uppercase text-[#253B29] font-medium mb-1 drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]"
+          className="text-[11px] xs:text-xs sm:text-sm tracking-[0.28em] uppercase text-[#253B29] font-medium mb-1 drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]"
           style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}
         >
           {titleText}
