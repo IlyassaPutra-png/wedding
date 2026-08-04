@@ -1238,91 +1238,22 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
           <FramedPhoto
             src={item.photo}
             alt={item.title}
-            frameSrc={frameChoice}
+            frameSrc={frame17Png}
             aspectRatio="aspect-[4/3]"
           />
+
+          {/* Corner Floral Ornaments anchored PRECISELY on the golden inner frame line (7% inset) */}
+          <img
+            src={bunga7Png}
+            alt=""
+            className="absolute top-[6.5%] left-[6.5%] sm:top-[7%] sm:left-[7%] w-12 xs:w-14 sm:w-16 h-auto pointer-events-none z-20 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.2)] animate-flower-sway-tl"
+          />
+          <img
+            src={bunga11Png}
+            alt=""
+            className="absolute top-[6.5%] right-[6.5%] sm:top-[7%] sm:right-[7%] w-12 xs:w-14 sm:w-16 h-auto pointer-events-none z-20 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.2)] animate-flower-sway-tr"
+          />
         </div>
-
-        {/* Corner Floral Ornaments depending on Item Index */}
-        {idx % 4 === 0 && (
-          <>
-            <img
-              src={bunga7Png}
-              alt=""
-              className="absolute -top-3.5 -left-3.5 sm:-top-4 sm:-left-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tl"
-            />
-            <img
-              src={bunga11Png}
-              alt=""
-              className="absolute -top-3.5 -right-3.5 sm:-top-4 sm:-right-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tr"
-            />
-            <img
-              src={bunga9Png}
-              alt=""
-              className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 w-12 xs:w-16 sm:w-20 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
-            />
-          </>
-        )}
-
-        {idx % 4 === 1 && (
-          <>
-            <img
-              src={bunga7Png}
-              alt=""
-              className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
-            />
-            <img
-              src={bunga11Png}
-              alt=""
-              className="absolute -top-3.5 -right-3.5 sm:-top-4 sm:-right-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tr"
-            />
-            <img
-              src={bunga9Png}
-              alt=""
-              className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
-            />
-          </>
-        )}
-
-        {idx % 4 === 2 && (
-          <>
-            <img
-              src={bunga7Png}
-              alt=""
-              className="absolute -top-3.5 -left-3.5 sm:-top-4 sm:-left-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tl"
-            />
-            <img
-              src={bunga11Png}
-              alt=""
-              className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
-            />
-            <img
-              src={bunga9Png}
-              alt=""
-              className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
-            />
-          </>
-        )}
-
-        {idx % 4 === 3 && (
-          <>
-            <img
-              src={bunga7Png}
-              alt=""
-              className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-14 xs:w-18 sm:w-22 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
-            />
-            <img
-              src={bunga11Png}
-              alt=""
-              className="absolute -top-3.5 -right-3.5 sm:-top-4 sm:-right-4 w-16 xs:w-20 sm:w-24 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)] animate-flower-sway-tr"
-            />
-            <img
-              src={bunga9Png}
-              alt=""
-              className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 w-12 xs:w-16 sm:w-20 h-auto pointer-events-none z-10 filter drop-shadow-[0_4px_10px_rgba(74,58,50,0.18)]"
-            />
-          </>
-        )}
       </div>
 
       {/* Title */}
@@ -1416,19 +1347,22 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
   ];
 
   return (
-    <section id="story" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+    <section id="story" className="py-20 px-0 sm:px-0 relative overflow-hidden bg-gradient-to-b from-[#FDF6F3] via-[#F8ECE8] to-[#FAF0ED] text-[#4A3A32] w-full min-h-screen">
       <FloatingButterflies count={2} />
-      <SectionBackgroundPhoto src={bg3Png} opacity={0.16} />
+      <SectionBackgroundPhoto src={bg3Png} opacity={0.18} />
       <SectionBirdsFlock delay={1} top="8vh" />
       <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.85} />
 
-      <div className="relative z-20 max-w-md mx-auto">
+      {/* Section Header */}
+      <div className="relative z-20 max-w-md mx-auto px-4 mb-8 text-center">
         <SectionHeader label="Our Journey Together" title="Our Love Story" light={false} />
+      </div>
 
-        {/* Full-Width Mobile Background Shape Container in Soft Pink Tint */}
-        <div className="mt-8 -mx-4 xs:mx-0 bg-gradient-to-b from-[#FAF2EF] via-[#F6ECE8] to-[#FAF2EF] backdrop-blur-md rounded-none xs:rounded-3xl p-5 xs:p-6 sm:p-8 border-y xs:border border-[#E5C7C0]/90 shadow-[0_16px_48px_rgba(110,65,55,0.1)] relative overflow-hidden">
+      {/* Full-Width Edge-to-Edge Soft Pink Continuous Shape Container */}
+      <div className="relative z-20 w-full bg-gradient-to-b from-[#F8ECE8]/90 via-[#F5E6E1]/95 to-[#F8ECE8]/90 backdrop-blur-md border-y border-[#E5C7C0]/90 shadow-[0_16px_48px_rgba(110,65,55,0.12)] py-10 px-4 sm:px-6">
+        <div className="max-w-md mx-auto">
           {/* Top Decorative Soft Rose Accent Line */}
-          <div className="w-full h-1.5 bg-gradient-to-r from-[#C7A86D] via-[#F3DDD7] to-[#C7A86D] rounded-full mb-3" />
+          <div className="w-full h-1.5 bg-gradient-to-r from-[#C7A86D] via-[#E8C7C0] to-[#C7A86D] rounded-full mb-6" />
 
           {storyTimeline.map((item, idx) => (
             <StoryItemBlock key={idx} item={item} idx={idx} />
@@ -1467,7 +1401,7 @@ function GalleryScrollCard({
           observer.disconnect();
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.15, rootMargin: "-20% 0px -20% 0px" }
     );
     if (cardRef.current) observer.observe(cardRef.current);
     return () => observer.disconnect();
@@ -1477,15 +1411,15 @@ function GalleryScrollCard({
     <div
       ref={cardRef}
       onClick={onSelect}
-      className={`relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-700 ease-out transform ${
+      className={`relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-[1100ms] cubic-bezier(0.16, 1, 0.3, 1) transform ${
         photo.isWide ? "col-span-2" : "col-span-1"
       } ${
         visible
           ? "opacity-100 translate-y-0 scale-100"
-          : "opacity-0 translate-y-8 scale-95"
+          : "opacity-0 translate-y-12 scale-90"
       }`}
       style={{
-        transitionDelay: `${(index % 3) * 90}ms`,
+        transitionDelay: `${(index % 3) * 110}ms`,
         boxShadow: "0 6px 20px rgba(74, 58, 50, 0.12)",
       }}
     >
@@ -1519,10 +1453,17 @@ function GallerySection({ photos }: { photos?: any[] }) {
     { id: 6, src: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
     { id: 7, src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
     { id: 8, src: "https://images.unsplash.com/photo-1472653431158-6364773b2a56?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    // Row 4 (3 vertical photos)
-    { id: 9, src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 10, src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 11, src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    // Row 4 (1 wide horizontal photo span-2 left, 1 vertical photo right)
+    { id: 9, src: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=1000&h=650&fit=crop&auto=format", aspect: "aspect-[16/10]", isWide: true },
+    { id: 10, src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    // Row 5 (3 vertical photos)
+    { id: 11, src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 12, src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 13, src: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    // Row 6 (3 vertical photos)
+    { id: 14, src: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 15, src: "https://images.unsplash.com/photo-1513278974582-3e1b4a4fa21e?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 16, src: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
   ];
 
   const [activeLightbox, setActiveLightbox] = useState<number | null>(null);
@@ -1979,9 +1920,11 @@ export default function App() {
             <div
               className="relative z-20 text-center pointer-events-none mb-2 sm:mb-4 px-4 flex flex-col items-center justify-center"
               style={{
-                opacity: openingStage === 'closed' ? 1 : 0,
-                transform: openingStage === 'closed' ? "scale(1) translateY(0)" : "scale(1.15) translateY(-20px)",
-                transition: "opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)"
+                opacity: (openingStage === 'closed' || openingStage === 'opening_gate') ? 1 : 0,
+                transform: (openingStage === 'closed' || openingStage === 'opening_gate')
+                  ? "scale(1) translateY(0)"
+                  : "scale(1.25) translateY(-30px)",
+                transition: "opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 2.0s cubic-bezier(0.25, 1, 0.5, 1)"
               }}
             >
               <div className="mb-2 px-4 py-1 rounded-full bg-[#FAF5EE]/95 border border-[#C7A86D]/60 shadow-[0_4px_16px_rgba(40,30,20,0.15)] backdrop-blur-md inline-flex items-center justify-center">
@@ -2016,7 +1959,7 @@ export default function App() {
 
             {/* Gate Graphic Container: Zoom smoothly into the archway hole of gerbsng_terbuka.png */}
             <div
-              className="relative w-[280px] xs:w-[340px] sm:w-[460px] md:w-[560px] lg:w-[640px] aspect-[711/837] max-h-[50vh] sm:max-h-[56vh] lg:max-h-[60vh] flex items-center justify-center pointer-events-none"
+              className="relative w-[340px] xs:w-[420px] sm:w-[580px] md:w-[680px] lg:w-[780px] aspect-[711/837] max-h-[64vh] sm:max-h-[72vh] lg:max-h-[78vh] flex items-center justify-center pointer-events-none"
               style={{
                 transformOrigin: "50% 50%",
                 transform: (openingStage === 'zooming_in' || openingStage === 'revealing')
@@ -2339,36 +2282,76 @@ export default function App() {
 
       {/* ── LOCATION ────────────────────────────────────────── */}
       <section id="location" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
+        <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
         <SideTrees leftTree={pohon8Png} rightTree={pohon9Png} opacity={0.85} />
         <div className="relative z-20 max-w-md mx-auto">
           <SectionReveal className="relative z-10">
-            <SectionHeader label="How to Find Us" title="Location" light={false} />
-            <div className="rounded-3xl overflow-hidden bg-white/95 border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]">
-              <div className="relative w-full aspect-[4/3] bg-[#F8F5F0] overflow-hidden">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1944491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sJl.%20Sudirman%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, filter: "brightness(0.95) contrast(1.05)" }}
-                  allowFullScreen
-                  loading="lazy"
-                  title="Wedding Location Map"
+            <SectionHeader label="How to Find Us" title="Wedding Location" light={false} />
+            
+            {/* Unified Luxury Location Card with Transparent Glass Background */}
+            <div className="rounded-3xl p-5 sm:p-7 bg-white/20 backdrop-blur-[3px] border border-[#C7A86D]/35 shadow-sm relative transition-all duration-300">
+              
+              {/* Ornate Framed Google Maps Display using frame9.png */}
+              <div className="relative w-full aspect-[4/3] xs:aspect-[16/11] mb-6 flex items-center justify-center">
+                {/* Inner Map iframe fitted inside frame9 inner window */}
+                <div className="w-full h-full p-[11%] sm:p-[12%] relative flex items-center justify-center z-0">
+                  <div className="w-full h-full relative overflow-hidden rounded-xl bg-[#EFE8DF]/80 border border-[#C7A86D]/20 shadow-inner">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1944491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sJl.%20Sudirman%2C%20Jakarta!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0, filter: "brightness(0.96) contrast(1.04)" }}
+                      allowFullScreen
+                      loading="lazy"
+                      title="Wedding Location Map"
+                    />
+                  </div>
+                </div>
+                {/* Ornate Frame 9 Overlay */}
+                <img
+                  src={frame9Png}
+                  alt="Ornate Location Frame"
+                  className="absolute inset-0 w-full h-full object-fill pointer-events-none z-10 filter drop-shadow-md"
                 />
               </div>
-              <div className="p-5 text-center bg-white">
-                <p className="font-serif text-lg text-[#4A3A32] font-medium">The Ivory Palace Grand Ballroom</p>
-                <p className="text-xs text-[#8A7560] mt-1">Jl. Gatot Subroto No. 88, Jakarta Selatan 12710</p>
-                <a
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs tracking-widest uppercase bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white font-semibold shadow-md hover:scale-105 transition-all"
-                >
-                  <MapPin size={14} />
-                  Get Directions
-                </a>
+
+              {/* Venue Details & Information */}
+              <div className="text-center space-y-3">
+                <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] uppercase tracking-widest font-semibold bg-[#F3DDD7]/90 text-[#4A3A32] border border-[#D8B6B0]">
+                  ✦ Grand Ballroom ✦
+                </div>
+                <h3 className="font-serif text-2xl text-[#4A3A32] font-semibold">
+                  The Ivory Palace Grand Ballroom
+                </h3>
+                <p className="text-xs text-[#4A3A32]/90 leading-relaxed max-w-xs mx-auto">
+                  Jl. Gatot Subroto No. 88, Jakarta Selatan 12710
+                </p>
+
+                {/* Facility Pill Tags */}
+                <div className="flex flex-wrap justify-center gap-2 pt-2 pb-1">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-medium bg-white/30 backdrop-blur-xs border border-[#C7A86D]/30 text-[#4A3A32]">
+                    🅿️ Parkir Luas & Valet
+                  </span>
+                  <span className="px-3 py-1 rounded-full text-[10px] font-medium bg-white/30 backdrop-blur-xs border border-[#C7A86D]/30 text-[#4A3A32]">
+                    🕌 Musholla AC
+                  </span>
+                </div>
+
+                {/* Big Interactive Action Button */}
+                <div className="pt-3">
+                  <a
+                    href="https://maps.google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full text-xs tracking-widest uppercase bg-gradient-to-r from-[#C7A86D] via-[#D4AF37] to-[#B39358] text-white font-bold shadow-lg hover:scale-[1.03] active:scale-95 transition-all duration-300"
+                  >
+                    <MapPin size={16} />
+                    Buka Petunjuk Arah (Google Maps)
+                  </a>
+                </div>
               </div>
+
             </div>
           </SectionReveal>
         </div>
