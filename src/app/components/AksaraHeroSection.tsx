@@ -27,7 +27,7 @@ export default function AksaraHeroSection({
   groomName = "Rizky",
   titleText = "The Wedding of"
 }: AksaraHeroSectionProps) {
-  // Lined-up bottom plants array repeating [pink, purple, white] across the bottom width
+  // Lined-up bottom plants array - 7 prominent flower clusters
   const plantTypes = [
     tanamanPinkPng,
     tanamanUnguPng,
@@ -36,19 +36,50 @@ export default function AksaraHeroSection({
     tanamanUnguPng,
     tanamanPutihPng,
     tanamanPinkPng,
-    tanamanUnguPng,
-    tanamanPutihPng,
-    tanamanPinkPng,
-    tanamanUnguPng,
-    tanamanPutihPng,
-    tanamanPinkPng,
-    tanamanUnguPng,
-    tanamanPutihPng,
   ];
 
   return (
     <section className="relative w-full h-[90vh] sm:h-[95vh] min-h-[580px] max-h-[880px] overflow-hidden bg-[#F5EFE6] select-none flex flex-col justify-between items-center shadow-lg">
       
+      {/* ── Bulletproof Inline CSS Keyframe Animations ────────────── */}
+      <style>{`
+        @keyframes windSwayTreeLeftTop {
+          0% { transform: rotate(0deg) scale(1) translateY(0px); }
+          50% { transform: rotate(-5.5deg) scale(1.03) translateY(-6px); }
+          100% { transform: rotate(0deg) scale(1) translateY(0px); }
+        }
+
+        @keyframes windSwayTreeRightTop {
+          0% { transform: rotate(0deg) scale(1) translateY(0px); }
+          50% { transform: rotate(5.5deg) scale(1.03) translateY(-6px); }
+          100% { transform: rotate(0deg) scale(1) translateY(0px); }
+        }
+
+        @keyframes windSwayTreeLeftBottom {
+          0% { transform: rotate(0deg) scale(1) translateY(0px); }
+          50% { transform: rotate(-6deg) scale(1.025) translateY(-6px); }
+          100% { transform: rotate(0deg) scale(1) translateY(0px); }
+        }
+
+        @keyframes windSwayTreeRightBottom {
+          0% { transform: rotate(0deg) scale(1) translateY(0px); }
+          50% { transform: rotate(6deg) scale(1.025) translateY(-6px); }
+          100% { transform: rotate(0deg) scale(1) translateY(0px); }
+        }
+
+        @keyframes windSwayPlantLeft {
+          0% { transform: rotate(0deg) scale(1); }
+          50% { transform: rotate(-14deg) scale(1.08); }
+          100% { transform: rotate(0deg) scale(1); }
+        }
+
+        @keyframes windSwayPlantRight {
+          0% { transform: rotate(0deg) scale(1); }
+          50% { transform: rotate(14deg) scale(1.08); }
+          100% { transform: rotate(0deg) scale(1); }
+        }
+      `}</style>
+
       {/* ── Background Soft Glow & Vignette ─────────────────────── */}
       <div 
         className="absolute inset-0 pointer-events-none z-0"
@@ -58,19 +89,19 @@ export default function AksaraHeroSection({
       />
 
       {/* ── 1. LAYER 0: Dense Background Trees (STATIC backdrop framing center) ── */}
-      {/* Rear Center Tree - Fills middle gap behind gazebo */}
+      {/* Rear Center Tree */}
       <img
         src={pohonTengahPng}
         alt="Pohon Tengah Belakang"
         className="absolute bottom-[8%] left-1/2 -translate-x-1/2 w-[95%] sm:w-[70%] max-w-[580px] h-[65%] sm:h-[60%] object-cover object-bottom pointer-events-none z-10 opacity-95 filter drop-shadow-sm"
       />
-      {/* Rear Mid Left Tree - Overlaps upper left canopy and lower trunk */}
+      {/* Rear Mid Left Tree */}
       <img
         src={pohonKiriBelakangPng}
         alt="Pohon Kiri Belakang"
         className="absolute top-[12%] sm:top-[8%] left-[-18%] xs:left-[-12%] sm:left-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[420px] h-[62%] object-cover pointer-events-none z-10 opacity-95"
       />
-      {/* Rear Mid Right Tree - Overlaps upper right canopy and lower trunk */}
+      {/* Rear Mid Right Tree */}
       <img
         src={pohonKananBelakangPng}
         alt="Pohon Kanan Belakang"
@@ -79,29 +110,45 @@ export default function AksaraHeroSection({
 
 
       {/* ── 2. LAYER 1: Midground & Foreground Swaying Trees (DYNAMIC WIND SWAY) ── */}
-      {/* Upper Left Canopy Tree (sways left-top) */}
+      {/* Upper Left Canopy Tree */}
       <img
         src={pohonKiriAtasPng}
         alt="Pohon Kiri Atas"
-        className="absolute top-[-3%] left-[-8%] xs:left-[-4%] sm:left-0 w-[62%] xs:w-[54%] sm:w-[42%] max-w-[400px] pointer-events-none z-20 origin-top-left animate-sway-tree-left-top filter drop-shadow-sm"
+        className="absolute top-[-3%] left-[-8%] xs:left-[-4%] sm:left-0 w-[62%] xs:w-[54%] sm:w-[42%] max-w-[400px] pointer-events-none z-20 filter drop-shadow-sm"
+        style={{
+          animation: "windSwayTreeLeftTop 5.2s ease-in-out infinite",
+          transformOrigin: "0% 0%"
+        }}
       />
-      {/* Upper Right Canopy Tree (sways right-top) */}
+      {/* Upper Right Canopy Tree */}
       <img
         src={pohonKananAtasPng}
         alt="Pohon Kanan Atas"
-        className="absolute top-[-3%] right-[-8%] xs:right-[-4%] sm:right-0 w-[60%] xs:w-[52%] sm:w-[40%] max-w-[380px] pointer-events-none z-20 origin-top-right animate-sway-tree-right-top filter drop-shadow-sm"
+        className="absolute top-[-3%] right-[-8%] xs:right-[-4%] sm:right-0 w-[60%] xs:w-[52%] sm:w-[40%] max-w-[380px] pointer-events-none z-20 filter drop-shadow-sm"
+        style={{
+          animation: "windSwayTreeRightTop 5.6s ease-in-out infinite",
+          transformOrigin: "100% 0%"
+        }}
       />
-      {/* Lower Left Trunk & Dense Foliage Tree (sways left-bottom) */}
+      {/* Lower Left Trunk & Dense Foliage Tree */}
       <img
         src={pohonKiriBawahPng}
         alt="Pohon Kiri Bawah"
-        className="absolute bottom-0 left-[-12%] xs:left-[-8%] sm:left-[-4%] w-[74%] xs:w-[66%] sm:w-[52%] max-w-[480px] pointer-events-none z-25 origin-bottom-left animate-sway-tree-left-bottom filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
+        className="absolute bottom-0 left-[-12%] xs:left-[-8%] sm:left-[-4%] w-[74%] xs:w-[66%] sm:w-[52%] max-w-[480px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
+        style={{
+          animation: "windSwayTreeLeftBottom 6.2s ease-in-out infinite",
+          transformOrigin: "20% 100%"
+        }}
       />
-      {/* Lower Right Twisted Trunk Tree (sways right-bottom) */}
+      {/* Lower Right Twisted Trunk Tree */}
       <img
         src={pohonKananBawahPng}
         alt="Pohon Kanan Bawah"
-        className="absolute bottom-0 right-[-12%] xs:right-[-8%] sm:right-[-4%] w-[76%] xs:w-[68%] sm:w-[54%] max-w-[500px] pointer-events-none z-25 origin-bottom-right animate-sway-tree-right-bottom filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
+        className="absolute bottom-0 right-[-12%] xs:right-[-8%] sm:right-[-4%] w-[76%] xs:w-[68%] sm:w-[54%] max-w-[500px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
+        style={{
+          animation: "windSwayTreeRightBottom 6.8s ease-in-out infinite",
+          transformOrigin: "80% 100%"
+        }}
       />
 
 
@@ -113,27 +160,26 @@ export default function AksaraHeroSection({
       />
 
 
-      {/* ── 4. LAYER 3: Dense Lined-up Bottom Plants (SWAYING IN OPPOSITE DIRECTIONS) ── */}
-      <div className="absolute bottom-0 left-0 right-0 w-full z-40 flex justify-between items-end overflow-hidden px-0 pointer-events-none h-24 xs:h-28 sm:h-36 md:h-40">
+      {/* ── 4. LAYER 3: Enlarged Lined-up Bottom Plants (SWAYING IN OPPOSITE DIRECTIONS) ── */}
+      <div className="absolute bottom-0 left-0 right-0 w-full z-40 flex justify-between items-end overflow-hidden px-0 pointer-events-none h-32 xs:h-40 sm:h-52 md:h-60">
         {plantTypes.map((plantSrc, idx) => {
           const isEven = idx % 2 === 0;
-          // Alternate sway animation: Even indices sway left, Odd indices sway right
-          const animationClass = isEven ? "animate-sway-plant-left" : "animate-sway-plant-right";
-          const delaySec = ((idx * 0.22) % 1.5).toFixed(2);
+          const animName = isEven ? "windSwayPlantLeft" : "windSwayPlantRight";
+          const delaySec = ((idx * 0.3) % 1.5).toFixed(2);
           
           return (
             <div
               key={idx}
-              className={`flex-1 min-w-[30px] xs:min-w-[36px] sm:min-w-[46px] -mx-2 xs:-mx-2.5 sm:-mx-3 flex items-end justify-center ${animationClass}`}
+              className="flex-1 min-w-[50px] xs:min-w-[65px] sm:min-w-[85px] -mx-3 xs:-mx-4 sm:-mx-6 flex items-end justify-center"
               style={{
-                animationDelay: `${delaySec}s`,
+                animation: `${animName} 3.4s ease-in-out infinite ${delaySec}s`,
                 transformOrigin: "bottom center"
               }}
             >
               <img
                 src={plantSrc}
                 alt={`Tanaman ${idx}`}
-                className="w-full h-auto max-h-[90px] xs:max-h-[110px] sm:max-h-[140px] md:max-h-[160px] object-contain object-bottom filter drop-shadow-[0_4px_8px_rgba(20,35,25,0.18)]"
+                className="w-full h-auto max-h-[140px] xs:max-h-[175px] sm:max-h-[220px] md:max-h-[260px] object-contain object-bottom filter drop-shadow-[0_6px_12px_rgba(20,35,25,0.22)]"
               />
             </div>
           );
