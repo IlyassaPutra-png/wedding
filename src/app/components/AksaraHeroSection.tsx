@@ -329,12 +329,14 @@ export default function AksaraHeroSection({
         </div>
 
         {/* Subtitle: "The Wedding of" */}
-        <p
-          className="text-[11px] xs:text-xs sm:text-sm tracking-[0.28em] uppercase text-[#253B29] font-medium mb-1 drop-shadow-[0_1px_2px_rgba(255,255,255,0.9)]"
-          style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}
-        >
-          {titleText}
-        </p>
+        <div className="mb-2 px-4 py-1 rounded-full bg-[#FAF5EE]/95 border border-[#C7A86D]/60 shadow-[0_4px_16px_rgba(20,35,25,0.15)] backdrop-blur-md inline-flex items-center justify-center">
+          <p
+            className="text-[11px] xs:text-xs sm:text-sm tracking-[0.3em] uppercase text-[#8B6B23] font-bold drop-shadow-xs"
+            style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}
+          >
+            {titleText}
+          </p>
+        </div>
 
         {/* Bride Name: "Aisyah" */}
         <h1

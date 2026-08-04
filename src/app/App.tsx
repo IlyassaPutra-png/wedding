@@ -345,14 +345,18 @@ function FramedPhoto({
   imgClassName?: string;
 }) {
   return (
-    <div className={`relative p-3.5 sm:p-5 flex items-center justify-center ${className}`}>
-      <div className={`w-full h-full relative overflow-hidden rounded-2xl z-0 ${aspectRatio}`}>
-        <img
-          src={src}
-          alt={alt}
-          className={`w-full h-full object-cover transition-transform duration-700 hover:scale-105 ${imgClassName}`}
-        />
+    <div className={`relative w-full h-full flex items-center justify-center ${className}`}>
+      {/* Inner photo container fitted inside ornate frame inner window */}
+      <div className="w-full h-full p-[11%] sm:p-[12%] relative flex items-center justify-center z-0">
+        <div className={`w-full h-full relative overflow-hidden rounded-xl bg-[#EFE8DF] ${aspectRatio}`}>
+          <img
+            src={src}
+            alt={alt}
+            className={`w-full h-full object-cover transition-transform duration-700 hover:scale-105 ${imgClassName}`}
+          />
+        </div>
       </div>
+      {/* Ornate Frame Overlay */}
       {frameSrc && (
         <img
           src={frameSrc}
@@ -886,21 +890,31 @@ function useCountdown(targetMs: number) {
 }
 
 /* ─── Intersection Observer Hook ────────────────────────── */
-function useInView(options: number | { threshold?: number; rootMargin?: string } = { threshold: 0.1, rootMargin: "0px 0px -33% 0px" }) {
+function useInView(
+  options: number | { threshold?: number; rootMargin?: string; once?: boolean } = { threshold: 0.05, rootMargin: "0px 0px 0px 0px", once: true }
+) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const { threshold, rootMargin } = typeof options === "number"
-    ? { threshold: options, rootMargin: "0px 0px -33% 0px" }
-    : { threshold: options.threshold ?? 0.1, rootMargin: options.rootMargin ?? "0px 0px -33% 0px" };
+
+  const threshold = typeof options === "number" ? options : options.threshold ?? 0.05;
+  const rootMargin = typeof options === "number" ? "0px 0px 0px 0px" : options.rootMargin ?? "0px 0px 0px 0px";
+  const once = typeof options === "number" ? true : options.once ?? true;
 
   useEffect(() => {
     const obs = new IntersectionObserver(
-      ([e]) => { setVisible(e.isIntersecting); },
+      ([e]) => {
+        if (e.isIntersecting) {
+          setVisible(true);
+          if (once) obs.disconnect();
+        } else if (!once) {
+          setVisible(false);
+        }
+      },
       { threshold, rootMargin }
     );
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
-  }, [threshold, rootMargin]);
+  }, [threshold, rootMargin, once]);
   return { ref, visible };
 }
 
@@ -1186,18 +1200,21 @@ interface StoryItemData {
 
 /* ─── Story Item Block (Inside Unified Soft Pink Continuous Shape Container) ─── */
 function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
-  const { ref, visible } = useInView(0.08);
+  const { ref, visible } = useInView({ threshold: 0.15, rootMargin: "0px 0px -40px 0px", once: true });
   const isEven = idx % 2 === 0;
 
+  // Cycle frame PNGs for rich variety
+  const frameChoice = idx % 3 === 0 ? frame17Png : idx % 3 === 1 ? frame16Png : frame10Png;
+
   return (
-    <div ref={ref} className="relative pt-6 pb-8 border-b border-[#C7A86D]/25 last:border-b-0 last:pb-2">
+    <div ref={ref} className="relative pt-6 pb-10 border-b border-[#C7A86D]/25 last:border-b-0 last:pb-2">
       {/* Year & Date Badge */}
       <div
-        className="flex justify-center mb-4 transition-all duration-1000 ease-out"
+        className="flex justify-center mb-4 transition-all duration-[1300ms] cubic-bezier(0.16, 1, 0.3, 1)"
         style={{
           opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0) scale(1)" : "translateY(-18px) scale(0.9)",
-          transitionDelay: "100ms",
+          transform: visible ? "translateY(0) scale(1)" : "translateY(-24px) scale(0.88)",
+          transitionDelay: "150ms",
         }}
       >
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0] shadow-sm">
@@ -1207,21 +1224,22 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
         </div>
       </div>
 
-      {/* Photo Wrapper Container with Corner Floral Ornaments */}
+      {/* Photo Wrapper Container with Ornate Frame & Corner Floral Ornaments */}
       <div
-        className="relative my-4 transition-all duration-1000 ease-out pointer-events-none select-none"
+        className="relative my-4 transition-all duration-[1500ms] cubic-bezier(0.16, 1, 0.3, 1) pointer-events-none select-none"
         style={{
           opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0) scale(1)" : "translateY(-25px) scale(0.96)",
-          transitionDelay: "250ms",
+          transform: visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.92)",
+          transitionDelay: "380ms",
         }}
       >
-        {/* Photo Container */}
-        <div className="w-full aspect-[4/5] xs:aspect-[3/4] sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-md border border-[#C7A86D]/30 relative z-0">
-          <img
+        {/* Ornate Framed Photo Container */}
+        <div className="w-full max-w-sm mx-auto aspect-[4/3] relative z-0">
+          <FramedPhoto
             src={item.photo}
             alt={item.title}
-            className="w-full h-full object-cover filter contrast-[1.03] brightness-[0.98] pointer-events-none"
+            frameSrc={frameChoice}
+            aspectRatio="aspect-[4/3]"
           />
         </div>
 
@@ -1309,7 +1327,7 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
 
       {/* Title */}
       <div
-        className="text-center mb-2 transition-all duration-1000 ease-out"
+        className="text-center mb-2 transition-all duration-[1300ms] cubic-bezier(0.16, 1, 0.3, 1)"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible
@@ -1317,7 +1335,7 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
             : isEven
             ? "translateX(-35px)"
             : "translateX(35px)",
-          transitionDelay: "400ms",
+          transitionDelay: "650ms",
         }}
       >
         <h3 className="font-serif text-2xl sm:text-3xl text-[#4A3A32] font-semibold tracking-wide">
@@ -1327,7 +1345,7 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
 
       {/* Description Text */}
       <p
-        className="text-[#4A3A32]/85 text-xs sm:text-sm leading-relaxed text-center font-light px-2 transition-all duration-1000 ease-out"
+        className="text-[#4A3A32]/85 text-xs sm:text-sm leading-relaxed text-center font-light px-2 transition-all duration-[1300ms] cubic-bezier(0.16, 1, 0.3, 1)"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible
@@ -1335,7 +1353,7 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
             : isEven
             ? "translateX(-25px)"
             : "translateX(25px)",
-          transitionDelay: "550ms",
+          transitionDelay: "880ms",
         }}
       >
         {item.desc}
@@ -1354,25 +1372,46 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
       desc: "Pandangan kami pertama kali bertemu di sebuah acara alumni kampus. Berawal dari percakapan hangat mengenai impian masa depan, kami menyadari ada getaran manis yang menyatukan hati."
     },
     {
+      year: "2022",
+      date: "14 Februari 2022",
+      title: "Kencan Pertama & Cerita Manis",
+      photo: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=450&fit=crop&auto=format",
+      desc: "Momen kencan pertama di sebuah kafe berlokasi tenang, di mana gelak tawa dan cerita hangat mengalir melintasi malam. Di sinilah rasa percaya dan rasa nyaman mulai berakar kuat."
+    },
+    {
       year: "2023",
       date: "20 Agustus 2023",
-      title: "Mengikat Janji",
+      title: "Mengikat Komitmen Pasangan",
       photo: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&h=450&fit=crop&auto=format",
       desc: "Setelah dua tahun saling mengenal dan menguatkan dalam suka dan duka, kami memutuskan untuk melangkah lebih serius sebagai pasangan yang siap tumbuh dan melengkapi bersama."
     },
     {
+      year: "2024",
+      date: "12 November 2024",
+      title: "Petualangan & Menjelajah Bersama",
+      photo: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&h=450&fit=crop&auto=format",
+      desc: "Menjelajahi keindahan alam bersama, belajar memahami dan melengkapi karakter satu sama lain, hingga ikatan batin dan kedewasaan hubungan kami terasa kian matang."
+    },
+    {
       year: "2025",
       date: "10 Januari 2025",
-      title: "Momen Lamaran",
+      title: "Momen Lamaran Syahdu",
       photo: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=450&fit=crop&auto=format",
       desc: "Di hadapan keluarga besar yang kami cintai, sebuah cincin tersemat indah. Suasana haru dan kebahagiaan menyelimuti saat pinangan resmi diterima dengan senyuman terbaik."
     },
     {
+      year: "2025",
+      date: "15 Juni 2025",
+      title: "Sesi Prewedding & Persiapan",
+      photo: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&h=450&fit=crop&auto=format",
+      desc: "Merajut impian pernikahan bersama, mengabadikan momen kebersamaan dalam potret prewedding hangat, serta mempersiapkan hari istimewa dengan ketulusan dan Doa."
+    },
+    {
       year: "2026",
       date: "20 September 2026",
-      title: "Menuju Pernikahan",
+      title: "Menuju Pernikahan Suci",
       photo: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&h=450&fit=crop&auto=format",
-      desc: "Hari yang kami tunggu akhirnya tiba. Bersama doa dan rida orang tua serta kehangatan keluarga tercinta, kami mengucap janji ikatan pernikahan suci untuk selamanya."
+      desc: "Hari yang kami tunggu akhirnya tiba. Bersama doa dan rida orang tua serta kehangatan keluarga tercinta, kami mengucap ikatan pernikahan suci untuk selamanya."
     }
   ];
 
@@ -1945,12 +1984,14 @@ export default function App() {
                 transition: "opacity 0.8s ease-in-out, transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)"
               }}
             >
-              <p
-                className="text-[0.65rem] xs:text-xs sm:text-sm tracking-[0.25em] text-[#5C4A38] uppercase font-medium mb-1 drop-shadow-sm"
-                style={{ fontFamily: "'Cormorant Garamond', 'Poppins', serif" }}
-              >
-                The Wedding of
-              </p>
+              <div className="mb-2 px-4 py-1 rounded-full bg-[#FAF5EE]/95 border border-[#C7A86D]/60 shadow-[0_4px_16px_rgba(40,30,20,0.15)] backdrop-blur-md inline-flex items-center justify-center">
+                <p
+                  className="text-[10px] xs:text-xs sm:text-sm tracking-[0.3em] text-[#8B6B23] uppercase font-bold drop-shadow-xs"
+                  style={{ fontFamily: "'Cormorant Garamond', 'Poppins', serif" }}
+                >
+                  The Wedding of
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2">
                 <h1
                   className="text-xl xs:text-2xl sm:text-3xl md:text-4xl text-[#2C2416] font-serif leading-tight tracking-wide drop-shadow-sm"
