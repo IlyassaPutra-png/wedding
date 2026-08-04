@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Home, MapPin, Calendar, Clock, Copy, Check, Instagram, Facebook, Heart, ChevronDown, Send, Music, X } from "lucide-react";
+import { Home, MapPin, Calendar, Clock, Copy, Check, Instagram, Facebook, Heart, ChevronDown, Send, Music, X, Download, Users, MessageSquare, CheckCircle2, XCircle, HelpCircle, RefreshCw } from "lucide-react";
 import AksaraHeroSection from "./components/AksaraHeroSection";
 import openinggSvg from "./components/gambar/openingg.svg";
 import musicTrack from "./components/Musik/nadin.mp3";
@@ -1718,18 +1718,171 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
   );
 }
 
+interface WishItem {
+  id: string;
+  name: string;
+  attendance?: 'yes' | 'no' | 'maybe';
+  guests?: string;
+  message: string;
+  date: string;
+}
+
+interface RsvpItem {
+  id: string;
+  name: string;
+  attendance: 'yes' | 'no' | 'maybe';
+  guests: string;
+  wishes?: string;
+  date: string;
+}
+
+const DEFAULT_WISHES: WishItem[] = [
+  { id: "w-1", name: "Sarah & James", attendance: "yes", guests: "2", message: "Semoga kalian berdua dikaruniai seumur hidup yang penuh cinta, tawa, dan kebahagiaan yang tak berujung!", date: "2 hari lalu" },
+  { id: "w-2", name: "Amelia Thompson", attendance: "yes", guests: "1", message: "Semoga kisah cinta kalian terus dituliskan dengan penuh kebahagiaan, petualangan, dan kasih sayang yang mendalam.", date: "3 hari lalu" },
+  { id: "w-3", name: "Robert & Diana", attendance: "yes", guests: "2", message: "Selamat! Cinta kalian adalah inspirasi bagi kami semua. Semoga pernikahan kalian indah dan penuh berkah!", date: "5 hari lalu" },
+  { id: "w-4", name: "Budi & Keluarga", attendance: "yes", guests: "4", message: "Selamat menempuh hidup baru Aisyah & Rizky. Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin!", date: "1 minggu lalu" },
+  { id: "w-5", name: "Maya Salsabila", attendance: "no", guests: "1", message: "Selamat ya Aisyah! Maaf banget belum bisa hadir langsung karena ada tugas dinas. Doa terbaik untuk kalian berdua!", date: "1 minggu lalu" },
+  { id: "w-6", name: "Hendra & Siska", attendance: "yes", guests: "2", message: "Happy Wedding Aisyah & Rizky! Semoga dilancarkan sampai hari H dan langgeng sampai kakek nenek!", date: "2 minggu lalu" },
+];
+
+function AddToCalendarMenu({ eventTitle, dateIsoStart, dateIsoEnd, locationStr, addressStr }: {
+  eventTitle: string;
+  dateIsoStart: string;
+  dateIsoEnd: string;
+  locationStr: string;
+  addressStr: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("The Wedding of Aisyah & Rizky - " + eventTitle)}&dates=${dateIsoStart}/${dateIsoEnd}&details=${encodeURIComponent("Acara " + eventTitle + " Pernikahan Aisyah Yusuf & Rizky Ramadhan. Lokasi: " + locationStr + ", " + addressStr)}&location=${encodeURIComponent(locationStr + ", " + addressStr)}`;
+
+  const handleIcsDownload = () => {
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Aisyah & Rizky Wedding//ID",
+      "BEGIN:VEVENT",
+      `SUMMARY:The Wedding of Aisyah & Rizky - ${eventTitle}`,
+      `DESCRIPTION:Acara ${eventTitle} Pernikahan Aisyah Yusuf & Rizky Ramadhan`,
+      `LOCATION:${locationStr}, ${addressStr}`,
+      `DTSTART:${dateIsoStart}`,
+      `DTEND:${dateIsoEnd}`,
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\r\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute("download", `Wedding_${eventTitle.replace(/\s+/g, "_")}.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <div className="relative mt-6 w-full z-30">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full py-3 px-4 rounded-full text-xs uppercase tracking-widest bg-gradient-to-r from-[#F3DDD7] via-[#F8ECE8] to-[#F3DDD7] border border-[#C7A86D]/50 text-[#4A3A32] font-bold hover:bg-[#C7A86D] hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95"
+      >
+        <Calendar size={15} className="text-[#C7A86D]" />
+        <span>Add to Calendar</span>
+        <ChevronDown size={14} className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="absolute left-0 right-0 top-full mt-2 z-40 rounded-2xl bg-white/98 backdrop-blur-xl border border-[#C7A86D]/40 shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200">
+          <a
+            href={googleUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#FAF5EE] text-xs text-[#4A3A32] font-semibold transition-colors"
+          >
+            <span className="w-6 h-6 rounded-full bg-[#EA4335]/15 text-[#EA4335] flex items-center justify-center font-bold text-[11px]">G</span>
+            <span>Google Calendar</span>
+          </a>
+          <button
+            type="button"
+            onClick={() => {
+              handleIcsDownload();
+              setOpen(false);
+            }}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#FAF5EE] text-xs text-[#4A3A32] font-semibold transition-colors text-left cursor-pointer"
+          >
+            <Download size={15} className="text-[#C7A86D]" />
+            <span>Apple / Outlook (.ics)</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Main App ───────────────────────────────────────────── */
 export default function App() {
   const [isOpened, setIsOpened] = useState(false);
   const [openingStage, setOpeningStage] = useState<'closed' | 'opening_gate' | 'zooming_in' | 'revealing' | 'opened'>('closed');
   const [copied, setCopied] = useState<string | null>(null);
-  const [wishes, setWishes] = useState([
-    { name: "Sarah & James", message: "Semoga kalian berdua dikaruniai seumur hidup yang penuh cinta, tawa, dan kebahagiaan yang tak berujung!", date: "2 hari lalu" },
-    { name: "Amelia Thompson", message: "Semoga kisah cinta kalian terus dituliskan dengan penuh kebahagiaan, petualangan, dan kasih sayang yang mendalam.", date: "3 hari lalu" },
-    { name: "Robert & Diana", message: "Selamat! Cinta kalian adalah inspirasi bagi kami semua. Semoga pernikahan kalian indah dan penuh berkah!", date: "5 hari lalu" },
-  ]);
+  
+  const [wishes, setWishes] = useState<WishItem[]>(() => {
+    try {
+      const saved = localStorage.getItem("wedding_guest_wishes");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return DEFAULT_WISHES;
+  });
+
+  const [rsvps, setRsvps] = useState<RsvpItem[]>(() => {
+    try {
+      const saved = localStorage.getItem("wedding_guest_rsvps");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  });
+
+  const [wishesFilter, setWishesFilter] = useState<'all' | 'yes' | 'no'>('all');
   const [rsvpForm, setRsvpForm] = useState({ name: "", attendance: "yes", guests: "1", wishes: "" });
   const [rsvpSent, setRsvpSent] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("wedding_guest_wishes", JSON.stringify(wishes));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [wishes]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("wedding_guest_rsvps", JSON.stringify(rsvps));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [rsvps]);
+
+  const filteredWishes = useMemo(() => {
+    if (wishesFilter === 'all') return wishes;
+    return wishes.filter(w => w.attendance === wishesFilter);
+  }, [wishes, wishesFilter]);
+
+  const totalAttending = useMemo(() => {
+    const wishesAttending = wishes.filter(w => w.attendance === 'yes').length;
+    const rsvpsAttending = rsvps.filter(r => r.attendance === 'yes').length;
+    return Math.max(wishesAttending, rsvpsAttending + 12);
+  }, [wishes, rsvps]);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const weddingDateMs = useMemo(() => new Date("2026-06-20T10:00:00").getTime(), []);
@@ -1835,9 +1988,34 @@ export default function App() {
 
   const handleRsvp = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!rsvpForm.name.trim()) return;
+
+    const newId = Date.now().toString();
+    const dateStr = "Baru saja";
+
+    const newRsvp: RsvpItem = {
+      id: newId,
+      name: rsvpForm.name.trim(),
+      attendance: rsvpForm.attendance as 'yes' | 'no' | 'maybe',
+      guests: rsvpForm.guests,
+      wishes: rsvpForm.wishes.trim(),
+      date: dateStr,
+    };
+
+    setRsvps(prev => [newRsvp, ...prev]);
+
     if (rsvpForm.wishes.trim()) {
-      setWishes(prev => [{ name: rsvpForm.name || "Anonim", message: rsvpForm.wishes, date: "Baru saja" }, ...prev]);
+      const newWish: WishItem = {
+        id: newId,
+        name: rsvpForm.name.trim(),
+        attendance: rsvpForm.attendance as 'yes' | 'no' | 'maybe',
+        guests: rsvpForm.guests,
+        message: rsvpForm.wishes.trim(),
+        date: dateStr,
+      };
+      setWishes(prev => [newWish, ...prev]);
     }
+
     setRsvpSent(true);
   };
 
@@ -2270,9 +2448,13 @@ export default function App() {
                       </div>
                     </div>
                   </div>
-                  <button className="mt-6 w-full py-2.5 rounded-full text-xs uppercase tracking-widest bg-[#F3DDD7] border border-[#C7A86D]/40 text-[#4A3A32] font-semibold hover:bg-[#C7A86D] hover:text-white transition-all">
-                    Add to Calendar
-                  </button>
+                  <AddToCalendarMenu
+                    eventTitle={ev.title}
+                    dateIsoStart={ev.title.includes("Akad") ? "20260920T080000Z" : "20260920T120000Z"}
+                    dateIsoEnd={ev.title.includes("Akad") ? "20260920T110000Z" : "20260920T210000Z"}
+                    locationStr={ev.location}
+                    addressStr={ev.address}
+                  />
                 </div>
               ))}
             </StaggerChildren>
@@ -2371,71 +2553,106 @@ export default function App() {
         <SideTrees leftTree={pohon10Png} rightTree={pohon1Png} opacity={0.8} />
         <div className="relative z-20 max-w-md mx-auto">
           <SectionReveal className="relative z-10">
-            <SectionHeader label="Will You Join Us?" title="RSVP" light={false} />
+            <SectionHeader label="Will You Join Us?" title="RSVP & Konfirmasi" light={false} />
             {rsvpSent ? (
-              <div className="text-center py-10 px-6 rounded-3xl bg-white/95 border border-[#C7A86D]/30 shadow-md">
-                <Heart size={36} className="text-[#C7A86D] fill-[#C7A86D] mx-auto mb-3" />
-                <h3 className="font-script text-3xl text-[#4A3A32]" style={{ fontFamily: "'Great Vibes', cursive" }}>Terima Kasih!</h3>
-                <p className="mt-2 text-xs text-[#4A3A32]/80">Konfirmasi kehadiran kalian telah kami terima. Kami tidak sabar untuk merayakan bersama kalian!</p>
+              <div className="text-center py-10 px-6 rounded-3xl bg-white/95 backdrop-blur-md border border-[#C7A86D]/40 shadow-[0_16px_40px_rgba(74,58,50,0.12)]">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#F3DDD7] to-[#C7A86D] text-white flex items-center justify-center mx-auto mb-4 shadow-lg animate-bounce">
+                  <Heart size={32} className="fill-white text-white" />
+                </div>
+                <h3 className="font-serif text-2xl text-[#4A3A32] font-semibold mb-2">Terima Kasih, {rsvpForm.name || 'Sahabat'}!</h3>
+                <p className="text-xs text-[#4A3A32]/80 leading-relaxed max-w-xs mx-auto mb-6">
+                  Konfirmasi kehadiran kalian ({rsvpForm.attendance === 'yes' ? 'Hadir' : rsvpForm.attendance === 'no' ? 'Berhalangan' : 'Masih Ragu'} • {rsvpForm.guests} Tamu) telah tersimpan secara dinamis. Ucapan kalian kini sudah muncul di daftar doa tamu!
+                </p>
+                <div className="flex flex-col gap-3">
+                  <a
+                    href="#wishes"
+                    className="w-full py-3 rounded-full text-xs font-bold tracking-widest uppercase bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white shadow-md hover:scale-[1.02] active:scale-95 transition-all inline-flex items-center justify-center gap-2"
+                  >
+                    <MessageSquare size={14} />
+                    Lihat Ucapan Kamu di Guest Wishes
+                  </a>
+                  <button
+                    onClick={() => {
+                      setRsvpSent(false);
+                      setRsvpForm({ name: "", attendance: "yes", guests: "1", wishes: "" });
+                    }}
+                    className="w-full py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#F3DDD7] border border-[#C7A86D]/40 text-[#4A3A32] hover:bg-[#C7A86D] hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <RefreshCw size={13} />
+                    Kirim Konfirmasi / Ucapan Lainnya
+                  </button>
+                </div>
               </div>
             ) : (
-              <form onSubmit={handleRsvp} className="space-y-4 rounded-3xl p-6 bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]">
+              <form onSubmit={handleRsvp} className="space-y-4 rounded-3xl p-6 sm:p-7 bg-white/95 backdrop-blur-md border border-[#C7A86D]/40 shadow-[0_16px_40px_rgba(74,58,50,0.1)]">
                 <div>
-                  <label className="block text-[10px] tracking-widest uppercase text-[#C7A86D] font-semibold mb-1">Nama Lengkap</label>
+                  <label className="block text-[10px] tracking-widest uppercase text-[#8B6B23] font-bold mb-1.5 flex items-center gap-1.5">
+                    <span>Nama Lengkap</span>
+                    <span className="text-[#C7A86D]">*</span>
+                  </label>
                   <input
                     type="text"
                     required
                     value={rsvpForm.name}
                     onChange={e => setRsvpForm(p => ({ ...p, name: e.target.value }))}
-                    placeholder="Nama kamu"
-                    className="w-full px-4 py-2.5 rounded-xl text-xs bg-[#F8F5F0] border border-[#D8B6B0] text-[#4A3A32] placeholder-[#8A7560]/60 outline-none focus:border-[#C7A86D]"
+                    placeholder="Masukkan nama lengkap kamu"
+                    className="w-full px-4 py-3 rounded-xl text-xs bg-[#FAF7F2] border border-[#D8B6B0] text-[#4A3A32] placeholder-[#8A7560]/50 outline-none focus:border-[#C7A86D] focus:ring-1 focus:ring-[#C7A86D] transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] tracking-widest uppercase text-[#C7A86D] font-semibold mb-1">Kehadiran</label>
-                  <div className="flex gap-2">
-                    {["yes", "no", "maybe"].map(opt => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => setRsvpForm(p => ({ ...p, attendance: opt }))}
-                        className={`flex-1 py-2.5 rounded-xl text-[11px] font-semibold uppercase tracking-wider transition-all ${
-                          rsvpForm.attendance === opt
-                            ? "bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white shadow-md"
-                            : "bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0]"
-                        }`}
-                      >
-                        {opt === "yes" ? "Hadir" : opt === "no" ? "Absen" : "Ragu"}
-                      </button>
-                    ))}
+                  <label className="block text-[10px] tracking-widest uppercase text-[#8B6B23] font-bold mb-1.5">Konfirmasi Kehadiran</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { key: "yes", label: "Hadir", icon: CheckCircle2 },
+                      { key: "no", label: "Absen", icon: XCircle },
+                      { key: "maybe", label: "Ragu", icon: HelpCircle },
+                    ].map(opt => {
+                      const Icon = opt.icon;
+                      const active = rsvpForm.attendance === opt.key;
+                      return (
+                        <button
+                          key={opt.key}
+                          type="button"
+                          onClick={() => setRsvpForm(p => ({ ...p, attendance: opt.key as any }))}
+                          className={`py-3 px-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                            active
+                              ? "bg-gradient-to-br from-[#C7A86D] to-[#B39358] text-white shadow-md scale-[1.02]"
+                              : "bg-[#F5ECE8] text-[#4A3A32] border border-[#D8B6B0]/60 hover:border-[#C7A86D]"
+                          }`}
+                        >
+                          <Icon size={16} className={active ? "text-white" : "text-[#C7A86D]"} />
+                          <span>{opt.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] tracking-widest uppercase text-[#C7A86D] font-semibold mb-1">Jumlah Tamu</label>
+                  <label className="block text-[10px] tracking-widest uppercase text-[#8B6B23] font-bold mb-1.5">Jumlah Tamu yang Hadir</label>
                   <select
                     value={rsvpForm.guests}
                     onChange={e => setRsvpForm(p => ({ ...p, guests: e.target.value }))}
-                    className="w-full px-4 py-2.5 rounded-xl text-xs bg-[#F8F5F0] border border-[#D8B6B0] text-[#4A3A32] outline-none focus:border-[#C7A86D]"
+                    className="w-full px-4 py-3 rounded-xl text-xs bg-[#FAF7F2] border border-[#D8B6B0] text-[#4A3A32] outline-none focus:border-[#C7A86D] transition-all cursor-pointer"
                   >
                     {["1","2","3","4","5+"].map(n => <option key={n} value={n}>{n} Tamu</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[10px] tracking-widest uppercase text-[#C7A86D] font-semibold mb-1">Ucapan & Doa</label>
+                  <label className="block text-[10px] tracking-widest uppercase text-[#8B6B23] font-bold mb-1.5">Ucapan & Doa Restu</label>
                   <textarea
                     rows={3}
                     value={rsvpForm.wishes}
                     onChange={e => setRsvpForm(p => ({ ...p, wishes: e.target.value }))}
-                    placeholder="Tuliskan doa dan ucapan terbaikmu..."
-                    className="w-full px-4 py-2.5 rounded-xl text-xs bg-[#F8F5F0] border border-[#D8B6B0] text-[#4A3A32] placeholder-[#8A7560]/60 outline-none resize-none focus:border-[#C7A86D]"
+                    placeholder="Tuliskan doa manis dan ucapan selamat terbaikmu..."
+                    className="w-full px-4 py-3 rounded-xl text-xs bg-[#FAF7F2] border border-[#D8B6B0] text-[#4A3A32] placeholder-[#8A7560]/50 outline-none resize-none focus:border-[#C7A86D] focus:ring-1 focus:ring-[#C7A86D] transition-all"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl flex items-center justify-center gap-2 text-xs font-semibold tracking-widest uppercase bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white shadow-md hover:opacity-95 transition-all"
+                  className="w-full py-3.5 rounded-xl flex items-center justify-center gap-2 text-xs font-bold tracking-widest uppercase bg-gradient-to-r from-[#C7A86D] via-[#D4AF37] to-[#B39358] text-white shadow-lg hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
                 >
-                  <Send size={14} />
-                  Kirim RSVP
+                  <Send size={15} />
+                  Kirim RSVP & Ucapan
                 </button>
               </form>
             )}
@@ -2450,23 +2667,111 @@ export default function App() {
         <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.8} />
         <div className="relative z-20 max-w-md mx-auto">
           <SectionReveal className="relative z-10">
-            <SectionHeader label="Kind Words" title="Guest Wishes" light={false} />
-            <StaggerChildren className="space-y-4" variant="zoom" staggerMs={100}>
-              {wishes.map((w, i) => (
-                <div key={i} className="rounded-2xl p-4 bg-white/95 border border-[#C7A86D]/25 shadow-md relative">
-                  <p className="text-xs leading-relaxed text-[#4A3A32]/90 font-light mb-3">"{w.message}"</p>
-                  <div className="flex items-center gap-2.5 pt-2 border-t border-[#D8B6B0]/30">
-                    <div className="w-7 h-7 rounded-full bg-[#F3DDD7] border border-[#D8B6B0] text-[#4A3A32] text-xs font-semibold flex items-center justify-center">
-                      {w.name[0]}
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-[#4A3A32]">{w.name}</p>
-                      <p className="text-[10px] text-[#8A7560]">{w.date}</p>
-                    </div>
-                  </div>
+            <SectionHeader label="Kind Words & Prayers" title="Guest Wishes" light={false} />
+
+            {/* Live Interactive Stats Bar */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 backdrop-blur-md border border-[#C7A86D]/30 shadow-xs">
+                <div className="w-9 h-9 rounded-xl bg-[#F3DDD7] text-[#C7A86D] flex items-center justify-center flex-shrink-0">
+                  <MessageSquare size={18} />
                 </div>
-              ))}
-            </StaggerChildren>
+                <div>
+                  <p className="font-serif text-lg font-bold text-[#4A3A32] leading-none">{wishes.length}</p>
+                  <p className="text-[10px] text-[#8A7560] font-medium tracking-wider uppercase mt-0.5">Total Ucapan</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 backdrop-blur-md border border-[#C7A86D]/30 shadow-xs">
+                <div className="w-9 h-9 rounded-xl bg-[#E8F3E8] text-[#2E7D32] flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 size={18} />
+                </div>
+                <div>
+                  <p className="font-serif text-lg font-bold text-[#4A3A32] leading-none">{totalAttending}</p>
+                  <p className="text-[10px] text-[#8A7560] font-medium tracking-wider uppercase mt-0.5">Tamu Confirmed</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Aksara Style Framed Wishes Box Container */}
+            <div className="rounded-3xl p-4 sm:p-5 bg-white/95 backdrop-blur-md border border-[#C7A86D]/35 shadow-[0_16px_40px_rgba(74,58,50,0.08)] relative overflow-hidden">
+              
+              {/* Box Top Header */}
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#C7A86D]/20">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-[#C7A86D]">✦</span>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#4A3A32]">Daftar Doa & Ucapan</h4>
+                </div>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#F3DDD7] text-[#4A3A32] font-semibold border border-[#D8B6B0]">
+                  {filteredWishes.length} Pesan
+                </span>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="flex justify-center gap-1.5 p-1 rounded-2xl bg-[#FAF5EE] border border-[#C7A86D]/20 mb-4">
+                {[
+                  { key: 'all', label: `Semua (${wishes.length})` },
+                  { key: 'yes', label: 'Hadir (✓)' },
+                  { key: 'no', label: 'Absen (✕)' },
+                ].map(tab => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setWishesFilter(tab.key as any)}
+                    className={`flex-1 py-1.5 rounded-xl text-[11px] font-semibold transition-all cursor-pointer ${
+                      wishesFilter === tab.key
+                        ? "bg-gradient-to-r from-[#C7A86D] to-[#B39358] text-white shadow-xs"
+                        : "text-[#6E5B48] hover:text-[#4A3A32]"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Wishes Scrollable Container with Fixed Sizing */}
+              <div className="h-[360px] sm:h-[400px] overflow-y-auto pr-1.5 space-y-3.5 scrollbar-thin scrollbar-thumb-[#C7A86D]/40">
+                {filteredWishes.length === 0 ? (
+                  <div className="text-center py-12 px-4 rounded-2xl bg-[#FAF5EE]/80 border border-[#C7A86D]/20">
+                    <p className="text-xs text-[#8A7560]">Belum ada ucapan pada kategori ini.</p>
+                  </div>
+                ) : (
+                  filteredWishes.map((w, i) => (
+                    <div key={w.id || i} className="rounded-2xl p-4 bg-[#FAF7F2]/90 border border-[#C7A86D]/25 shadow-xs relative transition-all hover:border-[#C7A86D]/50 hover:bg-white">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E8C7C0] via-[#D8B6B0] to-[#C7A86D] text-white text-xs font-bold font-serif flex items-center justify-center shadow-xs flex-shrink-0">
+                            {w.name[0]?.toUpperCase() || 'A'}
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-[#4A3A32] leading-tight">{w.name}</p>
+                            <p className="text-[10px] text-[#8A7560]">{w.date}</p>
+                          </div>
+                        </div>
+                        {w.attendance && (
+                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider flex-shrink-0 ${
+                            w.attendance === 'yes'
+                              ? "bg-[#E8F5E9] text-[#2E7D32] border border-[#A5D6A7]"
+                              : w.attendance === 'no'
+                              ? "bg-[#FFEBEE] text-[#C62828] border border-[#EF9A9A]"
+                              : "bg-[#FFF8E1] text-[#F57F17] border border-[#FFE082]"
+                          }`}>
+                            {w.attendance === 'yes' ? `✓ Hadir ${w.guests ? `(${w.guests})` : ''}` : w.attendance === 'no' ? '✕ Absen' : '? Ragu'}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs leading-relaxed text-[#4A3A32]/90 font-light pl-1 pt-1 italic">
+                        "{w.message}"
+                      </p>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Bottom Subtle Scroll Indicator */}
+              <div className="pt-3 mt-2 border-t border-[#C7A86D]/15 flex items-center justify-center gap-1.5 text-[10px] text-[#8A7560] font-medium tracking-wider uppercase">
+                <span>Scroll untuk melihat ucapan lainnya</span>
+                <ChevronDown size={12} className="text-[#C7A86D] animate-bounce" />
+              </div>
+
+            </div>
           </SectionReveal>
         </div>
       </section>
