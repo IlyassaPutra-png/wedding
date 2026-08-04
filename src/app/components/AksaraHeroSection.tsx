@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Import assets from assetpagebaru
 import fondasiTengahPng from "../../../assetpagebaru/fondasi_tengah.png";
@@ -16,10 +16,65 @@ import tanamanUnguPng from "../../../assetpagebaru/tanaman_ungu.png";
 // Top flower bouquet crest
 import topFloralHeaderPng from "./gambar/bunga/bunga7.png";
 
+// Flying bird assets for frame-by-frame wing flapping
+import burung01Png from "./gambar/burung/burung01.png";
+import burung02Png from "./gambar/burung/burung02.png";
+import burungBaru1Png from "./gambar/burung/burungbaru1.png";
+import burungBaru2Png from "./gambar/burung/burungbaru2.png";
+import burungBaru3Png from "./gambar/burung/burungbaru3.png";
+import burungBaru4Png from "./gambar/burung/burungbaru4.png";
+
 interface AksaraHeroSectionProps {
   brideName?: string;
   groomName?: string;
   titleText?: string;
+}
+
+/* ─── Flapping Bird Component (Alternates frames for authentic wing flap) ─── */
+function FlappingBird({
+  frameA,
+  frameB,
+  size = 36,
+  flapSpeed = 230,
+  flipX = false,
+  style = {},
+  className = "",
+}: {
+  frameA: string;
+  frameB: string;
+  size?: number;
+  flapSpeed?: number;
+  flipX?: boolean;
+  style?: React.CSSProperties;
+  className?: string;
+}) {
+  const [frame, setFrame] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setFrame((prev) => (prev === 0 ? 1 : 0));
+    }, flapSpeed);
+    return () => clearInterval(timer);
+  }, [flapSpeed]);
+
+  const transformStyle = flipX ? "scaleX(-1)" : "none";
+
+  return (
+    <div className={`relative pointer-events-none select-none ${className}`} style={{ width: size, height: size, transform: transformStyle, ...style }}>
+      <img
+        src={frameA}
+        alt="Bird frame A"
+        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
+        style={{ opacity: frame === 0 ? 1 : 0 }}
+      />
+      <img
+        src={frameB}
+        alt="Bird frame B"
+        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
+        style={{ opacity: frame === 1 ? 1 : 0 }}
+      />
+    </div>
+  );
 }
 
 export default function AksaraHeroSection({
@@ -43,40 +98,74 @@ export default function AksaraHeroSection({
       
       {/* ── Bulletproof Inline CSS Keyframe Animations ────────────── */}
       <style>{`
-        @keyframes windSwayTreeLeftTop {
-          0% { transform: rotate(0deg) scale(1) translateY(0px); }
-          50% { transform: rotate(-5.5deg) scale(1.03) translateY(-6px); }
-          100% { transform: rotate(0deg) scale(1) translateY(0px); }
-        }
-
-        @keyframes windSwayTreeRightTop {
-          0% { transform: rotate(0deg) scale(1) translateY(0px); }
-          50% { transform: rotate(5.5deg) scale(1.03) translateY(-6px); }
-          100% { transform: rotate(0deg) scale(1) translateY(0px); }
-        }
-
+        /* Lower Trees Wind Sway */
         @keyframes windSwayTreeLeftBottom {
           0% { transform: rotate(0deg) scale(1) translateY(0px); }
-          50% { transform: rotate(-6deg) scale(1.025) translateY(-6px); }
+          50% { transform: rotate(-5.5deg) scale(1.02) translateY(-4px); }
           100% { transform: rotate(0deg) scale(1) translateY(0px); }
         }
 
         @keyframes windSwayTreeRightBottom {
           0% { transform: rotate(0deg) scale(1) translateY(0px); }
-          50% { transform: rotate(6deg) scale(1.025) translateY(-6px); }
+          50% { transform: rotate(5.5deg) scale(1.02) translateY(-4px); }
           100% { transform: rotate(0deg) scale(1) translateY(0px); }
         }
 
+        /* Faster & Lively Plant Sway */
         @keyframes windSwayPlantLeft {
           0% { transform: rotate(0deg) scale(1); }
-          50% { transform: rotate(-14deg) scale(1.08); }
+          50% { transform: rotate(-14deg) scale(1.06); }
           100% { transform: rotate(0deg) scale(1); }
         }
 
         @keyframes windSwayPlantRight {
           0% { transform: rotate(0deg) scale(1); }
-          50% { transform: rotate(14deg) scale(1.08); }
+          50% { transform: rotate(14deg) scale(1.06); }
           100% { transform: rotate(0deg) scale(1); }
+        }
+
+        /* Flying Birds Left to Right (LTR) */
+        @keyframes flyAcrossLTR {
+          0% {
+            transform: translate(-120px, 20px) scale(0.7) rotate(-3deg);
+            opacity: 0;
+          }
+          8% {
+            opacity: 0.9;
+          }
+          50% {
+            transform: translate(calc(50vw - 30px), -25px) scale(1) rotate(2deg);
+            opacity: 1;
+          }
+          92% {
+            opacity: 0.9;
+          }
+          100% {
+            transform: translate(calc(100vw + 100px), -50px) scale(0.8) rotate(-4deg);
+            opacity: 0;
+          }
+        }
+
+        /* Flying Birds Right to Left (RTL - Crossing) */
+        @keyframes flyAcrossRTL {
+          0% {
+            transform: translate(100px, -20px) scale(0.8) rotate(4deg);
+            opacity: 0;
+          }
+          8% {
+            opacity: 0.9;
+          }
+          50% {
+            transform: translate(calc(-50vw + 30px), 25px) scale(1) rotate(-2deg);
+            opacity: 1;
+          }
+          92% {
+            opacity: 0.9;
+          }
+          100% {
+            transform: translate(calc(-100vw - 120px), 50px) scale(0.7) rotate(3deg);
+            opacity: 0;
+          }
         }
       `}</style>
 
@@ -87,6 +176,54 @@ export default function AksaraHeroSection({
           background: "radial-gradient(ellipse at 50% 35%, rgba(255, 254, 250, 0.98) 0%, rgba(245, 239, 230, 0.98) 55%, rgba(232, 224, 210, 1) 100%)"
         }}
       />
+
+      {/* ── 0. LAYER: CROSSING FLYING BIRDS FLOCKS IN THE SKY ─────── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-20">
+        {/* Flock 1: Flying Left to Right (facing forward right) */}
+        <div
+          className="absolute top-[12%] left-0"
+          style={{ animation: "flyAcrossLTR 13s linear infinite 0.5s" }}
+        >
+          <FlappingBird frameA={burung01Png} frameB={burung02Png} size={44} flapSpeed={220} flipX={false} />
+        </div>
+
+        <div
+          className="absolute top-[8%] left-0"
+          style={{ animation: "flyAcrossLTR 13s linear infinite 1.4s" }}
+        >
+          <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={34} flapSpeed={260} flipX={true} />
+        </div>
+
+        <div
+          className="absolute top-[16%] left-0"
+          style={{ animation: "flyAcrossLTR 13s linear infinite 2.2s" }}
+        >
+          <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={28} flapSpeed={200} flipX={true} />
+        </div>
+
+        {/* Flock 2: Flying Right to Left near lower swaying trees (CROSSING!) */}
+        <div
+          className="absolute top-[36%] right-0"
+          style={{ animation: "flyAcrossRTL 11s linear infinite 1.2s" }}
+        >
+          <FlappingBird frameA={burung01Png} frameB={burung02Png} size={42} flapSpeed={230} flipX={true} />
+        </div>
+
+        <div
+          className="absolute top-[32%] right-0"
+          style={{ animation: "flyAcrossRTL 11s linear infinite 2.0s" }}
+        >
+          <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={36} flapSpeed={250} flipX={false} />
+        </div>
+
+        <div
+          className="absolute top-[41%] right-0"
+          style={{ animation: "flyAcrossRTL 11s linear infinite 2.8s" }}
+        >
+          <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={30} flapSpeed={190} flipX={false} />
+        </div>
+      </div>
+
 
       {/* ── 1. LAYER 0: Dense Background Trees (STATIC backdrop framing center) ── */}
       {/* Rear Center Tree */}
@@ -109,44 +246,36 @@ export default function AksaraHeroSection({
       />
 
 
-      {/* ── 2. LAYER 1: Midground & Foreground Swaying Trees (DYNAMIC WIND SWAY) ── */}
-      {/* Upper Left Canopy Tree */}
+      {/* ── 2. LAYER 1: Midground & Foreground Trees ── */}
+      {/* Upper Left Canopy Tree (STATIONARY per user request) */}
       <img
         src={pohonKiriAtasPng}
         alt="Pohon Kiri Atas"
         className="absolute top-[-3%] left-[-8%] xs:left-[-4%] sm:left-0 w-[62%] xs:w-[54%] sm:w-[42%] max-w-[400px] pointer-events-none z-20 filter drop-shadow-sm"
-        style={{
-          animation: "windSwayTreeLeftTop 5.2s ease-in-out infinite",
-          transformOrigin: "0% 0%"
-        }}
       />
-      {/* Upper Right Canopy Tree */}
+      {/* Upper Right Canopy Tree (STATIONARY per user request) */}
       <img
         src={pohonKananAtasPng}
         alt="Pohon Kanan Atas"
         className="absolute top-[-3%] right-[-8%] xs:right-[-4%] sm:right-0 w-[60%] xs:w-[52%] sm:w-[40%] max-w-[380px] pointer-events-none z-20 filter drop-shadow-sm"
-        style={{
-          animation: "windSwayTreeRightTop 5.6s ease-in-out infinite",
-          transformOrigin: "100% 0%"
-        }}
       />
-      {/* Lower Left Trunk & Dense Foliage Tree */}
+      {/* Lower Left Trunk & Dense Foliage Tree (DYNAMIC WIND SWAY) */}
       <img
         src={pohonKiriBawahPng}
         alt="Pohon Kiri Bawah"
         className="absolute bottom-0 left-[-12%] xs:left-[-8%] sm:left-[-4%] w-[74%] xs:w-[66%] sm:w-[52%] max-w-[480px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
         style={{
-          animation: "windSwayTreeLeftBottom 6.2s ease-in-out infinite",
+          animation: "windSwayTreeLeftBottom 6.5s ease-in-out infinite",
           transformOrigin: "20% 100%"
         }}
       />
-      {/* Lower Right Twisted Trunk Tree */}
+      {/* Lower Right Twisted Trunk Tree (DYNAMIC WIND SWAY) */}
       <img
         src={pohonKananBawahPng}
         alt="Pohon Kanan Bawah"
         className="absolute bottom-0 right-[-12%] xs:right-[-8%] sm:right-[-4%] w-[76%] xs:w-[68%] sm:w-[54%] max-w-[500px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
         style={{
-          animation: "windSwayTreeRightBottom 6.8s ease-in-out infinite",
+          animation: "windSwayTreeRightBottom 7.2s ease-in-out infinite",
           transformOrigin: "80% 100%"
         }}
       />
@@ -160,19 +289,19 @@ export default function AksaraHeroSection({
       />
 
 
-      {/* ── 4. LAYER 3: Enlarged Lined-up Bottom Plants (SWAYING IN OPPOSITE DIRECTIONS) ── */}
+      {/* ── 4. LAYER 3: Lively Lined-up Bottom Plants (SWAYING IN OPPOSITE DIRECTIONS) ── */}
       <div className="absolute bottom-0 left-0 right-0 w-full z-40 flex justify-between items-end overflow-hidden px-0 pointer-events-none h-32 xs:h-40 sm:h-52 md:h-60">
         {plantTypes.map((plantSrc, idx) => {
           const isEven = idx % 2 === 0;
           const animName = isEven ? "windSwayPlantLeft" : "windSwayPlantRight";
-          const delaySec = ((idx * 0.3) % 1.5).toFixed(2);
+          const delaySec = ((idx * 0.25) % 1.2).toFixed(2);
           
           return (
             <div
               key={idx}
               className="flex-1 min-w-[50px] xs:min-w-[65px] sm:min-w-[85px] -mx-3 xs:-mx-4 sm:-mx-6 flex items-end justify-center"
               style={{
-                animation: `${animName} 3.4s ease-in-out infinite ${delaySec}s`,
+                animation: `${animName} 2.6s ease-in-out infinite ${delaySec}s`,
                 transformOrigin: "bottom center"
               }}
             >
