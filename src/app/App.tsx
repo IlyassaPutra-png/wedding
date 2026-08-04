@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Home, MapPin, Calendar, Clock, Copy, Check, Instagram, Facebook, Heart, ChevronDown, Send, Music, X } from "lucide-react";
+import AksaraHeroSection from "./components/AksaraHeroSection";
 import openinggSvg from "./components/gambar/openingg.svg";
 import musicTrack from "./components/Musik/nadin.mp3";
 import bungaOpeningKananSvg from "./components/gambar/bunga_opening_kanan.svg";
@@ -2062,6 +2063,9 @@ export default function App() {
       {/* Main Landing Page Content Container at Normal Scale (1.0) */}
       {/* Main Landing Page Content Container (Responsive Aksara Mobile Container) */}
       <div className="invitation-wrapper shadow-2xl relative bg-[#F8F5F0] text-[#4A3A32]">
+
+        {/* ── NEW AKSARA WEDDING HERO PAGE (Matching referensi.png) ───── */}
+        <AksaraHeroSection brideName="Aisyah" groomName="Rizky" titleText="The Wedding of" />
 
         {/* ── WELCOME ─────────────────────────────────────────── */}
         <section id="welcome" className="py-16 px-0 text-center relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
