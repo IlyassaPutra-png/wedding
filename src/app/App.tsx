@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Home, MapPin, Calendar, Clock, Copy, Check, Instagram, Facebook, Heart, ChevronDown, Send, Music, X, Download, Users, MessageSquare, CheckCircle2, XCircle, HelpCircle, RefreshCw } from "lucide-react";
+import { Home, MapPin, Calendar, Clock, Copy, Check, Instagram, Facebook, Heart, ChevronDown, Send, Music, Volume2, VolumeX, X, Download, Users, MessageSquare, CheckCircle2, XCircle, HelpCircle, RefreshCw } from "lucide-react";
 import AksaraHeroSection from "./components/AksaraHeroSection";
 import openinggSvg from "./components/gambar/openingg.svg";
 import musicTrack from "./components/Musik/nadin.mp3";
@@ -2214,11 +2214,15 @@ export default function App() {
       {isOpened && (
         <button
           onClick={() => setIsMuted(prev => !prev)}
-          className="fixed left-4 z-50 flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#4A3A32] shadow-lg border border-[#C7A86D]/35 backdrop-blur-xl transition hover:scale-105"
-          style={{ bottom: "calc(env(safe-area-inset-bottom, 1rem) + 1.5rem)" }}
+          className="fixed top-4 right-4 z-50 flex items-center justify-center w-10 h-10 rounded-full bg-[#F8F5F0]/90 text-[#4A3A32] shadow-[0_4px_20px_rgba(74,58,50,0.18)] border border-[#C7A86D]/40 backdrop-blur-xl transition-all duration-300 hover:scale-110 active:scale-95 group"
+          aria-label={isMuted ? "Unmute Sound" : "Mute Sound"}
+          title={isMuted ? "Putar Musik" : "Matikan Musik"}
         >
-          <Music size={16} className="text-[#C7A86D]" />
-          <span>{isMuted ? "Muted" : "Sound"}</span>
+          {isMuted ? (
+            <VolumeX size={18} className="text-[#8A7560] transition-colors group-hover:text-[#4A3A32]" />
+          ) : (
+            <Music size={18} className="text-[#C7A86D] animate-spin" style={{ animationDuration: '4s' }} />
+          )}
         </button>
       )}
 
@@ -2824,10 +2828,10 @@ export default function App() {
       </footer>
 
       {isOpened && (
-        <nav className="fixed left-1/2 z-50 -translate-x-1/2 w-[min(92vw,440px)] rounded-full border border-[#C7A86D]/35 bg-[#F8F5F0]/90 px-2 py-2 shadow-[0_10px_30px_rgba(74,58,50,0.15)] backdrop-blur-xl"
+        <nav className="fixed left-1/2 z-50 -translate-x-1/2 w-[min(95vw,460px)] rounded-full border border-[#C7A86D]/35 bg-[#F8F5F0]/90 px-1.5 py-1.5 sm:px-2 sm:py-2 shadow-[0_10px_30px_rgba(74,58,50,0.15)] backdrop-blur-xl"
           style={{ bottom: "calc(env(safe-area-inset-bottom, 1rem) + 0.75rem)" }}
         >
-          <div className="flex items-center justify-between gap-1">
+          <div className="flex items-center justify-between gap-0.5">
             {[
               { href: "#welcome", label: "Home", Icon: Home },
               { href: "#couple", label: "Couple", Icon: Heart },
@@ -2838,7 +2842,7 @@ export default function App() {
               <a
                 key={href}
                 href={href}
-                className="flex min-w-[48px] flex-1 items-center justify-center rounded-3xl px-2 py-1.5 text-center text-[9px] font-semibold uppercase tracking-wider text-[#4A3A32] transition-all duration-200 hover:bg-[#F3DDD7] hover:text-[#C7A86D]"
+                className="flex min-w-[42px] sm:min-w-[48px] flex-1 items-center justify-center rounded-3xl px-1.5 py-1.5 text-center text-[9px] font-semibold uppercase tracking-wider text-[#4A3A32] transition-all duration-200 hover:bg-[#F3DDD7] hover:text-[#C7A86D]"
                 aria-label={label}
               >
                 <div className="flex flex-col items-center justify-center gap-0.5">
@@ -2847,6 +2851,29 @@ export default function App() {
                 </div>
               </a>
             ))}
+
+            {/* Integrated Sound / Mute Toggle Button */}
+            <button
+              onClick={() => setIsMuted(prev => !prev)}
+              className={`flex min-w-[42px] sm:min-w-[48px] flex-1 items-center justify-center rounded-3xl px-1.5 py-1.5 text-center text-[9px] font-semibold uppercase tracking-wider transition-all duration-200 ${
+                isMuted
+                  ? "text-[#8A7560] hover:bg-[#F3DDD7] hover:text-[#4A3A32]"
+                  : "text-[#C7A86D] hover:bg-[#F3DDD7]"
+              }`}
+              aria-label={isMuted ? "Unmute Sound" : "Mute Sound"}
+              title={isMuted ? "Putar Musik" : "Matikan Musik"}
+            >
+              <div className="flex flex-col items-center justify-center gap-0.5">
+                {isMuted ? (
+                  <VolumeX size={15} className="text-[#8A7560]" />
+                ) : (
+                  <Volume2 size={15} className="text-[#C7A86D] animate-pulse" />
+                )}
+                <span className={isMuted ? "line-through opacity-75" : "font-bold"}>
+                  {isMuted ? "Mute" : "Sound"}
+                </span>
+              </div>
+            </button>
           </div>
         </nav>
       )}
