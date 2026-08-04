@@ -1885,7 +1885,7 @@ export default function App() {
   }, [wishes, rsvps]);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const weddingDateMs = useMemo(() => new Date("2026-06-20T10:00:00").getTime(), []);
+  const weddingDateMs = useMemo(() => new Date("2026-09-20T08:00:00").getTime(), []);
   const countdown = useCountdown(weddingDateMs);
 
   const handleStartOpening = () => {
@@ -2361,33 +2361,45 @@ export default function App() {
       <LoveStorySection timeline={timeline} />
 
       {/* ── COUNTDOWN ───────────────────────────────────────── */}
-      <section id="countdown" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F5F0E8] text-[#4A3A32]">
+      <section id="countdown" className="py-16 px-0 text-center relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
         <FloatingButterflies count={2} />
-        <SectionBackgroundPhoto src={bg4Png} opacity={0.16} />
-        <SideTrees leftTree={pohon6Png} rightTree={pohon1Png} opacity={0.8} />
-        <div className="relative z-20 max-w-md mx-auto text-center">
-          <SectionReveal className="relative z-10">
-            <SectionHeader label="The Big Day" title="Counting Down With Joy" light={false} />
-            <StaggerChildren className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-8" variant="zoom" staggerMs={120} baseDelay={100}>
-              {[
-                { label: "Hari", value: countdown.days },
-                { label: "Jam", value: countdown.hours },
-                { label: "Menit", value: countdown.minutes },
-                { label: "Detik", value: countdown.seconds },
-              ].map(({ label, value }) => (
-                <div
-                  key={label}
-                  className="flex flex-col items-center justify-center w-20 sm:w-24 h-22 sm:h-26 rounded-2xl bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_8px_24px_rgba(74,58,50,0.08)]"
-                >
-                  <span className="font-serif text-3xl sm:text-4xl text-[#4A3A32] font-semibold leading-none">
-                    {String(value).padStart(2, "0")}
-                  </span>
-                  <span className="text-[10px] tracking-[0.2em] uppercase mt-1 text-[#8A7560] font-semibold">
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </StaggerChildren>
+        <SectionBackgroundPhoto src={bg4Png} opacity={0.18} />
+        <SectionBirdsFlock delay={2} top="6vh" />
+        <SideTrees leftTree={pohon6Png} rightTree={pohon1Png} opacity={0.85} />
+
+        {/* Transparent Mobile Shape Overlay Matching 'With Joy We Announce' Section */}
+        <div className="relative z-20 w-full px-4 sm:px-6 max-w-md mx-auto">
+          <SectionReveal className="relative z-10 w-full">
+            <div className="w-full bg-white/20 backdrop-blur-[3px] rounded-2xl py-10 px-5 sm:px-8 border border-[#C7A86D]/30 shadow-sm transition-all duration-300">
+              <SectionHeader label="The Big Day" title="Counting Down With Joy" light={false} />
+
+              {/* Target Date Badge */}
+              <div className="mt-4 mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7]/80 text-[#4A3A32] border border-[#D8B6B0]">
+                <span>✦ Sabtu, 20 September 2026 ✦</span>
+              </div>
+
+              {/* Live Animated Countdown Cards */}
+              <StaggerChildren className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-2" variant="zoom" staggerMs={120} baseDelay={100}>
+                {[
+                  { label: "Hari", value: countdown.days },
+                  { label: "Jam", value: countdown.hours },
+                  { label: "Menit", value: countdown.minutes },
+                  { label: "Detik", value: countdown.seconds },
+                ].map(({ label, value }) => (
+                  <div
+                    key={label}
+                    className="flex flex-col items-center justify-center w-20 sm:w-24 h-22 sm:h-26 rounded-2xl bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_8px_24px_rgba(74,58,50,0.08)] transition-all hover:scale-105"
+                  >
+                    <span className="font-serif text-3xl sm:text-4xl text-[#4A3A32] font-semibold leading-none">
+                      {String(value).padStart(2, "0")}
+                    </span>
+                    <span className="text-[10px] tracking-[0.2em] uppercase mt-1 text-[#8A7560] font-semibold">
+                      {label}
+                    </span>
+                  </div>
+                ))}
+              </StaggerChildren>
+            </div>
           </SectionReveal>
         </div>
       </section>
