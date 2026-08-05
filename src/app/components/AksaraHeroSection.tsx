@@ -30,7 +30,7 @@ interface AksaraHeroSectionProps {
   titleText?: string;
 }
 
-/* ─── Flapping Bird Component (Alternates frames for authentic wing flap) ─── */
+/* ─── Flapping Bird Component (Pure CSS 0-state performance animation) ─── */
 function FlappingBird({
   frameA,
   frameB,
@@ -48,32 +48,26 @@ function FlappingBird({
   style?: React.CSSProperties;
   className?: string;
 }) {
-  const [frame, setFrame] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setFrame((prev) => (prev === 0 ? 1 : 0));
-    }, flapSpeed);
-    return () => clearInterval(timer);
-  }, [flapSpeed]);
-
-  const transformStyle = flipX ? "scaleX(-1)" : "none";
+  const duration = `${flapSpeed * 2}ms`;
 
   return (
-    <div className={`relative pointer-events-none select-none ${className}`} style={{ width: size, height: size, transform: transformStyle, ...style }}>
+    <div
+      className={`relative pointer-events-none select-none ${className}`}
+      style={{ width: size, height: size, transform: flipX ? "scaleX(-1)" : "none", ...style }}
+    >
       <img
         src={frameA}
-        alt="Bird frame A"
+        alt=""
         decoding="async"
-        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
-        style={{ opacity: frame === 0 ? 1 : 0 }}
+        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)] animate-bird-frame-a"
+        style={{ animationDuration: duration }}
       />
       <img
         src={frameB}
-        alt="Bird frame B"
+        alt=""
         decoding="async"
-        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
-        style={{ opacity: frame === 1 ? 1 : 0 }}
+        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)] animate-bird-frame-b"
+        style={{ animationDuration: duration }}
       />
     </div>
   );
@@ -126,24 +120,42 @@ export default function AksaraHeroSection({
           100% { transform: rotate(0deg) scale(1); }
         }
 
+        /* Bird Wing Flapping Frame Toggle */
+        @keyframes birdFrameA {
+          0%, 49.9% { opacity: 1; }
+          50%, 100% { opacity: 0; }
+        }
+        @keyframes birdFrameB {
+          0%, 49.9% { opacity: 0; }
+          50%, 100% { opacity: 1; }
+        }
+        .animate-bird-frame-a {
+          animation: birdFrameA 0.5s steps(1) infinite;
+          will-change: opacity;
+        }
+        .animate-bird-frame-b {
+          animation: birdFrameB 0.5s steps(1) infinite;
+          will-change: opacity;
+        }
+
         /* Flying Birds Left to Right (LTR) */
         @keyframes flyAcrossLTR {
           0% {
-            transform: translate(-120px, 20px) scale(0.7) rotate(-3deg);
+            transform: translate3d(-120px, 20px, 0) scale(0.7) rotate(-3deg);
             opacity: 0;
           }
           8% {
             opacity: 0.9;
           }
           50% {
-            transform: translate(calc(50vw - 30px), -25px) scale(1) rotate(2deg);
+            transform: translate3d(calc(50vw - 30px), -25px, 0) scale(1) rotate(2deg);
             opacity: 1;
           }
           92% {
             opacity: 0.9;
           }
           100% {
-            transform: translate(calc(100vw + 100px), -50px) scale(0.8) rotate(-4deg);
+            transform: translate3d(calc(100vw + 100px), -50px, 0) scale(0.8) rotate(-4deg);
             opacity: 0;
           }
         }
@@ -151,21 +163,21 @@ export default function AksaraHeroSection({
         /* Flying Birds Right to Left (RTL - Crossing) */
         @keyframes flyAcrossRTL {
           0% {
-            transform: translate(100px, -20px) scale(0.8) rotate(4deg);
+            transform: translate3d(100px, -20px, 0) scale(0.8) rotate(4deg);
             opacity: 0;
           }
           8% {
             opacity: 0.9;
           }
           50% {
-            transform: translate(calc(-50vw + 30px), 25px) scale(1) rotate(-2deg);
+            transform: translate3d(calc(-50vw + 30px), 25px, 0) scale(1) rotate(-2deg);
             opacity: 1;
           }
           92% {
             opacity: 0.9;
           }
           100% {
-            transform: translate(calc(-100vw - 120px), 50px) scale(0.7) rotate(3deg);
+            transform: translate3d(calc(-100vw - 120px), 50px, 0) scale(0.7) rotate(3deg);
             opacity: 0;
           }
         }

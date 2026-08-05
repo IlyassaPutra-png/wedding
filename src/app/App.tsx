@@ -345,7 +345,7 @@ function FramedPhoto({
   );
 }
 
-/* ─── Animated Flying Birds Component ─────────────────── */
+/* ─── Animated Flying Birds Component (Pure CSS 0-state performance animation) ─── */
 function FlappingBird({
   frameA,
   frameB,
@@ -363,30 +363,31 @@ function FlappingBird({
   style?: React.CSSProperties;
   className?: string;
 }) {
-  const [frame, setFrame] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setFrame((prev) => (prev === 0 ? 1 : 0));
-    }, flapSpeed);
-    return () => clearInterval(timer);
-  }, [flapSpeed]);
-
-  const transformStyle = flipX ? "scaleX(-1)" : "none";
+  const duration = `${flapSpeed * 2}ms`;
 
   return (
-    <div className={`relative pointer-events-none select-none ${className}`} style={{ width: size, height: size, transform: transformStyle, ...style }}>
+    <div
+      className={`relative pointer-events-none select-none ${className}`}
+      style={{
+        width: size,
+        height: size,
+        transform: flipX ? "scaleX(-1)" : "none",
+        ...style,
+      }}
+    >
       <img
         src={frameA}
-        alt="Bird frame A"
-        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
-        style={{ opacity: frame === 0 ? 1 : 0 }}
+        alt=""
+        decoding="async"
+        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)] animate-bird-frame-a"
+        style={{ animationDuration: duration }}
       />
       <img
         src={frameB}
-        alt="Bird frame B"
-        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
-        style={{ opacity: frame === 1 ? 1 : 0 }}
+        alt=""
+        decoding="async"
+        className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)] animate-bird-frame-b"
+        style={{ animationDuration: duration }}
       />
     </div>
   );
@@ -398,21 +399,21 @@ function FlyingBirdsFlock() {
       {/* Flock 1: Flying Left to Right across upper gate */}
       <div
         className="absolute top-[18vh] left-0"
-        style={{ animation: "flyAcrossLTR 13s linear infinite 0.5s" }}
+        style={{ animation: "flyAcrossLTR 13s linear infinite 0.5s", willChange: "transform" }}
       >
         <FlappingBird frameA={burung01Png} frameB={burung02Png} size={44} flapSpeed={230} flipX={false} />
       </div>
 
       <div
         className="absolute top-[15vh] left-0"
-        style={{ animation: "flyAcrossLTR 13s linear infinite 1.2s" }}
+        style={{ animation: "flyAcrossLTR 13s linear infinite 1.2s", willChange: "transform" }}
       >
         <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={34} flapSpeed={270} flipX={true} />
       </div>
 
       <div
         className="absolute top-[22vh] left-0"
-        style={{ animation: "flyAcrossLTR 13s linear infinite 1.9s" }}
+        style={{ animation: "flyAcrossLTR 13s linear infinite 1.9s", willChange: "transform" }}
       >
         <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={28} flapSpeed={210} flipX={true} />
       </div>
@@ -420,21 +421,21 @@ function FlyingBirdsFlock() {
       {/* Flock 2: Flying Right to Left across lower/mid gate */}
       <div
         className="absolute top-[28vh] right-0"
-        style={{ animation: "flyAcrossRTL 16s linear infinite 5.5s" }}
+        style={{ animation: "flyAcrossRTL 16s linear infinite 5.5s", willChange: "transform" }}
       >
         <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={48} flapSpeed={220} flipX={false} />
       </div>
 
       <div
         className="absolute top-[24vh] right-0"
-        style={{ animation: "flyAcrossRTL 16s linear infinite 6.3s" }}
+        style={{ animation: "flyAcrossRTL 16s linear infinite 6.3s", willChange: "transform" }}
       >
         <FlappingBird frameA={burung01Png} frameB={burung02Png} size={38} flapSpeed={260} flipX={true} />
       </div>
 
       <div
         className="absolute top-[32vh] right-0"
-        style={{ animation: "flyAcrossRTL 16s linear infinite 7.1s" }}
+        style={{ animation: "flyAcrossRTL 16s linear infinite 7.1s", willChange: "transform" }}
       >
         <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={30} flapSpeed={200} flipX={false} />
       </div>
@@ -449,6 +450,7 @@ function SectionBackgroundPhoto({ src, opacity = 0.14 }: { src: string; opacity?
       <img
         src={src}
         alt=""
+        decoding="async"
         className="w-full h-full object-cover filter saturate-[0.8] contrast-[1.05] animate-bg-wind pointer-events-none"
         style={{ opacity }}
       />
@@ -462,28 +464,65 @@ function SectionBackgroundPhoto({ src, opacity = 0.14 }: { src: string; opacity?
   );
 }
 
-/* ─── Section Birds Flock Component for content sections ─── */
-function SectionBirdsFlock({ delay = 0, top = "12vh" }: { delay?: number; top?: string }) {
+/* ─── Section Birds Flock Component (Flying Right to Left & Left to Right) ─── */
+function SectionBirdsFlock({
+  delay = 0,
+  top = "10vh",
+  direction = "both"
+}: {
+  delay?: number;
+  top?: string;
+  direction?: "LTR" | "RTL" | "both";
+}) {
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
-      <div
-        className="absolute left-0"
-        style={{ top, animation: `flyAcrossLTR 15s linear infinite ${delay}s` }}
-      >
-        <FlappingBird frameA={burung01Png} frameB={burung02Png} size={36} flapSpeed={240} flipX={false} />
-      </div>
-      <div
-        className="absolute left-0"
-        style={{ top: `calc(${top} + 4vh)`, animation: `flyAcrossLTR 15s linear infinite ${delay + 1.6}s` }}
-      >
-        <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={28} flapSpeed={280} flipX={true} />
-      </div>
-      <div
-        className="absolute right-0"
-        style={{ top: `calc(${top} + 8vh)`, animation: `flyAcrossRTL 18s linear infinite ${delay + 6}s` }}
-      >
-        <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={32} flapSpeed={220} flipX={false} />
-      </div>
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-25">
+      {/* Sekelompok Burung Terbang Dari Kanan ke Kiri (RTL Flock) */}
+      {(direction === "RTL" || direction === "both") && (
+        <>
+          <div
+            className="absolute right-0"
+            style={{ top, animation: `flyAcrossRTL 14s linear infinite ${delay}s`, willChange: "transform" }}
+          >
+            <FlappingBird frameA={burung01Png} frameB={burung02Png} size={42} flapSpeed={230} flipX={true} />
+          </div>
+          <div
+            className="absolute right-0"
+            style={{ top: `calc(${top} - 3vh)`, animation: `flyAcrossRTL 14s linear infinite ${delay + 0.8}s`, willChange: "transform" }}
+          >
+            <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={34} flapSpeed={260} flipX={false} />
+          </div>
+          <div
+            className="absolute right-0"
+            style={{ top: `calc(${top} + 4vh)`, animation: `flyAcrossRTL 14s linear infinite ${delay + 1.6}s`, willChange: "transform" }}
+          >
+            <FlappingBird frameA={burungBaru3Png} frameB={burungBaru4Png} size={28} flapSpeed={200} flipX={false} />
+          </div>
+          <div
+            className="absolute right-0"
+            style={{ top: `calc(${top} + 1.5vh)`, animation: `flyAcrossRTL 14s linear infinite ${delay + 2.3}s`, willChange: "transform" }}
+          >
+            <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={24} flapSpeed={280} flipX={false} />
+          </div>
+        </>
+      )}
+
+      {/* Sekelompok Burung Terbang Dari Kiri ke Kanan (LTR Flock) */}
+      {(direction === "LTR" || direction === "both") && (
+        <>
+          <div
+            className="absolute left-0"
+            style={{ top: `calc(${top} + 7vh)`, animation: `flyAcrossLTR 16s linear infinite ${delay + 5}s`, willChange: "transform" }}
+          >
+            <FlappingBird frameA={burung01Png} frameB={burung02Png} size={36} flapSpeed={240} flipX={false} />
+          </div>
+          <div
+            className="absolute left-0"
+            style={{ top: `calc(${top} + 11vh)`, animation: `flyAcrossLTR 16s linear infinite ${delay + 6.2}s`, willChange: "transform" }}
+          >
+            <FlappingBird frameA={burungBaru1Png} frameB={burungBaru2Png} size={28} flapSpeed={280} flipX={true} />
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -1195,9 +1234,9 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
         }}
       >
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0] shadow-sm">
-          <span>✦ {item.year}</span>
+          <span>❖ {item.year}</span>
           <span className="opacity-40">•</span>
-          <span>{item.date} ✦</span>
+          <span>{item.date} ❖</span>
         </div>
       </div>
 
@@ -2099,10 +2138,10 @@ export default function App() {
   ];
 
   const timeline = [
-    { year: "2019", title: "First Meeting", desc: "Pandangan kami bertemu di sebuah pesta kebun yang penuh bunga. Sebuah tawa yang tulus menjadi percakapan yang tak terlupakan.", icon: "✦" },
-    { year: "2020", title: "First Date", desc: "Makan malam romantis dengan cahaya lilin di tepi sungai. Bintang-bintang berbaris, dan kami tahu sesuatu yang ajaib telah dimulai.", icon: "✦" },
-    { year: "2022", title: "Official Couple", desc: "Melewati berbagai musim dan cerita, kami menjadi rumah satu sama lain. Cinta semakin dalam di setiap harinya.", icon: "✦" },
-    { year: "2024", title: "The Proposal", desc: "Di bawah hujan bunga mawar dan cahaya keemasan, ia mengajukan pertanyaan itu — dan jawabannya adalah selamanya.", icon: "✦" },
+    { year: "2019", title: "First Meeting", desc: "Pandangan kami bertemu di sebuah pesta kebun yang penuh bunga. Sebuah tawa yang tulus menjadi percakapan yang tak terlupakan.", icon: "❖" },
+    { year: "2020", title: "First Date", desc: "Makan malam romantis dengan cahaya lilin di tepi sungai. Bintang-bintang berbaris, dan kami tahu sesuatu yang ajaib telah dimulai.", icon: "❖" },
+    { year: "2022", title: "Official Couple", desc: "Melewati berbagai musim dan cerita, kami menjadi rumah satu sama lain. Cinta semakin dalam di setiap harinya.", icon: "❖" },
+    { year: "2024", title: "The Proposal", desc: "Di bawah hujan bunga mawar dan cahaya keemasan, ia mengajukan pertanyaan itu — dan jawabannya adalah selamanya.", icon: "❖" },
   ];
 
   return (
@@ -2249,7 +2288,7 @@ export default function App() {
             }}
           >
             <p className="text-xs sm:text-sm tracking-[0.2em] text-[#6E5B48] font-light mb-3">
-              ✦ Buka pintu awal kisah kami ✦
+              ❖ Buka pintu awal kisah kami ❖
             </p>
 
             <button
@@ -2447,7 +2486,7 @@ export default function App() {
 
               {/* Target Date Badge */}
               <div className="mt-4 mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7]/80 text-[#4A3A32] border border-[#D8B6B0]">
-                <span>✦ Sabtu, 20 September 2026 ✦</span>
+                <span>❖ Sabtu, 20 September 2026 ❖</span>
               </div>
 
               {/* Live Animated Countdown Cards */}
@@ -2495,7 +2534,7 @@ export default function App() {
                     time: "08:00 – 11:00 WIB",
                     location: "Al-Ikhlas Grand Mosque",
                     address: "Jl. Sudirman No. 12, Jakarta Pusat",
-                    icon: "✦",
+                    icon: "❖",
                   },
                   {
                     title: "Reception",
@@ -2504,7 +2543,7 @@ export default function App() {
                     time: "12:00 – 21:00 WIB",
                     location: "The Ivory Palace Grand Ballroom",
                     address: "Jl. Gatot Subroto No. 88, Jakarta Selatan",
-                    icon: "✦",
+                    icon: "❖",
                   },
                 ].map((ev, index) => (
                   <div
@@ -2554,6 +2593,7 @@ export default function App() {
       <section id="location" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
         <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
+        <SectionBirdsFlock delay={1} top="8vh" />
         <SideTrees leftTree={pohon8Png} rightTree={pohon9Png} opacity={0.85} />
         <div className="relative z-20 max-w-md mx-auto">
           <SectionReveal className="relative z-10">
@@ -2589,7 +2629,7 @@ export default function App() {
               {/* Venue Details & Information */}
               <div className="text-center space-y-3">
                 <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] uppercase tracking-widest font-semibold bg-[#F3DDD7]/90 text-[#4A3A32] border border-[#D8B6B0]">
-                  ✦ Grand Ballroom ✦
+                  ❖ Grand Ballroom ❖
                 </div>
                 <h3 className="font-serif text-2xl text-[#4A3A32] font-semibold">
                   The Ivory Palace Grand Ballroom
@@ -2786,7 +2826,7 @@ export default function App() {
               {/* Box Top Header */}
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#C7A86D]/20">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#C7A86D]">✦</span>
+                  <span className="text-xs text-[#C7A86D]">❖</span>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#4A3A32]">Daftar Doa & Ucapan</h4>
                 </div>
                 <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#F3DDD7] text-[#4A3A32] font-semibold border border-[#D8B6B0]">
@@ -2869,6 +2909,7 @@ export default function App() {
       <footer className="relative py-16 px-6 text-center overflow-hidden bg-[#F4EFEA] text-[#4A3A32] border-t border-[#C7A86D]/30">
         <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg5Png} opacity={0.18} />
+        <SectionBirdsFlock delay={2} top="6vh" />
         <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.7} />
         <div className="relative z-20 max-w-sm mx-auto">
           <SectionReveal className="relative z-10">
@@ -3248,43 +3289,60 @@ export default function App() {
           0%   { transform: rotateX(0deg); }
           100% { transform: rotateX(-160deg); }
         }
+        /* Bird Wing Flapping Frame Toggle */
+        @keyframes birdFrameA {
+          0%, 49.9% { opacity: 1; }
+          50%, 100% { opacity: 0; }
+        }
+        @keyframes birdFrameB {
+          0%, 49.9% { opacity: 0; }
+          50%, 100% { opacity: 1; }
+        }
+        .animate-bird-frame-a {
+          animation: birdFrameA 0.5s steps(1) infinite;
+          will-change: opacity;
+        }
+        .animate-bird-frame-b {
+          animation: birdFrameB 0.5s steps(1) infinite;
+          will-change: opacity;
+        }
         @keyframes flyAcrossLTR {
           0% {
-            transform: translate(-120px, 20px) scale(0.7) rotate(-3deg);
+            transform: translate3d(-120px, 20px, 0) scale(0.7) rotate(-3deg);
             opacity: 0;
           }
           8% {
             opacity: 0.9;
           }
           50% {
-            transform: translate(calc(50vw - 30px), -25px) scale(1) rotate(2deg);
+            transform: translate3d(calc(50vw - 30px), -25px, 0) scale(1) rotate(2deg);
             opacity: 1;
           }
           92% {
             opacity: 0.9;
           }
           100% {
-            transform: translate(calc(100vw + 100px), -50px) scale(0.8) rotate(-4deg);
+            transform: translate3d(calc(100vw + 100px), -50px, 0) scale(0.8) rotate(-4deg);
             opacity: 0;
           }
         }
         @keyframes flyAcrossRTL {
           0% {
-            transform: translate(calc(100vw + 100px), -20px) scale(0.8) rotate(4deg);
+            transform: translate3d(calc(100vw + 100px), -20px, 0) scale(0.8) rotate(4deg);
             opacity: 0;
           }
           8% {
             opacity: 0.95;
           }
           50% {
-            transform: translate(calc(50vw - 40px), 30px) scale(1.05) rotate(-2deg);
+            transform: translate3d(calc(50vw - 40px), 30px, 0) scale(1.05) rotate(-2deg);
             opacity: 1;
           }
           92% {
             opacity: 0.9;
           }
           100% {
-            transform: translate(-120px, 40px) scale(0.75) rotate(3deg);
+            transform: translate3d(-120px, 40px, 0) scale(0.75) rotate(3deg);
             opacity: 0;
           }
         }
