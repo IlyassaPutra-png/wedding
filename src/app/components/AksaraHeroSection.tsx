@@ -226,23 +226,23 @@ export default function AksaraHeroSection({
 
 
       {/* ── 1. LAYER 0: Dense Background Trees (STATIC backdrop framing center) ── */}
-      {/* Rear Center Tree */}
+      {/* Rear Center Tree (SUPER EXTRA LARGE CENTERPIECE) */}
       <img
         src={pohonTengahPng}
         alt="Pohon Tengah Belakang"
-        className="absolute bottom-[8%] left-1/2 -translate-x-1/2 w-[95%] sm:w-[70%] max-w-[580px] h-[65%] sm:h-[60%] object-cover object-bottom pointer-events-none z-10 opacity-95 filter drop-shadow-sm"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[180%] xs:w-[125%] sm:w-[110%] md:w-[98%] max-w-[1050px] h-[92vh] sm:h-[95vh] object-contain object-bottom pointer-events-none z-[10] opacity-95 filter drop-shadow-sm"
       />
-      {/* Rear Mid Left Tree */}
+      {/* Rear Mid Left Tree (Restored to previous framing size) */}
       <img
         src={pohonKiriBelakangPng}
         alt="Pohon Kiri Belakang"
-        className="absolute top-[12%] sm:top-[8%] left-[-18%] xs:left-[-12%] sm:left-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[420px] h-[62%] object-cover pointer-events-none z-10 opacity-95"
+        className="absolute top-[6%] sm:top-[4%] left-[-16%] xs:left-[-12%] sm:left-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[440px] h-[65vh] object-contain object-top-left pointer-events-none z-[12] opacity-95"
       />
-      {/* Rear Mid Right Tree */}
+      {/* Rear Mid Right Tree (Restored to previous framing size) */}
       <img
         src={pohonKananBelakangPng}
         alt="Pohon Kanan Belakang"
-        className="absolute top-[12%] sm:top-[8%] right-[-18%] xs:right-[-12%] sm:right-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[420px] h-[62%] object-cover pointer-events-none z-10 opacity-95"
+        className="absolute top-[6%] sm:top-[4%] right-[-16%] xs:right-[-12%] sm:right-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[440px] h-[65vh] object-contain object-top-right pointer-events-none z-[12] opacity-95"
       />
 
 
@@ -263,7 +263,7 @@ export default function AksaraHeroSection({
       <img
         src={pohonKiriBawahPng}
         alt="Pohon Kiri Bawah"
-        className="absolute bottom-0 left-[-12%] xs:left-[-8%] sm:left-[-4%] w-[74%] xs:w-[66%] sm:w-[52%] max-w-[480px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
+        className="absolute bottom-0 left-[-12%] xs:left-[-8%] sm:left-[-4%] w-[100%] xs:w-[66%] sm:w-[52%] max-w-[480px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
         style={{
           animation: "windSwayTreeLeftBottom 6.5s ease-in-out infinite",
           transformOrigin: "20% 100%"
@@ -273,7 +273,7 @@ export default function AksaraHeroSection({
       <img
         src={pohonKananBawahPng}
         alt="Pohon Kanan Bawah"
-        className="absolute bottom-0 right-[-12%] xs:right-[-8%] sm:right-[-4%] w-[76%] xs:w-[68%] sm:w-[54%] max-w-[500px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
+        className="absolute bottom-0 right-[-12%] xs:right-[-8%] sm:right-[-4%] w-[110%] xs:w-[68%] sm:w-[54%] max-w-[500px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
         style={{
           animation: "windSwayTreeRightBottom 7.2s ease-in-out infinite",
           transformOrigin: "80% 100%"

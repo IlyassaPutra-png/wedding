@@ -891,13 +891,13 @@ function useCountdown(targetMs: number) {
 
 /* ─── Intersection Observer Hook ────────────────────────── */
 function useInView(
-  options: number | { threshold?: number; rootMargin?: string; once?: boolean } = { threshold: 0.05, rootMargin: "0px 0px 0px 0px", once: true }
+  options: number | { threshold?: number; rootMargin?: string; once?: boolean } = { threshold: 0.05, rootMargin: "0px", once: true }
 ) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   const threshold = typeof options === "number" ? options : options.threshold ?? 0.05;
-  const rootMargin = typeof options === "number" ? "0px 0px 0px 0px" : options.rootMargin ?? "0px 0px 0px 0px";
+  const rootMargin = typeof options === "number" ? "0px" : options.rootMargin ?? "0px";
   const once = typeof options === "number" ? true : options.once ?? true;
 
   useEffect(() => {
@@ -925,28 +925,26 @@ function useFadeIn(threshold = 0.1) { return useInView(threshold); }
 type AnimVariant = "up" | "left" | "right" | "zoom" | "popIn" | "center" | "fade";
 
 function FadeSection({
-  children, className = "", variant = "up", delay = 0,
+  children, className = "", delay = 0, variant = "up",
 }: {
-  children: React.ReactNode; className?: string; variant?: AnimVariant; delay?: number;
+  children: React.ReactNode; className?: string; delay?: number; variant?: AnimVariant;
 }) {
-  const { ref, visible } = useInView();
+  const { ref, visible } = useInView(0.15);
 
   const style: React.CSSProperties = (() => {
-    if (variant === "popIn") {
-      return {
-        opacity: visible ? 1 : 0,
-        transform: visible ? "none" : "scale(0.75) translateY(20px)",
-        transition: `opacity 0.6s cubic-bezier(0.34,1.56,0.64,1) ${delay}ms,
-                     transform 0.6s cubic-bezier(0.34,1.56,0.64,1) ${delay}ms`,
-      };
-    }
-    const init: Record<string, string> = {
-      up: "translateY(34px)", left: "translateX(-45px)",
-      right: "translateX(45px)", zoom: "scale(0.92)", center: "translateY(28px) scale(0.98)", fade: "none",
-    };
+    const hiddenTransform = {
+      up: "translateY(36px)",
+      left: "translateX(-36px)",
+      right: "translateX(36px)",
+      zoom: "scale(0.92)",
+      popIn: "scale(0.85)",
+      center: "scale(0.95)",
+      fade: "none",
+    }[variant];
+
     return {
       opacity: visible ? 1 : 0,
-      transform: visible ? "none" : init[variant] ?? "translateY(34px)",
+      transform: visible ? "none" : hiddenTransform,
       transition: `opacity 0.8s cubic-bezier(0.22,1,0.36,1) ${delay}ms,
                    transform 0.8s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
     };
@@ -960,7 +958,7 @@ function SectionReveal({
 }: {
   children: React.ReactNode; className?: string; delay?: number;
 }) {
-  const { ref, visible } = useInView(0.15);
+  const { ref, visible } = useInView(0.05);
   return (
     <div
       ref={ref}
@@ -984,32 +982,36 @@ function StaggerChildren({
   children: React.ReactNode; className?: string;
   staggerMs?: number; baseDelay?: number; variant?: AnimVariant;
 }) {
-  const { ref, visible } = useInView(0.07);
+  const { ref, visible } = useInView(0.05);
   const arr = Array.isArray(children) ? children : [children];
 
   const getStyle = (i: number): React.CSSProperties => {
-    const d = baseDelay + i * staggerMs;
-    if (variant === "popIn") return {
-      opacity: visible ? 1 : 0,
-      transform: visible ? "none" : "scale(0.65) translateY(28px)",
-      transition: `opacity 0.55s cubic-bezier(0.34,1.56,0.64,1) ${d}ms,
-                   transform 0.55s cubic-bezier(0.34,1.56,0.64,1) ${d}ms`,
-    };
-    const init: Record<string, string> = {
-      up: "translateY(44px)", left: "translateX(-50px)",
-      right: "translateX(50px)", zoom: "scale(0.88)", fade: "none",
-    };
+    const delay = baseDelay + i * staggerMs;
+    const hiddenTransform = {
+      up: "translateY(28px)",
+      left: "translateX(-28px)",
+      right: "translateX(28px)",
+      zoom: "scale(0.9)",
+      popIn: "scale(0.8)",
+      center: "scale(0.93)",
+      fade: "none",
+    }[variant];
+
     return {
       opacity: visible ? 1 : 0,
-      transform: visible ? "none" : (init[variant] ?? "translateY(44px)"),
-      transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${d}ms,
-                   transform 0.7s cubic-bezier(0.22,1,0.36,1) ${d}ms`,
+      transform: visible ? "none" : hiddenTransform,
+      transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms,
+                   transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
     };
   };
 
   return (
     <div ref={ref} className={className}>
-      {arr.map((child, i) => <div key={i} style={getStyle(i)}>{child}</div>)}
+      {arr.map((child, i) => (
+        <div key={i} style={getStyle(i)}>
+          {child}
+        </div>
+      ))}
     </div>
   );
 }
@@ -1041,19 +1043,17 @@ function SectionHeader({
 }: {
   label: string; title: string; description?: string; light?: boolean;
 }) {
-  const { ref, visible } = useInView(0.15);
-  const gold = "#C7A86D";
-  const titleColor = "#4A3A32";
-  const descColor = "#8A7560";
+  const { ref, visible } = useInView(0.05);
+  const gold = "#7A5A1A";
+  const titleColor = "#2B1D14";
 
   return (
-    <div ref={ref} className="text-center mb-14">
+    <div ref={ref} className="text-center mb-10">
       {/* Badge */}
       <div style={{
         overflow: "hidden", display: "inline-block", marginBottom: "0.75rem",
       }}>
-        <p className="text-xs tracking-[0.45em] uppercase" style={{
-          color: gold, fontWeight: 300,
+        <p className="text-xs tracking-[0.45em] uppercase font-bold text-[#7A5A1A] drop-shadow-xs" style={{
           transform: visible ? "translateY(0)" : "translateY(120%)",
           opacity: visible ? 1 : 0,
           transition: "transform 0.7s cubic-bezier(0.16,1,0.3,1) 0ms, opacity 0.5s ease 0ms",
@@ -1358,8 +1358,8 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
         <SectionHeader label="Our Journey Together" title="Our Love Story" light={false} />
       </div>
 
-      {/* Full-Width Edge-to-Edge Soft Pink Continuous Shape Container */}
-      <div className="relative z-20 w-full bg-gradient-to-b from-[#F8ECE8]/90 via-[#F5E6E1]/95 to-[#F8ECE8]/90 backdrop-blur-md border-y border-[#E5C7C0]/90 shadow-[0_16px_48px_rgba(110,65,55,0.12)] py-10 px-4 sm:px-6">
+      {/* Full-Width Edge-to-Edge Pink Glass Shape Container */}
+      <div className="relative z-20 w-full bg-[#F6DDD8]/85 backdrop-blur-md border-y border-[#D8B6B0] shadow-md py-10 px-4 sm:px-6">
         <div className="max-w-md mx-auto">
           {/* Top Decorative Soft Rose Accent Line */}
           <div className="w-full h-1.5 bg-gradient-to-r from-[#C7A86D] via-[#E8C7C0] to-[#C7A86D] rounded-full mb-6" />
@@ -1401,7 +1401,7 @@ function GalleryScrollCard({
           observer.disconnect();
         }
       },
-      { threshold: 0.15, rootMargin: "-20% 0px -20% 0px" }
+      { threshold: 0.1, rootMargin: "-15% 0px -15% 0px" }
     );
     if (cardRef.current) observer.observe(cardRef.current);
     return () => observer.disconnect();
@@ -1411,28 +1411,28 @@ function GalleryScrollCard({
     <div
       ref={cardRef}
       onClick={onSelect}
-      className={`relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-[1100ms] cubic-bezier(0.16, 1, 0.3, 1) transform ${
+      className={`relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-[1400ms] cubic-bezier(0.16, 1, 0.3, 1) transform ${
         photo.isWide ? "col-span-2" : "col-span-1"
       } ${
         visible
           ? "opacity-100 translate-y-0 scale-100"
-          : "opacity-0 translate-y-12 scale-90"
+          : "opacity-0 translate-y-10 scale-95"
       }`}
       style={{
-        transitionDelay: `${(index % 3) * 110}ms`,
-        boxShadow: "0 6px 20px rgba(74, 58, 50, 0.12)",
+        transitionDelay: `${(index % 3) * 120}ms`,
+        boxShadow: "0 8px 24px rgba(74, 58, 50, 0.14)",
       }}
     >
       <div className={`w-full ${photo.aspect} relative overflow-hidden group`}>
         <img
           src={photo.src}
           alt={`Gallery item ${index + 1}`}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-[#4A3A32]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full bg-[#C7A86D] text-white flex items-center justify-center shadow-lg">
-            <Heart size={14} fill="currentColor" />
+          <div className="w-9 h-9 rounded-full bg-[#C7A86D] text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+            <Heart size={16} fill="currentColor" />
           </div>
         </div>
       </div>
@@ -1443,27 +1443,27 @@ function GalleryScrollCard({
 function GallerySection({ photos }: { photos?: any[] }) {
   const galleryItems: GalleryPhotoItem[] = [
     // Row 1 (3 vertical photos)
-    { id: 1, src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 2, src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 3, src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 1, src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 2, src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 3, src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
     // Row 2 (1 vertical photo left, 1 wide horizontal photo span-2 right)
-    { id: 4, src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 5, src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1000&h=650&fit=crop&auto=format", aspect: "aspect-[16/10]", isWide: true },
+    { id: 4, src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 5, src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&h=800&fit=crop&auto=format", aspect: "aspect-[16/10]", isWide: true },
     // Row 3 (3 vertical photos)
-    { id: 6, src: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 7, src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 8, src: "https://images.unsplash.com/photo-1472653431158-6364773b2a56?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 6, src: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 7, src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 8, src: "https://images.unsplash.com/photo-1472653431158-6364773b2a56?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
     // Row 4 (1 wide horizontal photo span-2 left, 1 vertical photo right)
-    { id: 9, src: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=1000&h=650&fit=crop&auto=format", aspect: "aspect-[16/10]", isWide: true },
-    { id: 10, src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 9, src: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=1200&h=800&fit=crop&auto=format", aspect: "aspect-[16/10]", isWide: true },
+    { id: 10, src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
     // Row 5 (3 vertical photos)
-    { id: 11, src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 12, src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 13, src: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 11, src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 12, src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 13, src: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
     // Row 6 (3 vertical photos)
-    { id: 14, src: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 15, src: "https://images.unsplash.com/photo-1513278974582-3e1b4a4fa21e?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 16, src: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=600&h=800&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 14, src: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 15, src: "https://images.unsplash.com/photo-1513278974582-3e1b4a4fa21e?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 16, src: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
   ];
 
   const [activeLightbox, setActiveLightbox] = useState<number | null>(null);
@@ -1475,11 +1475,11 @@ function GallerySection({ photos }: { photos?: any[] }) {
       <SectionBirdsFlock delay={3} top="12vh" />
       <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.85} />
 
-      <div className="relative z-20 max-w-md mx-auto">
+      <div className="relative z-20 max-w-lg mx-auto">
         <SectionHeader label="Captured Moments" title="Our Gallery" light={false} />
 
         {/* 3-Column Grid matching Screenshot */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-2.5 mt-6">
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5 mt-6">
           {galleryItems.map((photo, index) => (
             <GalleryScrollCard
               key={photo.id}
@@ -1592,6 +1592,7 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
     <section id="gift" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
       <FloatingButterflies count={2} />
       <SectionBackgroundPhoto src={bg5Png} opacity={0.16} />
+      <SectionBirdsFlock delay={2} top="8vh" />
       <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.85} />
       <div className="relative z-20 max-w-md mx-auto">
         <SectionReveal className="relative z-10">
@@ -1604,7 +1605,7 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
           <div className="space-y-6">
 
             {/* ── Envelope / QRIS card ── */}
-            <div className="rounded-3xl overflow-hidden bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]">
+            <div className="rounded-3xl overflow-hidden bg-white/20 backdrop-blur-[3px] border border-[#C7A86D]/35 shadow-sm transition-all duration-300">
               {/* Envelope closed state */}
               {!envelopeOpen && (
                 <div className="flex flex-col items-center text-center px-6 py-10">
@@ -1695,7 +1696,7 @@ function GiftSection({ copied, handleCopy }: { copied: string | null; handleCopy
             ].map((b) => (
               <div
                 key={b.bank}
-                className="rounded-2xl p-4 flex items-center justify-between gap-3 bg-white/95 border border-[#C7A86D]/30 shadow-md"
+                className="rounded-2xl p-4 flex items-center justify-between gap-3 bg-white/20 backdrop-blur-[3px] border border-[#C7A86D]/35 shadow-sm transition-all duration-300"
               >
                 <div>
                   <p className="text-[10px] tracking-[0.3em] uppercase text-[#C7A86D] font-semibold">{b.bank}</p>
@@ -1781,25 +1782,25 @@ function AddToCalendarMenu({ eventTitle, dateIsoStart, dateIsoEnd, locationStr, 
   };
 
   return (
-    <div className="relative mt-6 w-full z-30">
+    <div className={`relative mt-6 w-full ${open ? 'z-[100]' : 'z-30'}`}>
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="w-full py-3 px-4 rounded-full text-xs uppercase tracking-widest bg-gradient-to-r from-[#F3DDD7] via-[#F8ECE8] to-[#F3DDD7] border border-[#C7A86D]/50 text-[#4A3A32] font-bold hover:bg-[#C7A86D] hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95"
+        className="w-full py-3 px-4 rounded-full text-xs uppercase tracking-widest bg-gradient-to-r from-[#F3DDD7] via-[#F8ECE8] to-[#F3DDD7] border border-[#C7A86D]/50 text-[#2B1D14] font-bold hover:bg-[#C7A86D] hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95"
       >
-        <Calendar size={15} className="text-[#C7A86D]" />
+        <Calendar size={15} className="text-[#7A5A1A]" />
         <span>Add to Calendar</span>
         <ChevronDown size={14} className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-full mt-2 z-40 rounded-2xl bg-white/98 backdrop-blur-xl border border-[#C7A86D]/40 shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute left-0 right-0 top-full mt-2 z-[100] rounded-2xl bg-white/98 backdrop-blur-xl border border-[#C7A86D]/40 shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200">
           <a
             href={googleUrl}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#FAF5EE] text-xs text-[#4A3A32] font-semibold transition-colors"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#FAF5EE] text-xs text-[#2B1D14] font-bold transition-colors"
           >
             <span className="w-6 h-6 rounded-full bg-[#EA4335]/15 text-[#EA4335] flex items-center justify-center font-bold text-[11px]">G</span>
             <span>Google Calendar</span>
@@ -2277,31 +2278,31 @@ export default function App() {
           {/* Transparent Full-Width Mobile Shape Overlay */}
           <div className="relative z-20 w-full px-4 sm:px-6">
             <SectionReveal className="relative z-10 w-full">
-              <div className="w-full bg-white/20 backdrop-blur-[3px] rounded-2xl py-10 px-5 sm:px-8 border border-[#C7A86D]/30 shadow-sm transition-all duration-300">
+              <div className="w-full bg-white/40 backdrop-blur-md rounded-2xl py-10 px-5 sm:px-8 border border-[#C7A86D]/45 shadow-md transition-all duration-300">
                 {/* Monogram Header Logo (R | A) */}
                 <div className="flex items-center justify-center gap-3 mb-5">
-                  <span className="font-serif text-3xl sm:text-4xl font-light text-[#4A3A32] tracking-wider">R</span>
-                  <div className="w-[1.5px] h-8 bg-[#4A3A32]/60"></div>
-                  <span className="font-script text-3xl sm:text-4xl text-[#4A3A32]" style={{ fontFamily: "'Great Vibes', cursive" }}>A</span>
+                  <span className="font-serif text-3xl sm:text-4xl font-bold text-[#2B1D14] tracking-wider">R</span>
+                  <div className="w-[2px] h-8 bg-[#2B1D14]"></div>
+                  <span className="font-script text-3xl sm:text-4xl font-bold text-[#2B1D14]" style={{ fontFamily: "'Great Vibes', cursive" }}>A</span>
                 </div>
 
-                <p className="text-[11px] tracking-[0.35em] uppercase text-[#C7A86D] font-semibold mb-2">With Joy We Announce</p>
+                <p className="text-[11px] tracking-[0.35em] uppercase text-[#7A5A1A] font-bold mb-2">With Joy We Announce</p>
                 
-                <h2 className="font-script text-4xl sm:text-5xl text-[#4A3A32] mb-6 leading-tight" style={{ fontFamily: "'Great Vibes', cursive" }}>
+                <h2 className="font-script text-4xl sm:text-5xl text-[#2B1D14] font-bold mb-6 leading-tight" style={{ fontFamily: "'Great Vibes', cursive" }}>
                   We Found Love
                 </h2>
 
-                <p className="font-serif italic text-[#4A3A32]/90 text-sm sm:text-base leading-relaxed mb-5 max-w-md mx-auto">
+                <p className="font-serif italic text-[#2B1D14] text-sm sm:text-base font-semibold leading-relaxed mb-5 max-w-md mx-auto">
                   "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir."
                 </p>
                 
-                <p className="text-xs sm:text-sm tracking-wider text-[#4A3A32] font-serif mb-6">
-                  - <span className="underline underline-offset-4 font-semibold">QS. Ar-Rum</span> : 21 -
+                <p className="text-xs sm:text-sm tracking-wider text-[#7A5A1A] font-serif font-bold mb-6">
+                  - <span className="underline underline-offset-4 font-bold">QS. Ar-Rum</span> : 21 -
                 </p>
 
-                <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#C7A86D]/60 to-transparent mx-auto mb-6"></div>
+                <div className="w-24 h-[1.5px] bg-gradient-to-r from-transparent via-[#C7A86D] to-transparent mx-auto mb-6"></div>
 
-                <p className="text-xs sm:text-sm leading-relaxed text-[#4A3A32]/85 font-light max-w-md mx-auto">
+                <p className="text-xs sm:text-sm leading-relaxed text-[#2B1D14] font-bold max-w-md mx-auto">
                   Dengan penuh cinta dan rasa syukur yang melimpah, kami dengan bahagia mengundang kalian untuk merayakan bersatunya dua hati kami. Kehadiran kalian akan membuat hari istimewa kami menjadi sempurna — dan selalu terkenang dalam ingatan kami.
                 </p>
               </div>
@@ -2439,66 +2440,68 @@ export default function App() {
         <SectionBackgroundPhoto src={bg4Png} opacity={0.16} />
         <SectionBirdsFlock delay={4} top="10vh" />
         <SideTrees leftTree={pohon2Png} rightTree={pohon7Png} opacity={0.85} />
-        <div className="relative z-20 max-w-md mx-auto">
-          <SectionReveal className="relative z-10">
-            <SectionHeader label="Save The Date" title="Wedding Events" light={false} />
-            <StaggerChildren className="space-y-6" variant="up" staggerMs={150} baseDelay={80}>
-              {[
-                {
-                  title: "Akad Nikah",
-                  subtitle: "Ijab Kabul",
-                  date: "Sabtu, 20 September 2026",
-                  time: "08:00 – 11:00 WIB",
-                  location: "Al-Ikhlas Grand Mosque",
-                  address: "Jl. Sudirman No. 12, Jakarta Pusat",
-                  icon: "✦",
-                },
-                {
-                  title: "Reception",
-                  subtitle: "Resepsi Pernikahan",
-                  date: "Sabtu, 20 September 2026",
-                  time: "12:00 – 21:00 WIB",
-                  location: "The Ivory Palace Grand Ballroom",
-                  address: "Jl. Gatot Subroto No. 88, Jakarta Selatan",
-                  icon: "✦",
-                },
-              ].map((ev) => (
-                <div
-                  key={ev.title}
-                  className="rounded-3xl p-6 relative overflow-hidden bg-white/95 backdrop-blur-md border border-[#C7A86D]/30 shadow-[0_12px_32px_rgba(74,58,50,0.1)]"
-                >
-                  <div className="absolute top-4 right-4 opacity-20 text-4xl text-[#C7A86D] font-serif">
-                    {ev.icon}
-                  </div>
-                  <p className="text-[10px] tracking-[0.3em] uppercase mb-1 text-[#C7A86D] font-semibold">{ev.subtitle}</p>
-                  <h3 className="font-serif text-2xl text-[#4A3A32] font-normal">{ev.title}</h3>
-                  <div className="mt-5 space-y-3">
-                    <div className="flex items-start gap-3 text-[#4A3A32]/85 text-xs">
-                      <Calendar size={15} className="text-[#C7A86D] mt-0.5 flex-shrink-0" />
-                      <span>{ev.date}</span>
+        <div className="relative z-30 max-w-md mx-auto">
+          <SectionReveal className="relative z-10 w-full">
+            <div className="w-full bg-white/35 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-[#C7A86D]/40 shadow-md transition-all duration-300">
+              <SectionHeader label="Save The Date" title="Wedding Events" light={false} />
+              <StaggerChildren className="space-y-6" variant="up" staggerMs={150} baseDelay={80}>
+                {[
+                  {
+                    title: "Akad Nikah",
+                    subtitle: "Ijab Kabul",
+                    date: "Sabtu, 20 September 2026",
+                    time: "08:00 – 11:00 WIB",
+                    location: "Al-Ikhlas Grand Mosque",
+                    address: "Jl. Sudirman No. 12, Jakarta Pusat",
+                    icon: "✦",
+                  },
+                  {
+                    title: "Reception",
+                    subtitle: "Resepsi Pernikahan",
+                    date: "Sabtu, 20 September 2026",
+                    time: "12:00 – 21:00 WIB",
+                    location: "The Ivory Palace Grand Ballroom",
+                    address: "Jl. Gatot Subroto No. 88, Jakarta Selatan",
+                    icon: "✦",
+                  },
+                ].map((ev) => (
+                  <div
+                    key={ev.title}
+                    className="rounded-2xl p-5 sm:p-6 relative overflow-visible bg-white/80 backdrop-blur-md border border-[#C7A86D]/45 shadow-sm transition-all duration-300 hover:shadow-md"
+                  >
+                    <div className="absolute top-4 right-4 opacity-30 text-4xl text-[#7A5A1A] font-serif">
+                      {ev.icon}
                     </div>
-                    <div className="flex items-start gap-3 text-[#4A3A32]/85 text-xs">
-                      <Clock size={15} className="text-[#C7A86D] mt-0.5 flex-shrink-0" />
-                      <span>{ev.time}</span>
-                    </div>
-                    <div className="flex items-start gap-3 text-[#4A3A32]/85 text-xs">
-                      <MapPin size={15} className="text-[#C7A86D] mt-0.5 flex-shrink-0" />
-                      <div>
-                        <p className="font-medium text-[#4A3A32] text-sm">{ev.location}</p>
-                        <p className="text-[11px] text-[#8A7560] mt-0.5">{ev.address}</p>
+                    <p className="text-[11px] tracking-[0.3em] uppercase mb-1 text-[#7A5A1A] font-bold">{ev.subtitle}</p>
+                    <h3 className="font-serif text-2xl text-[#2B1D14] font-bold">{ev.title}</h3>
+                    <div className="mt-4 space-y-2.5">
+                      <div className="flex items-start gap-3 text-[#2B1D14] text-xs font-semibold">
+                        <Calendar size={16} className="text-[#7A5A1A] mt-0.5 flex-shrink-0" />
+                        <span className="font-bold">{ev.date}</span>
+                      </div>
+                      <div className="flex items-start gap-3 text-[#2B1D14] text-xs font-semibold">
+                        <Clock size={16} className="text-[#7A5A1A] mt-0.5 flex-shrink-0" />
+                        <span className="font-bold">{ev.time}</span>
+                      </div>
+                      <div className="flex items-start gap-3 text-[#2B1D14] text-xs font-semibold">
+                        <MapPin size={16} className="text-[#7A5A1A] mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="font-bold text-[#2B1D14] text-sm">{ev.location}</p>
+                          <p className="text-[11px] text-[#5A4535] font-medium mt-0.5">{ev.address}</p>
+                        </div>
                       </div>
                     </div>
+                    <AddToCalendarMenu
+                      eventTitle={ev.title}
+                      dateIsoStart={ev.title.includes("Akad") ? "20260920T080000Z" : "20260920T120000Z"}
+                      dateIsoEnd={ev.title.includes("Akad") ? "20260920T110000Z" : "20260920T210000Z"}
+                      locationStr={ev.location}
+                      addressStr={ev.address}
+                    />
                   </div>
-                  <AddToCalendarMenu
-                    eventTitle={ev.title}
-                    dateIsoStart={ev.title.includes("Akad") ? "20260920T080000Z" : "20260920T120000Z"}
-                    dateIsoEnd={ev.title.includes("Akad") ? "20260920T110000Z" : "20260920T210000Z"}
-                    locationStr={ev.location}
-                    addressStr={ev.address}
-                  />
-                </div>
-              ))}
-            </StaggerChildren>
+                ))}
+              </StaggerChildren>
+            </div>
           </SectionReveal>
         </div>
       </section>
@@ -2596,7 +2599,7 @@ export default function App() {
           <SectionReveal className="relative z-10">
             <SectionHeader label="Will You Join Us?" title="RSVP & Konfirmasi" light={false} />
             {rsvpSent ? (
-              <div className="text-center py-10 px-6 rounded-3xl bg-white/95 backdrop-blur-md border border-[#C7A86D]/40 shadow-[0_16px_40px_rgba(74,58,50,0.12)]">
+              <div className="text-center py-10 px-6 rounded-3xl bg-white/20 backdrop-blur-[3px] border border-[#C7A86D]/35 shadow-sm transition-all duration-300">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#F3DDD7] to-[#C7A86D] text-white flex items-center justify-center mx-auto mb-4 shadow-lg animate-bounce">
                   <Heart size={32} className="fill-white text-white" />
                 </div>
@@ -2625,7 +2628,7 @@ export default function App() {
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleRsvp} className="space-y-4 rounded-3xl p-6 sm:p-7 bg-white/95 backdrop-blur-md border border-[#C7A86D]/40 shadow-[0_16px_40px_rgba(74,58,50,0.1)]">
+              <form onSubmit={handleRsvp} className="space-y-4 rounded-3xl p-6 sm:p-7 bg-white/20 backdrop-blur-[3px] border border-[#C7A86D]/35 shadow-sm transition-all duration-300">
                 <div>
                   <label className="block text-[10px] tracking-widest uppercase text-[#8B6B23] font-bold mb-1.5 flex items-center gap-1.5">
                     <span>Nama Lengkap</span>
@@ -2705,6 +2708,7 @@ export default function App() {
       <section id="wishes" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
         <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg5Png} opacity={0.15} />
+        <SectionBirdsFlock delay={1} top="8vh" />
         <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.8} />
         <div className="relative z-20 max-w-md mx-auto">
           <SectionReveal className="relative z-10">
@@ -2712,7 +2716,7 @@ export default function App() {
 
             {/* Live Interactive Stats Bar */}
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 backdrop-blur-md border border-[#C7A86D]/30 shadow-xs">
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/20 backdrop-blur-[3px] border border-[#C7A86D]/35 shadow-sm transition-all duration-300">
                 <div className="w-9 h-9 rounded-xl bg-[#F3DDD7] text-[#C7A86D] flex items-center justify-center flex-shrink-0">
                   <MessageSquare size={18} />
                 </div>
@@ -2721,7 +2725,7 @@ export default function App() {
                   <p className="text-[10px] text-[#8A7560] font-medium tracking-wider uppercase mt-0.5">Total Ucapan</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/90 backdrop-blur-md border border-[#C7A86D]/30 shadow-xs">
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/20 backdrop-blur-[3px] border border-[#C7A86D]/35 shadow-sm transition-all duration-300">
                 <div className="w-9 h-9 rounded-xl bg-[#E8F3E8] text-[#2E7D32] flex items-center justify-center flex-shrink-0">
                   <CheckCircle2 size={18} />
                 </div>
@@ -2733,7 +2737,7 @@ export default function App() {
             </div>
 
             {/* Aksara Style Framed Wishes Box Container */}
-            <div className="rounded-3xl p-4 sm:p-5 bg-white/95 backdrop-blur-md border border-[#C7A86D]/35 shadow-[0_16px_40px_rgba(74,58,50,0.08)] relative overflow-hidden">
+            <div className="rounded-3xl p-4 sm:p-5 bg-white/20 backdrop-blur-[3px] border border-[#C7A86D]/35 shadow-sm relative overflow-hidden transition-all duration-300">
               
               {/* Box Top Header */}
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#C7A86D]/20">
