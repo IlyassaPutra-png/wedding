@@ -1884,9 +1884,33 @@ export default function App() {
     return Math.max(wishesAttending, rsvpsAttending + 12);
   }, [wishes, rsvps]);
   const [isMuted, setIsMuted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const weddingDateMs = useMemo(() => new Date("2026-09-20T08:00:00").getTime(), []);
   const countdown = useCountdown(weddingDateMs);
+
+  // Track scroll position to show navbar only after scrolling down
+  useEffect(() => {
+    if (!isOpened) {
+      setIsScrolled(false);
+      return;
+    }
+
+    const handleScroll = () => {
+      if (window.scrollY > 60) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isOpened]);
 
   const handleStartOpening = () => {
     if (openingStage !== 'closed') return;
@@ -1906,6 +1930,7 @@ export default function App() {
     // Step 3: As camera enters deep through the gate hole, reveal the main invitation landing page
     setTimeout(() => {
       setIsOpened(true);
+      window.scrollTo(0, 0);
       setOpeningStage('revealing');
     }, 4500);
 
@@ -2828,12 +2853,17 @@ export default function App() {
       </footer>
 
       {isOpened && (
-        <nav className="fixed left-1/2 z-50 -translate-x-1/2 w-[min(95vw,460px)] rounded-full border border-[#C7A86D]/35 bg-[#F8F5F0]/90 px-1.5 py-1.5 sm:px-2 sm:py-2 shadow-[0_10px_30px_rgba(74,58,50,0.15)] backdrop-blur-xl"
+        <nav
+          className={`fixed left-1/2 z-50 -translate-x-1/2 w-[min(95vw,460px)] rounded-full border border-[#C7A86D]/35 bg-[#F8F5F0]/90 px-1.5 py-1.5 sm:px-2 sm:py-2 shadow-[0_10px_30px_rgba(74,58,50,0.15)] backdrop-blur-xl transition-all duration-500 transform ${
+            isScrolled
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 translate-y-10 pointer-events-none"
+          }`}
           style={{ bottom: "calc(env(safe-area-inset-bottom, 1rem) + 0.75rem)" }}
         >
           <div className="flex items-center justify-between gap-0.5">
             {[
-              { href: "#welcome", label: "Home", Icon: Home },
+              { href: "#hero", label: "Home", Icon: Home },
               { href: "#couple", label: "Couple", Icon: Heart },
               { href: "#events", label: "Events", Icon: Calendar },
               { href: "#location", label: "Location", Icon: MapPin },

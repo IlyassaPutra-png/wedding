@@ -94,7 +94,7 @@ export default function AksaraHeroSection({
   ];
 
   return (
-    <section className="relative w-full h-[90vh] sm:h-[95vh] min-h-[580px] max-h-[880px] overflow-hidden bg-[#F5EFE6] select-none flex flex-col justify-between items-center shadow-lg">
+    <section id="hero" className="relative w-full h-screen min-h-[100dvh] overflow-hidden bg-[#F5EFE6] select-none flex flex-col justify-between items-center shadow-lg">
       
       {/* ── Bulletproof Inline CSS Keyframe Animations ────────────── */}
       <style>{`
