@@ -905,15 +905,15 @@ function useCountdown(targetMs: number) {
   return time;
 }
 
-/* ─── Intersection Observer Hook ────────────────────────── */
+/* ─── Intersection Observer Hook (Triggers center screen) ─── */
 function useInView(
-  options: number | { threshold?: number; rootMargin?: string; once?: boolean } = { threshold: 0.05, rootMargin: "0px", once: true }
+  options: number | { threshold?: number; rootMargin?: string; once?: boolean } = { threshold: 0.1, rootMargin: "0px 0px -38% 0px", once: true }
 ) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
-  const threshold = typeof options === "number" ? options : options.threshold ?? 0.05;
-  const rootMargin = typeof options === "number" ? "0px" : options.rootMargin ?? "0px";
+  const threshold = typeof options === "number" ? options : options.threshold ?? 0.1;
+  const rootMargin = typeof options === "number" ? "0px 0px -38% 0px" : options.rootMargin ?? "0px 0px -38% 0px";
   const once = typeof options === "number" ? true : options.once ?? true;
 
   useEffect(() => {
@@ -1216,7 +1216,7 @@ interface StoryItemData {
 
 /* ─── Story Item Block (Inside Unified Soft Pink Continuous Shape Container) ─── */
 function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
-  const { ref, visible } = useInView({ threshold: 0.15, rootMargin: "0px 0px -40px 0px", once: true });
+  const { ref, visible } = useInView({ threshold: 0.1, rootMargin: "0px 0px -38% 0px", once: true });
   const isEven = idx % 2 === 0;
 
   // Cycle frame PNGs for rich variety
@@ -1234,9 +1234,9 @@ function StoryItemBlock({ item, idx }: { item: StoryItemData; idx: number }) {
         }}
       >
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7] text-[#4A3A32] border border-[#D8B6B0] shadow-sm">
-          <span>❖ {item.year}</span>
+          <span>❦ {item.year}</span>
           <span className="opacity-40">•</span>
-          <span>{item.date} ❖</span>
+          <span>{item.date} ❦</span>
         </div>
       </div>
 
@@ -1417,7 +1417,7 @@ function GalleryScrollCard({
           observer.disconnect();
         }
       },
-      { threshold: 0.05, rootMargin: "50px 0px 50px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -38% 0px" }
     );
     if (cardRef.current) observer.observe(cardRef.current);
     return () => observer.disconnect();
@@ -2138,10 +2138,10 @@ export default function App() {
   ];
 
   const timeline = [
-    { year: "2019", title: "First Meeting", desc: "Pandangan kami bertemu di sebuah pesta kebun yang penuh bunga. Sebuah tawa yang tulus menjadi percakapan yang tak terlupakan.", icon: "❖" },
-    { year: "2020", title: "First Date", desc: "Makan malam romantis dengan cahaya lilin di tepi sungai. Bintang-bintang berbaris, dan kami tahu sesuatu yang ajaib telah dimulai.", icon: "❖" },
-    { year: "2022", title: "Official Couple", desc: "Melewati berbagai musim dan cerita, kami menjadi rumah satu sama lain. Cinta semakin dalam di setiap harinya.", icon: "❖" },
-    { year: "2024", title: "The Proposal", desc: "Di bawah hujan bunga mawar dan cahaya keemasan, ia mengajukan pertanyaan itu — dan jawabannya adalah selamanya.", icon: "❖" },
+    { year: "2019", title: "First Meeting", desc: "Pandangan kami bertemu di sebuah pesta kebun yang penuh bunga. Sebuah tawa yang tulus menjadi percakapan yang tak terlupakan.", icon: "❦" },
+    { year: "2020", title: "First Date", desc: "Makan malam romantis dengan cahaya lilin di tepi sungai. Bintang-bintang berbaris, dan kami tahu sesuatu yang ajaib telah dimulai.", icon: "❦" },
+    { year: "2022", title: "Official Couple", desc: "Melewati berbagai musim dan cerita, kami menjadi rumah satu sama lain. Cinta semakin dalam di setiap harinya.", icon: "❦" },
+    { year: "2024", title: "The Proposal", desc: "Di bawah hujan bunga mawar dan cahaya keemasan, ia mengajukan pertanyaan itu — dan jawabannya adalah selamanya.", icon: "❦" },
   ];
 
   return (
@@ -2288,7 +2288,7 @@ export default function App() {
             }}
           >
             <p className="text-xs sm:text-sm tracking-[0.2em] text-[#6E5B48] font-light mb-3">
-              ❖ Buka pintu awal kisah kami ❖
+              ❦ Buka pintu awal kisah kami ❦
             </p>
 
             <button
@@ -2486,7 +2486,7 @@ export default function App() {
 
               {/* Target Date Badge */}
               <div className="mt-4 mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#F3DDD7]/80 text-[#4A3A32] border border-[#D8B6B0]">
-                <span>❖ Sabtu, 20 September 2026 ❖</span>
+                <span>❦ Sabtu, 20 September 2026 ❦</span>
               </div>
 
               {/* Live Animated Countdown Cards */}
@@ -2534,7 +2534,7 @@ export default function App() {
                     time: "08:00 – 11:00 WIB",
                     location: "Al-Ikhlas Grand Mosque",
                     address: "Jl. Sudirman No. 12, Jakarta Pusat",
-                    icon: "❖",
+                    icon: "❦",
                   },
                   {
                     title: "Reception",
@@ -2543,7 +2543,7 @@ export default function App() {
                     time: "12:00 – 21:00 WIB",
                     location: "The Ivory Palace Grand Ballroom",
                     address: "Jl. Gatot Subroto No. 88, Jakarta Selatan",
-                    icon: "❖",
+                    icon: "❦",
                   },
                 ].map((ev, index) => (
                   <div
@@ -2629,7 +2629,7 @@ export default function App() {
               {/* Venue Details & Information */}
               <div className="text-center space-y-3">
                 <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] uppercase tracking-widest font-semibold bg-[#F3DDD7]/90 text-[#4A3A32] border border-[#D8B6B0]">
-                  ❖ Grand Ballroom ❖
+                  ❦ Grand Ballroom ❦
                 </div>
                 <h3 className="font-serif text-2xl text-[#4A3A32] font-semibold">
                   The Ivory Palace Grand Ballroom
@@ -2826,7 +2826,7 @@ export default function App() {
               {/* Box Top Header */}
               <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#C7A86D]/20">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#C7A86D]">❖</span>
+                  <span className="text-xs text-[#C7A86D]">❦</span>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#4A3A32]">Daftar Doa & Ucapan</h4>
                 </div>
                 <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#F3DDD7] text-[#4A3A32] font-semibold border border-[#D8B6B0]">
@@ -2912,7 +2912,7 @@ export default function App() {
         <SectionBirdsFlock delay={2} top="6vh" />
         <SideTrees leftTree={pohon10Png} rightTree={pohon9Png} opacity={0.7} />
         <div className="relative z-20 max-w-sm mx-auto">
-          <SectionReveal className="relative z-10">
+          <div className="relative z-10 transition-all duration-700 opacity-100 translate-y-0">
             <p className="text-[10px] tracking-[0.4em] uppercase text-[#C7A86D] font-semibold mb-2">
               With All Our Love
             </p>
@@ -2937,7 +2937,7 @@ export default function App() {
             <p className="mt-8 text-[10px] text-[#8A7560] tracking-widest">
               Dibuat dengan cinta · #AisyahRizky2026
             </p>
-          </SectionReveal>
+          </div>
         </div>
       </footer>
 
@@ -2999,55 +2999,58 @@ export default function App() {
       </div>
 
       <style>{`
-        /* Continuous Lifelike Sway for Side Trees (Pohon Bergerak Seperti Hidup) */
+        /* Continuous Lifelike Sway for Side Trees (Pohon Bergerak Ekstra Smooth & Anggun) */
         @keyframes livingTreeSwayLeft {
           0% {
-            transform: rotate(0deg) scale(1) translate(0px, 0px);
+            transform: rotate3d(0, 0, 1, 0deg) translate3d(0px, 0px, 0);
           }
           20% {
-            transform: rotate(1.6deg) scale(1.015) translate(3px, -2px);
+            transform: rotate3d(0, 0, 1, 2.6deg) scale(1.015) translate3d(4px, -2px, 0);
           }
           40% {
-            transform: rotate(-1.2deg) scale(0.99) translate(-2px, 1px);
+            transform: rotate3d(0, 0, 1, 1.2deg) scale(1.005) translate3d(2px, -1px, 0);
           }
           60% {
-            transform: rotate(1.8deg) scale(1.02) translate(3px, -3px);
+            transform: rotate3d(0, 0, 1, -2.2deg) scale(0.99) translate3d(-3px, 1px, 0);
           }
           80% {
-            transform: rotate(0.8deg) scale(1.008) translate(1px, -1px);
+            transform: rotate3d(0, 0, 1, -0.8deg) scale(0.995) translate3d(-1px, 0px, 0);
           }
           100% {
-            transform: rotate(0deg) scale(1) translate(0px, 0px);
+            transform: rotate3d(0, 0, 1, 0deg) translate3d(0px, 0px, 0);
           }
         }
 
         @keyframes livingTreeSwayRight {
           0% {
-            transform: rotate(0deg) scale(1) translate(0px, 0px);
+            transform: rotate3d(0, 0, 1, 0deg) translate3d(0px, 0px, 0);
           }
-          25% {
-            transform: rotate(-1.6deg) scale(1.02) translate(-3px, -2px);
+          20% {
+            transform: rotate3d(0, 0, 1, -2.6deg) scale(1.015) translate3d(-4px, -2px, 0);
           }
-          50% {
-            transform: rotate(1.2deg) scale(0.99) translate(2px, 1px);
+          40% {
+            transform: rotate3d(0, 0, 1, -1.2deg) scale(1.005) translate3d(-2px, -1px, 0);
           }
-          75% {
-            transform: rotate(-1.4deg) scale(1.015) translate(-3px, -1px);
+          60% {
+            transform: rotate3d(0, 0, 1, 2.2deg) scale(0.99) translate3d(3px, 1px, 0);
+          }
+          80% {
+            transform: rotate3d(0, 0, 1, 0.8deg) scale(0.995) translate3d(1px, 0px, 0);
           }
           100% {
-            transform: rotate(0deg) scale(1) translate(0px, 0px);
+            transform: rotate3d(0, 0, 1, 0deg) translate3d(0px, 0px, 0);
           }
         }
 
         .animate-living-tree-left {
           transform-origin: bottom left;
-          animation: livingTreeSwayLeft 22s ease-in-out infinite;
+          animation: livingTreeSwayLeft 18s cubic-bezier(0.37, 0, 0.63, 1) infinite;
           will-change: transform;
         }
 
         .animate-living-tree-right {
           transform-origin: bottom right;
-          animation: livingTreeSwayRight 26s ease-in-out infinite 2s;
+          animation: livingTreeSwayRight 22s cubic-bezier(0.37, 0, 0.63, 1) infinite 2s;
           will-change: transform;
         }
 
