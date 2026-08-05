@@ -1350,24 +1350,24 @@ function LoveStorySection({ timeline }: { timeline?: any[] }) {
   );
 }
 
-/* ─── Gallery Section (Matching Exact Screenshot Grid & Scroll Reveal Animation) ─── */
+/* ─── Gallery Section (2-Column Grid with Ultra-Smooth Lightbox & Lazy Loading) ─── */
 interface GalleryPhotoItem {
   id: number;
   src: string;
-  aspect: string;
-  isWide?: boolean;
+  title?: string;
 }
 
 function GalleryScrollCard({
   photo,
   index,
-  onSelect
+  onSelect,
 }: {
   photo: GalleryPhotoItem;
   index: number;
   onSelect: () => void;
 }) {
   const [visible, setVisible] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1378,7 +1378,7 @@ function GalleryScrollCard({
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "-15% 0px -15% 0px" }
+      { threshold: 0.05, rootMargin: "50px 0px 50px 0px" }
     );
     if (cardRef.current) observer.observe(cardRef.current);
     return () => observer.disconnect();
@@ -1388,28 +1388,40 @@ function GalleryScrollCard({
     <div
       ref={cardRef}
       onClick={onSelect}
-      className={`relative cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-[1400ms] cubic-bezier(0.16, 1, 0.3, 1) transform ${
-        photo.isWide ? "col-span-2" : "col-span-1"
-      } ${
+      className={`relative cursor-pointer overflow-hidden rounded-2xl border border-[#C7A86D]/30 bg-[#FAF7F2] transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) transform hover:-translate-y-1 group ${
         visible
           ? "opacity-100 translate-y-0 scale-100"
-          : "opacity-0 translate-y-10 scale-95"
+          : "opacity-0 translate-y-8 scale-95"
       }`}
       style={{
-        transitionDelay: `${(index % 3) * 120}ms`,
-        boxShadow: "0 8px 24px rgba(74, 58, 50, 0.14)",
+        transitionDelay: `${(index % 2) * 90}ms`,
+        boxShadow: "0 10px 30px -5px rgba(74, 58, 50, 0.12)",
+        willChange: "transform, opacity",
       }}
     >
-      <div className={`w-full ${photo.aspect} relative overflow-hidden group`}>
+      <div className="w-full aspect-[4/5] relative overflow-hidden bg-[#EFE8DF]/60">
+        {!loaded && (
+          <div className="absolute inset-0 bg-gradient-to-r from-[#EFE8DF] via-[#FAF7F2] to-[#EFE8DF] animate-pulse" />
+        )}
         <img
           src={photo.src}
-          alt={`Gallery item ${index + 1}`}
-          className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+          alt={photo.title || `Gallery item ${index + 1}`}
+          onLoad={() => setLoaded(true)}
+          className={`w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105 ${
+            loaded ? "opacity-100 scale-100" : "opacity-0 scale-105"
+          }`}
           loading="lazy"
+          decoding="async"
         />
-        <div className="absolute inset-0 bg-[#4A3A32]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <div className="w-9 h-9 rounded-full bg-[#C7A86D] text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-            <Heart size={16} fill="currentColor" />
+        {/* Subtle overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2B1D14]/65 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-white font-serif text-sm font-medium tracking-wide drop-shadow-md">
+              {photo.title || "Pre-Wedding"}
+            </span>
+            <div className="w-8 h-8 rounded-full bg-[#C7A86D] text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+              <Heart size={14} fill="currentColor" />
+            </div>
           </div>
         </div>
       </div>
@@ -1419,31 +1431,45 @@ function GalleryScrollCard({
 
 function GallerySection({ photos }: { photos?: any[] }) {
   const galleryItems: GalleryPhotoItem[] = [
-    // Row 1 (3 vertical photos)
-    { id: 1, src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 2, src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 3, src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    // Row 2 (1 vertical photo left, 1 wide horizontal photo span-2 right)
-    { id: 4, src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 5, src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&h=800&fit=crop&auto=format", aspect: "aspect-[16/10]", isWide: true },
-    // Row 3 (3 vertical photos)
-    { id: 6, src: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 7, src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 8, src: "https://images.unsplash.com/photo-1472653431158-6364773b2a56?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    // Row 4 (1 wide horizontal photo span-2 left, 1 vertical photo right)
-    { id: 9, src: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=1200&h=800&fit=crop&auto=format", aspect: "aspect-[16/10]", isWide: true },
-    { id: 10, src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    // Row 5 (3 vertical photos)
-    { id: 11, src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 12, src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 13, src: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    // Row 6 (3 vertical photos)
-    { id: 14, src: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 15, src: "https://images.unsplash.com/photo-1513278974582-3e1b4a4fa21e?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
-    { id: 16, src: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800&h=1000&fit=crop&auto=format", aspect: "aspect-[3/4]" },
+    { id: 1, src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&auto=format&q=80", title: "Eternal Vows" },
+    { id: 2, src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&h=1000&fit=crop&auto=format&q=80", title: "Golden Moment" },
+    { id: 3, src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&h=1000&fit=crop&auto=format&q=80", title: "Pure Elegance" },
+    { id: 4, src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=1000&fit=crop&auto=format&q=80", title: "Whispers of Love" },
+    { id: 5, src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=1000&fit=crop&auto=format&q=80", title: "Hand in Hand" },
+    { id: 6, src: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&h=1000&fit=crop&auto=format&q=80", title: "Sweet Embrace" },
+    { id: 7, src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800&h=1000&fit=crop&auto=format&q=80", title: "Blooming Romance" },
+    { id: 8, src: "https://images.unsplash.com/photo-1472653431158-6364773b2a56?w=800&h=1000&fit=crop&auto=format&q=80", title: "Sunlit Memories" },
+    { id: 9, src: "https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&h=1000&fit=crop&auto=format&q=80", title: "Together Forever" },
+    { id: 10, src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=1000&fit=crop&auto=format&q=80", title: "Gentle Touch" },
+    { id: 11, src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=1000&fit=crop&auto=format&q=80", title: "Graceful Sunset" },
+    { id: 12, src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&h=1000&fit=crop&auto=format&q=80", title: "Love's Radiance" },
+    { id: 13, src: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=800&h=1000&fit=crop&auto=format&q=80", title: "Blissful Smile" },
+    { id: 14, src: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&h=1000&fit=crop&auto=format&q=80", title: "Romantic Walk" },
+    { id: 15, src: "https://images.unsplash.com/photo-1513278974582-3e1b4a4fa21e?w=800&h=1000&fit=crop&auto=format&q=80", title: "Forever Dream" },
+    { id: 16, src: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=800&h=1000&fit=crop&auto=format&q=80", title: "Sacred Joy" },
+    { id: 17, src: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=800&h=1000&fit=crop&auto=format&q=80", title: "Serenade of Hearts" },
+    { id: 18, src: "https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?w=800&h=1000&fit=crop&auto=format&q=80", title: "Golden Hour Smile" },
+    { id: 19, src: "https://images.unsplash.com/photo-1525258946800-98cfd641d0de?w=800&h=1000&fit=crop&auto=format&q=80", title: "Cherished Moments" },
+    { id: 20, src: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?w=800&h=1000&fit=crop&auto=format&q=80", title: "Timeless Beauty" },
+    { id: 21, src: "https://images.unsplash.com/photo-1509924603527-4c3a47659550?w=800&h=1000&fit=crop&auto=format&q=80", title: "Warm Embraces" },
+    { id: 22, src: "https://images.unsplash.com/photo-1519741347686-c1e0aadf4611?w=800&h=1000&fit=crop&auto=format&q=80", title: "Endless Devotion" },
+    { id: 23, src: "https://images.unsplash.com/photo-1524824267900-2fa9cbf7a506?w=800&h=1000&fit=crop&auto=format&q=80", title: "Enchanted Garden" },
+    { id: 24, src: "https://images.unsplash.com/photo-1507504031003-b417219a0fde?w=800&h=1000&fit=crop&auto=format&q=80", title: "Joyful Celebration" },
   ];
 
   const [activeLightbox, setActiveLightbox] = useState<number | null>(null);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (activeLightbox === null) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveLightbox(null);
+      else if (e.key === "ArrowLeft") setActiveLightbox((prev) => (prev !== null ? (prev - 1 + galleryItems.length) % galleryItems.length : 0));
+      else if (e.key === "ArrowRight") setActiveLightbox((prev) => (prev !== null ? (prev + 1) % galleryItems.length : 0));
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeLightbox, galleryItems.length]);
 
   return (
     <section id="gallery" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#FAF7F2] text-[#4A3A32]">
@@ -1452,11 +1478,11 @@ function GallerySection({ photos }: { photos?: any[] }) {
       <SectionBirdsFlock delay={3} top="12vh" />
       <SideTrees leftTree={pohon7Png} rightTree={pohon8Png} opacity={0.85} />
 
-      <div className="relative z-20 max-w-lg mx-auto">
+      <div className="relative z-20 max-w-xl sm:max-w-2xl mx-auto">
         <SectionHeader label="Captured Moments" title="Our Gallery" light={false} />
 
-        {/* 3-Column Grid matching Screenshot */}
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5 mt-6">
+        {/* 2-Column Grid (2 photos per row, larger & clearer) */}
+        <div className="grid grid-cols-2 gap-3.5 sm:gap-5 mt-8">
           {galleryItems.map((photo, index) => (
             <GalleryScrollCard
               key={photo.id}
@@ -1471,36 +1497,47 @@ function GallerySection({ photos }: { photos?: any[] }) {
       {/* Lightbox Modal */}
       {activeLightbox !== null && (
         <div
-          className="fixed inset-0 z-50 bg-[#F8F5F0]/95 backdrop-blur-xl flex flex-col items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-[#2B1D14]/80 backdrop-blur-xl flex flex-col items-center justify-center p-4 transition-all duration-300 animate-in fade-in duration-200"
           onClick={() => setActiveLightbox(null)}
         >
           <button
             onClick={() => setActiveLightbox(null)}
-            className="absolute top-5 right-5 text-[#4A3A32] hover:text-[#C7A86D] p-2 z-50"
+            className="absolute top-5 right-5 text-white/80 hover:text-white bg-black/30 hover:bg-black/50 p-2.5 rounded-full transition-all duration-200 z-50 cursor-pointer"
+            aria-label="Close Lightbox"
           >
-            <X size={28} />
+            <X size={24} />
           </button>
           <div
-            className="relative max-w-lg w-full max-h-[85vh] overflow-hidden rounded-2xl border border-[#C7A86D]/40 shadow-2xl bg-white"
+            className="relative max-w-xl w-full max-h-[85vh] overflow-hidden rounded-3xl border border-[#C7A86D]/40 shadow-2xl bg-white/95 backdrop-blur-md flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={galleryItems[activeLightbox].src}
-              alt="Gallery Lightbox"
-              className="w-full h-full object-contain max-h-[75vh] mx-auto rounded-t-xl"
-            />
-            <div className="flex justify-between items-center px-4 py-3 bg-[#FAF7F2] border-t border-[#D8B6B0]/40 text-[#4A3A32] text-xs font-medium">
-              <span>{activeLightbox + 1} / {galleryItems.length}</span>
-              <div className="flex gap-4">
+            <div className="relative w-full overflow-hidden bg-[#1A120C] flex items-center justify-center min-h-[50vh] max-h-[72vh]">
+              <img
+                src={galleryItems[activeLightbox].src}
+                alt={galleryItems[activeLightbox].title || "Gallery Lightbox"}
+                className="w-full h-full object-contain max-h-[72vh] mx-auto transition-all duration-500"
+                decoding="async"
+              />
+            </div>
+            <div className="flex justify-between items-center px-6 py-4 bg-[#FAF7F2] border-t border-[#C7A86D]/30 text-[#4A3A32]">
+              <div className="flex flex-col">
+                <span className="font-serif text-base font-bold text-[#2B1D14]">
+                  {galleryItems[activeLightbox].title || "Pre-Wedding"}
+                </span>
+                <span className="text-[11px] text-[#7A5A1A] font-semibold tracking-wider uppercase">
+                  {activeLightbox + 1} of {galleryItems.length}
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
                 <button
                   onClick={() => setActiveLightbox((prev) => (prev !== null ? (prev - 1 + galleryItems.length) % galleryItems.length : 0))}
-                  className="hover:underline uppercase tracking-wider text-[#C7A86D] font-semibold"
+                  className="px-3.5 py-1.5 rounded-full border border-[#C7A86D]/40 bg-white hover:bg-[#C7A86D] hover:text-white text-xs text-[#2B1D14] font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
                 >
                   ← Prev
                 </button>
                 <button
                   onClick={() => setActiveLightbox((prev) => (prev !== null ? (prev + 1) % galleryItems.length : 0))}
-                  className="hover:underline uppercase tracking-wider text-[#C7A86D] font-semibold"
+                  className="px-3.5 py-1.5 rounded-full border border-[#C7A86D]/40 bg-white hover:bg-[#C7A86D] hover:text-white text-xs text-[#2B1D14] font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
                 >
                   Next →
                 </button>
