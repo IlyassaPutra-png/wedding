@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Home, MapPin, Calendar, Clock, Copy, Check, Instagram, Facebook, Heart, ChevronDown, Send, Music, Volume2, VolumeX, X, Download, Users, MessageSquare, CheckCircle2, XCircle, HelpCircle, RefreshCw } from "lucide-react";
+import { Home, MapPin, Calendar, Clock, Copy, Check, Instagram, Facebook, Heart, ChevronDown, Send, Music, Volume2, VolumeX, X, Download, MessageSquare, CheckCircle2, XCircle, HelpCircle, RefreshCw } from "lucide-react";
 import AksaraHeroSection from "./components/AksaraHeroSection";
-import openinggSvg from "./components/gambar/openingg.svg";
 import musicTrack from "./components/Musik/nadin.mp3";
 import bungaOpeningKananSvg from "./components/gambar/bunga_opening_kanan.svg";
 import bungaOpeningKiriSvg from "./components/gambar/bungan_opening_kiri.svg";
@@ -14,37 +13,23 @@ import burungBaru2Png from "./components/gambar/burung/burungbaru2.png";
 import burungBaru3Png from "./components/gambar/burung/burungbaru3.png";
 import burungBaru4Png from "./components/gambar/burung/burungbaru4.png";
 import kupuPng from "./components/gambar/burung/kupu.png";
-import hitungMundurSvg from "./components/gambar/hitungmundur.svg";
 import bunga1Svg from "./components/gambar/1.svg";
 import kiriAtasSvg from "./components/gambar/kiriatas.svg";
 import kananAtasSvg from "./components/gambar/kananatas.svg";
 import kiriBawahSvg from "./components/gambar/kiribawah.svg";
 import kananBawahSvg from "./components/gambar/kananbawah.svg";
-import bunga2Svg from "./components/gambar/2.svg";
-import rumahSvg from "./components/gambar/rumah.svg";
-import bg80Svg from "./components/gambar/80.svg";
-import bg85Svg from "./components/gambar/85.svg";
-import bunga2Png from "./components/gambar/bunga/bunga2.png";
 import bunga8Png from "./components/gambar/bunga/bunga8.png";
 import bunga9Png from "./components/gambar/bunga/bunga9.png";
 import bunga10Png from "./components/gambar/bunga/bunga10.png";
 import bunga11Png from "./components/gambar/bunga/bunga11.png";
-import bunga3Png from "./components/gambar/bunga/bunga3.png";
-import bunga5Png from "./components/gambar/bunga/bunga5.png";
 import pohon1Png from "./components/gambar/pohon/pohon1.png";
 import pohon2Png from "./components/gambar/pohon/pohon2.png";
 
 import frame17Png from "./components/gambar/frames/frame17.png";
 import frame16Png from "./components/gambar/frames/frame16.png";
 import frame10Png from "./components/gambar/frames/frame10.png";
-import frame1Png from "./components/gambar/frames/frame1.png";
-import frame2Png from "./components/gambar/frames/frame2.png";
-import frame4Png from "./components/gambar/frames/frame4.png";
-import frame5Png from "./components/gambar/frames/frame5.png";
-import frame8Png from "./components/gambar/frames/frame8.png";
 import frame9Png from "./components/gambar/frames/frame9.png";
 
-import pohonPng from "./components/gambar/pohon/pohon.png";
 import pohon6Png from "./components/gambar/pohon/pohon6.png";
 import pohon7Png from "./components/gambar/pohon/pohon7.png";
 import pohon8Png from "./components/gambar/pohon/pohon8.png";
@@ -57,14 +42,6 @@ import bg2Png from "./components/gambar/bg/bg2.png";
 import bg3Png from "./components/gambar/bg/bg3.png";
 import bg4Png from "./components/gambar/bg/bg4.png";
 import bg5Png from "./components/gambar/bg/bg5.png";
-import daun1Png from "./components/gambar/Daun/daun1.png";
-import daun2Png from "./components/gambar/Daun/daun2.png";
-import daun7Png from "./components/gambar/Daun/daun7.png";
-import daun10Png from "./components/gambar/Daun/daun10.png";
-import tanaman1Png from "./components/gambar/tanaman/tanaman1.png";
-import tanaman5Png from "./components/gambar/tanaman/tanaman5.png";
-import bunga1Png from "./components/gambar/bunga/bunga1.png";
-import bunga6Png from "./components/gambar/bunga/bunga6.png";
 import bunga7Png from "./components/gambar/bunga/bunga7.png";
 
 /* ─── Side Trees Framing Component (Continuous Lifelike Swaying Animation) ─── */
@@ -1008,7 +985,7 @@ function StaggerChildren({
   return (
     <div ref={ref} className={className}>
       {arr.map((child, i) => (
-        <div key={i} style={getStyle(i)}>
+        <div key={i} style={{ ...getStyle(i), position: "relative", zIndex: arr.length - i }}>
           {child}
         </div>
       ))}
@@ -1746,14 +1723,37 @@ const DEFAULT_WISHES: WishItem[] = [
   { id: "w-6", name: "Hendra & Siska", attendance: "yes", guests: "2", message: "Happy Wedding Aisyah & Rizky! Semoga dilancarkan sampai hari H dan langgeng sampai kakek nenek!", date: "2 minggu lalu" },
 ];
 
-function AddToCalendarMenu({ eventTitle, dateIsoStart, dateIsoEnd, locationStr, addressStr }: {
+function AddToCalendarMenu({ eventTitle, dateIsoStart, dateIsoEnd, locationStr, addressStr, onOpenChange }: {
   eventTitle: string;
   dateIsoStart: string;
   dateIsoEnd: string;
   locationStr: string;
   addressStr: string;
+  onOpenChange?: (open: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        onOpenChange?.(false);
+      }
+    };
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open, onOpenChange]);
+
+  const toggleOpen = () => {
+    const next = !open;
+    setOpen(next);
+    onOpenChange?.(next);
+  };
 
   const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("The Wedding of Aisyah & Rizky - " + eventTitle)}&dates=${dateIsoStart}/${dateIsoEnd}&details=${encodeURIComponent("Acara " + eventTitle + " Pernikahan Aisyah Yusuf & Rizky Ramadhan. Lokasi: " + locationStr + ", " + addressStr)}&location=${encodeURIComponent(locationStr + ", " + addressStr)}`;
 
@@ -1782,10 +1782,10 @@ function AddToCalendarMenu({ eventTitle, dateIsoStart, dateIsoEnd, locationStr, 
   };
 
   return (
-    <div className={`relative mt-6 w-full ${open ? 'z-[100]' : 'z-30'}`}>
+    <div ref={menuRef} className={`relative mt-6 w-full ${open ? 'z-[200]' : 'z-40'}`}>
       <button
         type="button"
-        onClick={() => setOpen(!open)}
+        onClick={toggleOpen}
         className="w-full py-3 px-4 rounded-full text-xs uppercase tracking-widest bg-gradient-to-r from-[#F3DDD7] via-[#F8ECE8] to-[#F3DDD7] border border-[#C7A86D]/50 text-[#2B1D14] font-bold hover:bg-[#C7A86D] hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95"
       >
         <Calendar size={15} className="text-[#7A5A1A]" />
@@ -1794,12 +1794,15 @@ function AddToCalendarMenu({ eventTitle, dateIsoStart, dateIsoEnd, locationStr, 
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-full mt-2 z-[100] rounded-2xl bg-white/98 backdrop-blur-xl border border-[#C7A86D]/40 shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute left-0 right-0 top-full mt-2 z-[300] rounded-2xl bg-white/98 backdrop-blur-xl border border-[#C7A86D]/40 shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200">
           <a
             href={googleUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              onOpenChange?.(false);
+            }}
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#FAF5EE] text-xs text-[#2B1D14] font-bold transition-colors"
           >
             <span className="w-6 h-6 rounded-full bg-[#EA4335]/15 text-[#EA4335] flex items-center justify-center font-bold text-[11px]">G</span>
@@ -1827,6 +1830,7 @@ export default function App() {
   const [isOpened, setIsOpened] = useState(false);
   const [openingStage, setOpeningStage] = useState<'closed' | 'opening_gate' | 'zooming_in' | 'revealing' | 'opened'>('closed');
   const [copied, setCopied] = useState<string | null>(null);
+  const [openCalendarIndex, setOpenCalendarIndex] = useState<number | null>(null);
   
   const [wishes, setWishes] = useState<WishItem[]>(() => {
     try {
@@ -1985,6 +1989,7 @@ export default function App() {
   // Load background music once and keep it ready
   useEffect(() => {
     const audio = new Audio(musicTrack);
+    audio.preload = "none";
     audio.loop = true;
     audio.volume = 0.75;
     audio.muted = isMuted;
@@ -2435,7 +2440,7 @@ export default function App() {
       </section>
 
       {/* ── EVENTS ──────────────────────────────────────────── */}
-      <section id="events" className="py-20 px-4 sm:px-6 relative overflow-hidden bg-[#F8F5F0] text-[#4A3A32]">
+      <section id="events" className="py-20 px-4 sm:px-6 relative overflow-visible bg-[#F8F5F0] text-[#4A3A32]">
         <FloatingButterflies count={2} />
         <SectionBackgroundPhoto src={bg4Png} opacity={0.16} />
         <SectionBirdsFlock delay={4} top="10vh" />
@@ -2464,10 +2469,11 @@ export default function App() {
                     address: "Jl. Gatot Subroto No. 88, Jakarta Selatan",
                     icon: "✦",
                   },
-                ].map((ev) => (
+                ].map((ev, index) => (
                   <div
                     key={ev.title}
                     className="rounded-2xl p-5 sm:p-6 relative overflow-visible bg-white/80 backdrop-blur-md border border-[#C7A86D]/45 shadow-sm transition-all duration-300 hover:shadow-md"
+                    style={{ zIndex: openCalendarIndex === index ? 100 : (50 - index) }}
                   >
                     <div className="absolute top-4 right-4 opacity-30 text-4xl text-[#7A5A1A] font-serif">
                       {ev.icon}
@@ -2497,6 +2503,7 @@ export default function App() {
                       dateIsoEnd={ev.title.includes("Akad") ? "20260920T110000Z" : "20260920T210000Z"}
                       locationStr={ev.location}
                       addressStr={ev.address}
+                      onOpenChange={(isOpen) => setOpenCalendarIndex(isOpen ? index : null)}
                     />
                   </div>
                 ))}

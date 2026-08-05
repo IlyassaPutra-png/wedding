@@ -64,12 +64,14 @@ function FlappingBird({
       <img
         src={frameA}
         alt="Bird frame A"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
         style={{ opacity: frame === 0 ? 1 : 0 }}
       />
       <img
         src={frameB}
         alt="Bird frame B"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-contain filter drop-shadow-[0_3px_6px_rgba(0,0,0,0.18)]"
         style={{ opacity: frame === 1 ? 1 : 0 }}
       />
@@ -230,18 +232,21 @@ export default function AksaraHeroSection({
       <img
         src={pohonTengahPng}
         alt="Pohon Tengah Belakang"
+        decoding="async"
         className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[180%] xs:w-[125%] sm:w-[110%] md:w-[98%] max-w-[1050px] h-[92vh] sm:h-[95vh] object-contain object-bottom pointer-events-none z-[10] opacity-95 filter drop-shadow-sm"
       />
       {/* Rear Mid Left Tree (Restored to previous framing size) */}
       <img
         src={pohonKiriBelakangPng}
         alt="Pohon Kiri Belakang"
+        decoding="async"
         className="absolute top-[6%] sm:top-[4%] left-[-16%] xs:left-[-12%] sm:left-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[440px] h-[65vh] object-contain object-top-left pointer-events-none z-[12] opacity-95"
       />
       {/* Rear Mid Right Tree (Restored to previous framing size) */}
       <img
         src={pohonKananBelakangPng}
         alt="Pohon Kanan Belakang"
+        decoding="async"
         className="absolute top-[6%] sm:top-[4%] right-[-16%] xs:right-[-12%] sm:right-[-6%] w-[72%] xs:w-[64%] sm:w-[50%] max-w-[440px] h-[65vh] object-contain object-top-right pointer-events-none z-[12] opacity-95"
       />
 
@@ -251,18 +256,21 @@ export default function AksaraHeroSection({
       <img
         src={pohonKiriAtasPng}
         alt="Pohon Kiri Atas"
+        decoding="async"
         className="absolute top-[-3%] left-[-8%] xs:left-[-4%] sm:left-0 w-[62%] xs:w-[54%] sm:w-[42%] max-w-[400px] pointer-events-none z-20 filter drop-shadow-sm"
       />
       {/* Upper Right Canopy Tree (STATIONARY per user request) */}
       <img
         src={pohonKananAtasPng}
         alt="Pohon Kanan Atas"
+        decoding="async"
         className="absolute top-[-3%] right-[-8%] xs:right-[-4%] sm:right-0 w-[60%] xs:w-[52%] sm:w-[40%] max-w-[380px] pointer-events-none z-20 filter drop-shadow-sm"
       />
       {/* Lower Left Trunk & Dense Foliage Tree (DYNAMIC WIND SWAY) */}
       <img
         src={pohonKiriBawahPng}
         alt="Pohon Kiri Bawah"
+        decoding="async"
         className="absolute bottom-0 left-[-12%] xs:left-[-8%] sm:left-[-4%] w-[100%] xs:w-[66%] sm:w-[52%] max-w-[480px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
         style={{
           animation: "windSwayTreeLeftBottom 6.5s ease-in-out infinite",
@@ -273,6 +281,7 @@ export default function AksaraHeroSection({
       <img
         src={pohonKananBawahPng}
         alt="Pohon Kanan Bawah"
+        decoding="async"
         className="absolute bottom-0 right-[-12%] xs:right-[-8%] sm:right-[-4%] w-[110%] xs:w-[68%] sm:w-[54%] max-w-[500px] pointer-events-none z-25 filter drop-shadow-[0_8px_16px_rgba(30,45,35,0.14)]"
         style={{
           animation: "windSwayTreeRightBottom 7.2s ease-in-out infinite",
@@ -285,6 +294,7 @@ export default function AksaraHeroSection({
       <img
         src={fondasiTengahPng}
         alt="Fondasi Tengah Gazebo"
+        decoding="async"
         className="absolute bottom-[3%] left-1/2 -translate-x-1/2 w-[88%] xs:w-[82%] sm:w-[68%] md:w-[58%] max-w-[500px] pointer-events-none z-30 filter drop-shadow-[0_14px_28px_rgba(35,45,30,0.22)]"
       />
 
@@ -308,6 +318,7 @@ export default function AksaraHeroSection({
               <img
                 src={plantSrc}
                 alt={`Tanaman ${idx}`}
+                decoding="async"
                 className="w-full h-auto max-h-[140px] xs:max-h-[175px] sm:max-h-[220px] md:max-h-[260px] object-contain object-bottom filter drop-shadow-[0_6px_12px_rgba(20,35,25,0.22)]"
               />
             </div>
@@ -324,6 +335,7 @@ export default function AksaraHeroSection({
           <img
             src={topFloralHeaderPng}
             alt="Floral Crest"
+            decoding="async"
             className="w-full h-auto object-contain"
           />
         </div>
